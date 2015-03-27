@@ -5,11 +5,15 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 public class StartUp extends Application {
 
     @Override
     public void start(Stage stage) {
+        
+     
         ContinentenBeheer continentenBeheer = new ContinentenBeheer();
         Scene scene = new Scene(new ContinentControllerPanel(continentenBeheer));
         stage.setTitle("Werelddelen");
