@@ -1,19 +1,23 @@
 
+import domain.Continent;
 import domain.ContinentenBeheer;
 import gui.ContinentControllerPanel;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import util.JPAUtil;
 
 public class StartUp extends Application {
 
     @Override
     public void start(Stage stage) {
         
-     
+        
         ContinentenBeheer continentenBeheer = new ContinentenBeheer();
         Scene scene = new Scene(new ContinentControllerPanel(continentenBeheer));
         stage.setTitle("Werelddelen");
