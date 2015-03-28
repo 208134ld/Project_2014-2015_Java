@@ -5,6 +5,13 @@
  */
 package domain;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import persistentie.ContinentenMapper;
@@ -18,11 +25,26 @@ public class ContinentenBeheer {
     private ObservableList<String> continenten;
     private ContinentenMapper continentenMapper = new ContinentenMapper();
 
-    public ContinentenBeheer() {
-        //creatie en opvullen van de ObservableList
+    public ContinentenBeheer() throws SQLException {
+        String url = "jdbc:sqlserver://localhost:1433;databaseName=HOGENT1415_11";   //database specific url.
+        String user = "sa";
+        String password = "root";
+
+        Connection connection
+                = DriverManager.getConnection(url, user, password);
+
+        Statement statement = connection.createStatement();
+        String sql = "select * from Continents";
+        ResultSet result = statement.executeQuery(sql);
+        
+        List continentenList = new ArrayList<>();
+        
+        while(result.next()) {
+            continentenList.add(result.getString("name"));
+        }
+        
         continenten = FXCollections.observableArrayList(
-                continentenMapper.geefContinenten()); //de
-        //mapper klasse geeft een lijst van continenten terug
+                continentenList);
     }
 
     public ObservableList<String> getContinenten() {

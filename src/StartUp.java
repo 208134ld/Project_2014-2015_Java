@@ -30,10 +30,10 @@ public class StartUp extends Application {
         while(result.next()) {
 
             name = result.getString("name");
-
+            System.out.println(name);
         }
-        System.out.println(name);
-        connection.close();
+        
+        
 
         ContinentenBeheer continentenBeheer = new ContinentenBeheer();
         Scene scene = new Scene(new ContinentControllerPanel(continentenBeheer));
@@ -46,6 +46,7 @@ public class StartUp extends Application {
             stage.setMinHeight(stage.getHeight());
         });
         stage.show();
+        //connection.close();
     }
 
     public static void main(String... args) {
