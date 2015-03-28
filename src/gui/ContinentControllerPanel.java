@@ -5,6 +5,7 @@
  */
 package gui;
 
+import domain.Continent;
 import domain.ContinentenBeheer;
 import java.io.IOException;
 import javafx.event.ActionEvent;
@@ -13,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.InputMethodEvent;
 import javafx.scene.layout.BorderPane;
 import persistentie.ContinentRepository;
 
@@ -30,17 +32,13 @@ public class ContinentControllerPanel extends BorderPane {
     private Button btnRemoveContinent;
 
     @FXML
-    private ListView<String> listContinenten;
+    private ListView<Continent> listContinenten;
 
     private ContinentenBeheer domeinController;
 
     public ContinentControllerPanel(ContinentenBeheer domeinController) {
         this.domeinController = domeinController;
-        ContinentRepository rep = new ContinentRepository();
-        System.out.println(rep.getAllContinents());
-        FXMLLoader loader = new FXMLLoader(
-                getClass().getResource(
-                        "ContinentControllerPanel.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("ContinentControllerPanel.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -59,9 +57,12 @@ public class ContinentControllerPanel extends BorderPane {
                 addListener((observableValue, oldValue, newValue)->{
                     if(newValue != null){
                         int index = listContinenten.getSelectionModel().getSelectedIndex();
+                        
                         System.out.printf("%d %s\n", index, newValue);
                     }
                 });
+        
+        
     }
 
     @FXML
@@ -83,7 +84,7 @@ public class ContinentControllerPanel extends BorderPane {
     @FXML
     private void removeContinent(ActionEvent event) {
         // de geselecteerde filosoof opvragen
-        String geselecteerdeContinent = listContinenten.getSelectionModel().
+        Continent geselecteerdeContinent = listContinenten.getSelectionModel().
                 getSelectedItem();
         if (geselecteerdeContinent != null) {
         // zie volgende slide
@@ -96,5 +97,6 @@ public class ContinentControllerPanel extends BorderPane {
             }
         }
     }
+    
 
 }

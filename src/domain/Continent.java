@@ -1,5 +1,7 @@
 
 package domain;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,13 +20,18 @@ public class Continent {
     @Column(name = "ContinentID")
     private IntegerProperty continentId;
     @OneToMany(mappedBy="continent")
-    private ObservableList<Country> countries;
+    private List<Country> countries;
 
     public Continent(){};
     public Continent(String naam) {
         name = new SimpleStringProperty(naam);
         continentId = new SimpleIntegerProperty();
-        countries = FXCollections.observableArrayList();
+        countries = new ArrayList<>();
+    }
+    public Continent(String naam,int id)
+    {
+        this(naam);
+        setId(id);
     }
     public String getName() {
         return name.get();
@@ -35,7 +42,7 @@ public class Continent {
     public Integer getId() {
         return continentId.get();
     }
-    public final void SetId(int id)
+    public final void setId(int id)
     {
         this.continentId.set(id);
     }
@@ -47,7 +54,7 @@ public class Continent {
     public IntegerProperty getIdProp() {
         return continentId;
     }
-    public ObservableList<Country> getCountries()
+    public List<Country> getCountries()
     {
         return countries;
     }
@@ -55,7 +62,10 @@ public class Continent {
     {
         return countries.stream().filter(e->e.getId() == countryId).findFirst().get();
     }
-   
+   public String toString()
+   {
+       return getName();
+   }
     
     
 }

@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import persistentie.ContinentenMapper;
@@ -22,43 +24,59 @@ import persistentie.ContinentenMapper;
  */
 public class ContinentenBeheer {
 
-    private ObservableList<String> continenten;
+    private ObservableList<Continent> continenten;
     private ContinentenMapper continentenMapper = new ContinentenMapper();
-
+    private Connection connection;
     public ContinentenBeheer() throws SQLException {
         String url = "jdbc:sqlserver://localhost:1433;databaseName=HOGENT1415_11";   //database specific url.
         String user = "sa";
         String password = "root";
-        Connection connection
+       connection
                 = DriverManager.getConnection(url, user, password);
         Statement statement = connection.createStatement();
         String sql = "select * from Continents";
         ResultSet result = statement.executeQuery(sql);
+        
         List continentenList = new ArrayList<>();
         
         while(result.next()) {
-            continentenList.add(result.getString("name"));
+            
+            continentenList.add(new Continent(result.getString("name"),result.getInt("ContinentID")));
         }
         
         continenten = FXCollections.observableArrayList(
                 continentenList);
     }
 
-    public ObservableList<String> getContinenten() {
+    public ObservableList<Continent> getContinenten()
+    {
         return continenten;
     }
-    
     public boolean noContinenten(){
         return continenten.isEmpty();
     }
     
     public void addContinent(String naam){
+        
         if(naam != null && !naam.trim().isEmpty()){
-            continenten.add(naam);
+          
+            
+            try {
+                connection.createStatement().execute("insert into continents values('"+naam+"')");
+                ResultSet r = connection.createStatement().executeQuery("select MAX(Continents.ContinentID) from Continents");
+                r.next();
+                continenten.add(new Continent(naam,r.getInt(1)));
+            } catch (SQLException ex) {
+                Logger.getLogger(ContinentenBeheer.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
-    
-    public void removeContinent(String naam){
-        continenten.remove(naam);
+    public void removeContinent(Continent cont){
+        continenten.remove(cont);
+        try {
+            connection.createStatement().execute("delete from Continents where ContinentID = "+cont.getId());
+        } catch (SQLException ex) {
+            Logger.getLogger(ContinentenBeheer.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
