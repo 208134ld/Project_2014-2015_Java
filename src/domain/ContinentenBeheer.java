@@ -29,14 +29,11 @@ public class ContinentenBeheer {
         String url = "jdbc:sqlserver://localhost:1433;databaseName=HOGENT1415_11";   //database specific url.
         String user = "sa";
         String password = "root";
-
         Connection connection
                 = DriverManager.getConnection(url, user, password);
-
         Statement statement = connection.createStatement();
         String sql = "select * from Continents";
         ResultSet result = statement.executeQuery(sql);
-        
         List continentenList = new ArrayList<>();
         
         while(result.next()) {

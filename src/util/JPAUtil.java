@@ -10,7 +10,7 @@ import javax.persistence.Persistence;
  */
 public class JPAUtil 
 {
-    private static final String PERSISTENCE_UNIT_NAME = "HOGENT1415_11";
+    private static final String PERSISTENCE_UNIT_NAME = "climateChart";
     private static EntityManagerFactory entityManagerFactory;
     private static ThreadLocal<EntityManager> manager = new ThreadLocal<EntityManager>();
     

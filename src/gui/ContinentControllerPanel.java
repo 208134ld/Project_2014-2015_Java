@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
+import persistentie.ContinentRepository;
 
 /**
  * FXML Controller class
@@ -35,7 +36,8 @@ public class ContinentControllerPanel extends BorderPane {
 
     public ContinentControllerPanel(ContinentenBeheer domeinController) {
         this.domeinController = domeinController;
-
+        ContinentRepository rep = new ContinentRepository();
+        System.out.println(rep.getAllContinents());
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource(
                         "ContinentControllerPanel.fxml"));
