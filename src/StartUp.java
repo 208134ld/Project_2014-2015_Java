@@ -1,23 +1,40 @@
-
-import domain.Continent;
 import domain.ContinentenBeheer;
 import gui.ContinentControllerPanel;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import util.JPAUtil;
 
 public class StartUp extends Application {
 
     @Override
-    public void start(Stage stage) {
-        
-        
+    public void start(Stage stage) throws SQLException {
+        String url = "jdbc:sqlserver://localhost:1433;databaseName=HOGENT1415_11";   //database specific url.
+        String user = "sa";
+        String password = "root";
+
+        Connection connection
+                = DriverManager.getConnection(url, user, password);
+
+        Statement statement = connection.createStatement();
+        String sql = "select * from Continents";
+        ResultSet result = statement.executeQuery(sql);
+        String name="";
+        while(result.next()) {
+
+            name = result.getString("name");
+
+        }
+        System.out.println(name);
+        connection.close();
+
         ContinentenBeheer continentenBeheer = new ContinentenBeheer();
         Scene scene = new Scene(new ContinentControllerPanel(continentenBeheer));
         stage.setTitle("Werelddelen");
