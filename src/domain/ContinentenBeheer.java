@@ -73,8 +73,18 @@ public class ContinentenBeheer {
     }
     public void removeContinent(Continent cont){
         continenten.remove(cont);
+              
         try {
             connection.createStatement().execute("delete from Continents where ContinentID = "+cont.getId());
+        } catch (SQLException ex) {
+            Logger.getLogger(ContinentenBeheer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public void changeName(int id,String name)
+    {
+        continenten.stream().filter(i->i.getId()==id).findFirst().get().setName(name);
+        try {
+            connection.createStatement().execute("update Continents set Name ='"+name+"' where ContinentID="+id);
         } catch (SQLException ex) {
             Logger.getLogger(ContinentenBeheer.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -23,6 +23,13 @@
       </GridPane>
    </top>
    <center>
-      <ListView fx:id="listContinenten" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <ListView fx:id="listContinenten" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <contextMenu>
+            <ContextMenu fx:id="continentMenu">
+              <items>
+                <MenuItem fx:id="VeranderNaam" mnemonicParsing="false" onAction="#veranderNaam" text="Verander naam" />
+              </items>
+            </ContextMenu>
+         </contextMenu></ListView>
    </center>
 </fx:root>

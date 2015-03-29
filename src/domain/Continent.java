@@ -38,6 +38,7 @@ public class Continent {
     }
     public void setName(String name) {
         this.name.set(name);
+        
     }
     public Integer getId() {
         return continentId.get();

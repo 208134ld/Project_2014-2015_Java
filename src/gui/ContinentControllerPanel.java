@@ -8,14 +8,22 @@ package gui;
 import domain.Continent;
 import domain.ContinentenBeheer;
 import java.io.IOException;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.util.Callback;
 import persistentie.ContinentRepository;
 
 /**
@@ -34,10 +42,20 @@ public class ContinentControllerPanel extends BorderPane {
     @FXML
     private ListView<Continent> listContinenten;
 
+    @FXML
     private ContinentenBeheer domeinController;
 
+    @FXML
+    private ContextMenu continentMenu;
+    @FXML
+    private MenuItem VeranderNaam;
+
+   
     public ContinentControllerPanel(ContinentenBeheer domeinController) {
-        this.domeinController = domeinController;
+        this.domeinController = domeinController; 
+       
+        
+        
         FXMLLoader loader = new FXMLLoader(getClass().getResource("ContinentControllerPanel.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -96,6 +114,22 @@ public class ContinentControllerPanel extends BorderPane {
                 btnRemoveContinent.setDisable(true);
             }
         }
+    }
+     @FXML
+    private void veranderNaam(ActionEvent event) {
+         TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Verander de naam van "+listContinenten.getSelectionModel().getSelectedItem().getName());
+        dialog.setHeaderText("Verander de naam van "+listContinenten.getSelectionModel().getSelectedItem().getName());
+        dialog.setContentText("Vul naam in:");
+        dialog.showAndWait().ifPresent(response -> {
+            if (!response.isEmpty()) {
+          
+                domeinController.changeName(listContinenten.getSelectionModel().getSelectedItem().getId(), response);
+                listContinenten.getSelectionModel().selectLast();
+                
+            }
+        });
+        
     }
     
 
