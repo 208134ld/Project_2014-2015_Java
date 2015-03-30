@@ -45,9 +45,9 @@ public class Country {
         this.continent = continent;
     }
 
-    public Country(String name) {
+    public Country(String name, int id) {
         this.name = new SimpleStringProperty(name);
-        countryId = new SimpleIntegerProperty();
+        countryId = new SimpleIntegerProperty(id);
         climateCharts = FXCollections.observableArrayList();
     }
     

@@ -6,6 +6,7 @@
 
 package persistentie;
 
+import domain.ClimateChart;
 import domain.Continent;
 import domain.Country;
 import java.sql.Connection;
@@ -57,12 +58,24 @@ public class ContinentRepository extends Repository {
         ResultSet result = statement.executeQuery(sql);
         
         while(result.next()) {
-            countries.add(new Country(result.getString("Name")));
+            countries.add(new Country(result.getString("Name"), result.getInt("CountryID")));
         }
 //        getEm().getTransaction().begin();
 //        List<Country> countries = getEm().createQuery("SELECT * from countries where ContinentID = "+continentId).getResultList();
 //        getEm().getTransaction().commit();
 //        getEm().close();
         return countries;
+    }
+    
+    public List<ClimateChart> getClimateChartsOfCountry(int countryId) throws SQLException{
+        List<ClimateChart> climateCharts = new ArrayList<>();
+        String sql = "select * from ClimateCharts where CountryID = "+countryId;
+        ResultSet result = statement.executeQuery(sql);
+        
+        while(result.next()) {
+            climateCharts.add(new ClimateChart(result.getString("Location")));
+        }
+        
+        return climateCharts;
     }
 }

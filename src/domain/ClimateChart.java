@@ -40,7 +40,7 @@ public class ClimateChart {
         this.country = country;
     }
     
-    public void ClimateChart(String location)
+    public ClimateChart(String location)
     {
         this.location = new SimpleStringProperty(location);
         climateChartId = new SimpleIntegerProperty();
