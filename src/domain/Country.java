@@ -50,17 +50,21 @@ public class Country {
         countryId = new SimpleIntegerProperty();
         climateCharts = FXCollections.observableArrayList();
     }
+    
+    
     public String getName() {
         return name.get();
     }
+    
     public void setName(String name) {
         this.name.set(name);
     }
+    
     public Integer getId() {
         return countryId.get();
     }
-    public final void SetId(int id)
-    {
+    
+    public final void SetId(int id){
         this.countryId.set(id);
     }
 
@@ -71,12 +75,12 @@ public class Country {
     public IntegerProperty getIdProp() {
         return countryId;
     }
-    public ObservableList<ClimateChart> getClimateCharts()
-    {
+    
+    public ObservableList<ClimateChart> getClimateCharts(){
         return climateCharts;
     }
-    public ClimateChart getClimateChart(int climateChartId)
-    {
+    
+    public ClimateChart getClimateChart(int climateChartId){
          return climateCharts.stream().filter(e->e.getId() == climateChartId).findFirst().get();
     }
 }
