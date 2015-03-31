@@ -8,6 +8,7 @@ package gui;
 import domain.ClimateChart;
 import domain.Continent;
 import domain.Country;
+import domain.MyNode;
 import domain.TextFieldTreeCellImpl;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -73,17 +74,20 @@ public class MainPanel extends GridPane {
         root.setExpanded(true);
 
         //Onderstaand gedeelte maakt het mogelijk om treeviewitems "on the spot" van naam te veranderen, dit werkt alleen met treeItem<String> dus moet nog aangepast worden
-//        selectionTreeView.setEditable(true);
-//        selectionTreeView.setCellFactory(new Callback<TreeView<String>,TreeCell<String>>(){
-//            @Override
-//            public TreeCell<String> call(TreeView<String> p) {
-//                TextFieldTreeCellImpl textField = null;
-//                textField = new TextFieldTreeCellImpl();
-//                return textField;
-//            }
-//
-//            
-//        });
+        selectionTreeView.setEditable(true);
+        selectionTreeView.setCellFactory(new Callback<TreeView<MyNode>,TreeCell<MyNode>>(){
+            @Override
+            public TreeCell<MyNode> call(TreeView<MyNode> p) {
+                try {
+                    return new TextFieldTreeCellImpl();
+                } catch (SQLException ex) {
+                    Logger.getLogger(MainPanel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                return null;
+            }
+
+            
+        });
         
         //itemChild.setExpanded(false);
         selectionTreeView.setRoot(root);
@@ -101,35 +105,35 @@ public class MainPanel extends GridPane {
         });
     }
 
-    private static class MyNode {
-
-        String value;
-        String type;
-        int id;
-
-        public MyNode(String value, String type, int id) {
-            this.type = type;
-            this.value = value;
-            this.id = id;
-        }
-
-        public boolean isContinent() {
-            return type.equalsIgnoreCase("Continent");
-        }
-
-        public boolean isCountry() {
-            return type.equalsIgnoreCase("Country");
-        }
-
-        public boolean isClimateChart() {
-            return type.equalsIgnoreCase("ClimateChart");
-        }
-
-        @Override
-        public String toString() {
-            return value;
-
-        }
-    }
+//    private static class MyNode {
+//
+//        String value;
+//        String type;
+//        int id;
+//
+//        public MyNode(String value, String type, int id) {
+//            this.type = type;
+//            this.value = value;
+//            this.id = id;
+//        }
+//
+//        public boolean isContinent() {
+//            return type.equalsIgnoreCase("Continent");
+//        }
+//
+//        public boolean isCountry() {
+//            return type.equalsIgnoreCase("Country");
+//        }
+//
+//        public boolean isClimateChart() {
+//            return type.equalsIgnoreCase("ClimateChart");
+//        }
+//
+//        @Override
+//        public String toString() {
+//            return value;
+//
+//        }
+//    }
 
 }

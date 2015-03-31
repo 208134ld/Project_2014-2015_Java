@@ -73,7 +73,7 @@ public class ContinentRepository extends Repository {
         ResultSet result = statement.executeQuery(sql);
         
         while(result.next()) {
-            climateCharts.add(new ClimateChart(result.getString("Location")));
+            climateCharts.add(new ClimateChart(result.getString("Location"), result.getInt("ClimateChartID")));
         }
         
         return climateCharts;

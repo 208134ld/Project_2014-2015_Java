@@ -90,11 +90,10 @@ public class ClimateChart {
         this.country = country;
     }
     
-    public ClimateChart(String location)
+    public ClimateChart(String location, int id)
     {
         this.location = new SimpleStringProperty(location);
-       
-        
+        this.climateChartId = id;
     }
     public void ClimateChart(String loc,int begin,int end,int[]temp,int[]sed,double latidude,double longitude,int id)
     {

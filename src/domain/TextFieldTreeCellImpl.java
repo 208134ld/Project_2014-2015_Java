@@ -14,7 +14,7 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-public final class TextFieldTreeCellImpl extends TreeCell<String> {
+public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
  
         private TextField textField;
         
@@ -26,7 +26,9 @@ public final class TextFieldTreeCellImpl extends TreeCell<String> {
         String password = "root";
         Statement statement;
         
-        public TextFieldTreeCellImpl() {
+        public TextFieldTreeCellImpl() throws SQLException {
+            connection = DriverManager.getConnection(url, user, password);
+            statement = connection.createStatement();
         }
  
         @Override
@@ -44,24 +46,14 @@ public final class TextFieldTreeCellImpl extends TreeCell<String> {
         @Override
         public void cancelEdit() {
             super.cancelEdit();
-            setText((String) getItem());
+            setText((String) getItem().value);
             setGraphic(getTreeItem().getGraphic());
         }
  
         @Override
-        public void updateItem(String item, boolean empty) {
+        public void updateItem(MyNode item, boolean empty) {
             
             super.updateItem(item, empty);
- 
-            //String sql = "UPDATE Continents SET Name='"+item+"' WHERE Name='"+oldItem+"'";
-            
-//            try {
-//                ResultSet result = statement.executeQuery(sql);
-//            } catch (SQLException ex) {
-//                Logger.getLogger(TextFieldTreeCellImpl.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//            
-//            oldItem = item;
             
             if (empty) {
                 setText(null);
@@ -88,7 +80,19 @@ public final class TextFieldTreeCellImpl extends TreeCell<String> {
                 @Override
                 public void handle(KeyEvent t) {
                     if (t.getCode() == KeyCode.ENTER) {
-                        commitEdit(textField.getText());
+                        
+                        String sql = "UPDATE Continents SET Name='"+textField.getText()+"' WHERE ContinentID="+getItemId();
+                        if(getItem().isCountry())
+                            sql = "UPDATE Countries SET Name='"+textField.getText()+"' WHERE CountryID="+getItemId();
+                        if(getItem().isClimateChart())
+                            sql = "UPDATE ClimateCharts SET Location='"+textField.getText()+"' WHERE ClimateChartID="+getItemId();
+                        
+                        try {
+                            ResultSet result = statement.executeQuery(sql);
+                        } catch (SQLException ex) {
+                            Logger.getLogger(TextFieldTreeCellImpl.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        commitEdit(new MyNode(textField.getText(), getType(), getItemId()));
                     } else if (t.getCode() == KeyCode.ESCAPE) {
                         cancelEdit();
                     }
@@ -98,5 +102,13 @@ public final class TextFieldTreeCellImpl extends TreeCell<String> {
  
         private String getString() {
             return getItem() == null ? "" : getItem().toString();
+        }
+        
+        private String getType(){
+            return getItem() == null ? "" : getItem().type;
+        }
+        
+        private int getItemId(){
+            return getItem() == null ? null : getItem().id;
         }
 }
