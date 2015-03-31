@@ -88,7 +88,7 @@ public class MainPanel extends GridPane {
 
             
         });
-        
+         
         //itemChild.setExpanded(false);
         selectionTreeView.setRoot(root);
         selectionTreeView.setShowRoot(false);
