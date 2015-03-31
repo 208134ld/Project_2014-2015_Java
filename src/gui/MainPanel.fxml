@@ -41,7 +41,7 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <Label layoutX="177.0" layoutY="1.0" prefHeight="27.0" prefWidth="70.0" text="Locatie" textOverrun="WORD_ELLIPSIS" underline="true">
+                              <Label fx:id="locatieLable" layoutX="177.0" layoutY="1.0" prefHeight="27.0" prefWidth="70.0" text="Locatie" textOverrun="WORD_ELLIPSIS" underline="true">
                                  <font>
                                     <Font size="18.0" />
                                  </font>

@@ -16,6 +16,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -77,6 +79,62 @@ public class ContinentRepository extends Repository {
         }
         
         return climateCharts;
+    }
+      public ClimateChart getClimateChartByClimateChartID(int cID)
+    {
+        String loc="";
+        int begin=0;
+        int einde=0;
+        int countryID=0;
+        double longi=0;
+        double lat = 0;
+        boolean aboveEq=false;
+        Country c = null;
+        
+        String sql = "select * from ClimateCharts where ClimateChartID ="+cID;
+        ResultSet result;
+        try {
+            result = statement.executeQuery(sql);
+            while(result.next()){
+            loc = result.getString("Location");
+            begin = result.getInt("BeginPeriod");
+            einde = result.getInt("EndPeriod");
+            aboveEq = result.getBoolean("AboveEquator");
+            lat = result.getDouble("Latitude");
+            longi = result.getDouble("Longitude");
+            countryID = result.getInt("CountryID");
+        }
+        } catch (SQLException ex) {
+            Logger.getLogger(ContinentRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            
+            result = statement.executeQuery("select * from Countries where CountryID="+countryID);
+            while(result.next()){
+                c = new Country(result.getString("Name"),result.getInt("CountryID"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ContinentRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       int[] temp =new int[12];
+       int[] sed = new int[12];
+       int counter = 0;
+        sql = "select AverTemp, Sediment from ClimateCharts join ClimateChartMonth on ClimateCharts.ClimateChartID = ClimateChartMonth.ClimateChartId join Months on ClimateChartMonth.MonthId = Months.MonthID where ClimateCharts.ClimateChartID ="+cID;
+        try {
+            result = statement.executeQuery(sql);
+            while(result.next()){
+            temp[counter] = result.getInt("AverTemp");
+            sed[counter] = result.getInt("Sediment");
+            counter++;
+            
+        }
+        } catch (SQLException ex) {
+            Logger.getLogger(ContinentRepository.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        ClimateChart climate = new ClimateChart(loc,begin,einde,temp,sed,lat,longi,countryID);
+        System.out.println(c.getName());
+        climate.setCountry(c);
+        return climate;
     }
     
 }

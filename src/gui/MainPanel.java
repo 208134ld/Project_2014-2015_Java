@@ -21,6 +21,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -38,7 +40,20 @@ public class MainPanel extends GridPane {
 
     @FXML
     TreeView selectionTreeView;
-
+    @FXML
+    private TableColumn<?, ?> maandcol;
+    @FXML
+    private TableColumn<?, ?> tempCol;
+    @FXML
+    private TableColumn<?, ?> sedCol;
+    @FXML
+    private Label longitudeLabel;
+    @FXML
+    private Label latitudelabel;
+    @FXML
+    private Label landId,locatieLable;
+    @FXML
+    private Label beginPeriode;
     private ContinentRepository continentRepository;
 
     public MainPanel() throws SQLException {
@@ -98,12 +113,20 @@ public class MainPanel extends GridPane {
             public void changed(ObservableValue<? extends TreeItem<MyNode>> observable, TreeItem<MyNode> oldValue, TreeItem<MyNode> newValue) {
                 TreeItem<MyNode> selectedItem = newValue;
                 if(selectedItem.getValue().type.equalsIgnoreCase("ClimateChart")){
-                    System.out.println("Dit is een climatechart oftewel een locatie");
+                    
+                    ClimateChart c  = continentRepository.getClimateChartByClimateChartID(selectedItem.getValue().id);
+                    updateLocationDetailPanel(c);
                 }
                 
             }
         });
     }
-
+    public void updateLocationDetailPanel(ClimateChart c)
+    {
+        longitudeLabel.setText(c.getLongitude()+"");
+        latitudelabel.setText(c.getLatidude()+"");
+        locatieLable.setText(c.getLocation());
+        landId.setText(c.getCountry().getName());
+    }
 
 }
