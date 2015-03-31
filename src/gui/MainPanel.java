@@ -5,6 +5,7 @@
  */
 package gui;
 
+import domain.ClimateChart;
 import domain.Continent;
 import domain.Country;
 import java.io.IOException;
@@ -51,6 +52,13 @@ public class MainPanel extends GridPane {
 
             for(Country co : continentRepository.getCountriesOfContinent(c.getId())){
                 TreeItem<String> countryChild = new TreeItem<>(co.getName());
+                //List<ClimateChart> list = continentRepository.getClimateChartsOfCountry(co.getId());
+                //int i = 0;
+                for(ClimateChart chart : continentRepository.getClimateChartsOfCountry(co.getId())){
+                    TreeItem<String> climateChartChild = new TreeItem<>(chart.getLocation());
+                    countryChild.getChildren().add(climateChartChild);
+                }
+                
                 itemChild.getChildren().add(countryChild);
             }
             
