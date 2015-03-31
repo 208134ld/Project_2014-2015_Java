@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -76,11 +78,7 @@ public class MainPanel extends GridPane {
 //            @Override
 //            public TreeCell<String> call(TreeView<String> p) {
 //                TextFieldTreeCellImpl textField = null;
-//                try {
-//                    textField = new TextFieldTreeCellImpl();
-//                } catch (SQLException ex) {
-//                    Logger.getLogger(MainPanel.class.getName()).log(Level.SEVERE, null, ex);
-//                }
+//                textField = new TextFieldTreeCellImpl();
 //                return textField;
 //            }
 //
@@ -90,6 +88,14 @@ public class MainPanel extends GridPane {
         //itemChild.setExpanded(false);
         selectionTreeView.setRoot(root);
         selectionTreeView.setShowRoot(false);
+        
+        selectionTreeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<MyNode>>() {
+            @Override
+            public void changed(ObservableValue<? extends TreeItem<MyNode>> observable, TreeItem<MyNode> oldValue, TreeItem<MyNode> newValue) {
+                TreeItem<MyNode> selectedItem = newValue;
+                System.out.println("Selected Text : " + selectedItem.getValue());
+            }
+        });
     }
 
     private static class MyNode {

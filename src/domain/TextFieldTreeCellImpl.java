@@ -26,9 +26,7 @@ public final class TextFieldTreeCellImpl extends TreeCell<String> {
         String password = "root";
         Statement statement;
         
-        public TextFieldTreeCellImpl() throws SQLException {
-            connection = DriverManager.getConnection(url, user, password);
-            statement = connection.createStatement();
+        public TextFieldTreeCellImpl() {
         }
  
         @Override
@@ -101,4 +99,4 @@ public final class TextFieldTreeCellImpl extends TreeCell<String> {
         private String getString() {
             return getItem() == null ? "" : getItem().toString();
         }
-    }
+}
