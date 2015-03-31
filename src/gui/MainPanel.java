@@ -93,7 +93,10 @@ public class MainPanel extends GridPane {
             @Override
             public void changed(ObservableValue<? extends TreeItem<MyNode>> observable, TreeItem<MyNode> oldValue, TreeItem<MyNode> newValue) {
                 TreeItem<MyNode> selectedItem = newValue;
-                System.out.println("Selected Text : " + selectedItem.getValue());
+                if(selectedItem.getValue().type.equalsIgnoreCase("ClimateChart")){
+                    System.out.println("Dit is een climatechart oftewel een locatie");
+                }
+                
             }
         });
     }
