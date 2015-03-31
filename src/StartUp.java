@@ -1,4 +1,5 @@
 
+import domain.ClimateChart;
 import gui.MainPanel;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -28,8 +29,7 @@ public class StartUp extends Application {
             stage.setMinWidth(stage.getWidth());
             stage.setMinHeight(stage.getHeight());
         });
-        stage.show();
-
+        stage.show();;
     }
 
     public static void main(String... args) {
