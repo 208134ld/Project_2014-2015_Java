@@ -5,6 +5,11 @@
  */
 package domain;
 
+import java.time.Month;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import javafx.beans.property.*;
 import static javafx.beans.property.DoubleProperty.doubleProperty;
 import javax.persistence.Column;
@@ -32,13 +37,20 @@ public class ClimateChart {
     @ManyToOne
     private Country country;
     private IntegerProperty beginperiod, endperiod;
-    private int[] sedimentArray,TempArray;
     private boolean aboveEquator;
     private DoubleProperty latitude,longitude;
     public ClimateChart(){}
-
+    private List<Months> months;
     public void setClimateChartId(int climateChartId) {
         this.climateChartId = climateChartId;
+    }
+
+    public List<Months> getMonths() {
+        return months;
+    }
+
+    public void setMonths(List<Months> months) {
+        this.months = months;
     }
     
     public void setBeginperiod(int b)
@@ -58,21 +70,6 @@ public class ClimateChart {
         return this.endperiod.get();
     }
 
-    public int[] getSedimentArray() {
-        return sedimentArray;
-    }
-
-    public void setSedimentArray(int[] sedimentArray) {
-        this.sedimentArray = sedimentArray;
-    }
-
-    public int[] getTempArray() {
-        return TempArray;
-    }
-
-    public void setTempArray(int[] TempArray) {
-        this.TempArray = TempArray;
-    }
 
     public boolean isAboveEquator() {
         return aboveEquator;
@@ -95,17 +92,17 @@ public class ClimateChart {
         this.location = new SimpleStringProperty(location);
         this.climateChartId = id;
     }
-    public void ClimateChart(String loc,int begin,int end,int[]temp,int[]sed,double latidude,double longitude,int id)
+    public ClimateChart(String loc,int begin,int end,int[]temp,int[]sed,double latidude,double longitude,int id)
     {
         this.location = new SimpleStringProperty(loc);
         setClimateChartId(id);
         this.endperiod = new SimpleIntegerProperty(end); 
         this.beginperiod = new SimpleIntegerProperty(begin);
-        setTempArray(temp);
-        setSedimentArray(sed);
+        
         this.latitude = new SimpleDoubleProperty(latidude);
         this.longitude = new SimpleDoubleProperty(longitude);
-        
+        months = new ArrayList<Months>();
+        setMonthList(sed,temp);
     }
     public StringProperty getLocationProp() {
         return location;
@@ -135,6 +132,16 @@ public class ClimateChart {
     public void setLongitude(double longitude) {
         this.longitude.set(longitude);
     }
-
+    private void setMonthList(int[]sediments, int[]temperature)
+    {
+        if(temperature.length !=12||sediments.length!=12)
+            throw new IllegalArgumentException("Er zijn meer dan 12 maanden in deze lijst");
+        int counter=0;
+        for(MonthOfTheYear m : MonthOfTheYear.values())
+        {
+            months.add(new Months(sediments[counter],temperature[counter],m));
+            counter++;
+        }
+    }
     
 }
