@@ -34,7 +34,7 @@ public class ClimateChart {
     private IntegerProperty beginperiod, endperiod;
     private int[] sedimentArray,TempArray;
     private boolean aboveEquator;
-    private DoubleProperty latidude,longitude;
+    private DoubleProperty latitude,longitude;
     public ClimateChart(){}
 
     public void setClimateChartId(int climateChartId) {
@@ -104,7 +104,7 @@ public class ClimateChart {
         this.beginperiod = new SimpleIntegerProperty(begin);
         setTempArray(temp);
         setSedimentArray(sed);
-        this.latidude = new SimpleDoubleProperty(latidude);
+        this.latitude = new SimpleDoubleProperty(latidude);
         this.longitude = new SimpleDoubleProperty(longitude);
         
     }
@@ -122,11 +122,11 @@ public class ClimateChart {
     }
 
     public double getLatidude() {
-        return latidude.get();
+        return latitude.get();
     }
 
     public void setLatidude(double latidude) {
-        this.latidude.set(latidude);
+        this.latitude.set(latidude);
     }
 
     public double getLongitude() {
