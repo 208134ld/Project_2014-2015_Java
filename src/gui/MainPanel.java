@@ -15,6 +15,7 @@ import domain.TextFieldTreeCellImpl;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -73,9 +74,14 @@ public class MainPanel extends GridPane {
     private Label beginPeriode,eindPeriode;
     private ContinentRepository continentRepository;
     private ClimateChart selectedClimatechart;
+    
+    private ObservableList<TreeItem<MyNode>> obsTreeItems;
+    private List<TreeItem<MyNode>> treeItems;
+    
     public MainPanel() throws SQLException {
         continentRepository = new ContinentRepository();
-
+        treeItems = new ArrayList<>();
+        
         FXMLLoader loader = new FXMLLoader(getClass().getResource("MainPanel.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -85,7 +91,7 @@ public class MainPanel extends GridPane {
             throw new RuntimeException(ex);
         }
 
-        TreeItem<MyNode> root = new TreeItem<>(new MyNode("Root node", "Root", 1));
+        final TreeItem<MyNode> root = new TreeItem<>(new MyNode("Root node", "Root", 1));
 
         for(Continent c : continentRepository.getAllContinents()){
             TreeItem<MyNode> itemChild = new TreeItem<>(new MyNode(c.getName(), "Continent", c.getId()));
@@ -101,10 +107,12 @@ public class MainPanel extends GridPane {
                 itemChild.getChildren().add(countryChild);
             }
             
-            root.getChildren().add(itemChild);
+            treeItems.add(itemChild);
+            //root.getChildren().add(itemChild);
         }
         
-        
+        obsTreeItems = FXCollections.observableArrayList(treeItems);
+        root.getChildren().addAll(obsTreeItems);
         
         root.setExpanded(true);
         initMonthTable();
@@ -114,7 +122,7 @@ public class MainPanel extends GridPane {
             @Override
             public TreeCell<MyNode> call(TreeView<MyNode> p) {
                 try {
-                    return new TextFieldTreeCellImpl();
+                    return new TextFieldTreeCellImpl(root, treeItems);
                 } catch (SQLException ex) {
                     Logger.getLogger(MainPanel.class.getName()).log(Level.SEVERE, null, ex);
                 }
