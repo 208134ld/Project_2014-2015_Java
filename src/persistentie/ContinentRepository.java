@@ -80,7 +80,8 @@ public class ContinentRepository extends Repository {
         
         return climateCharts;
     }
-      public ClimateChart getClimateChartByClimateChartID(int cID)
+    
+    public ClimateChart getClimateChartByClimateChartID(int cID)
     {
         String loc="";
         int begin=0;
@@ -136,5 +137,10 @@ public class ContinentRepository extends Repository {
         climate.setCountry(c);
         return climate;
     }
+    
+//    public void insertContinent(String name) throws SQLException{
+//        String sql = "INSERT INTO Continents (Name) VALUES ('"+name+"')";
+//        statement.executeUpdate(sql);
+//    }
     
 }
