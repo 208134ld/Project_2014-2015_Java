@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.Month;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
@@ -23,19 +24,24 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
+import javax.swing.JOptionPane;
 import persistentie.ContinentRepository;
 
 /**
@@ -65,7 +71,7 @@ public class MainPanel extends GridPane {
     @FXML
     private Label beginPeriode,eindPeriode;
     private ContinentRepository continentRepository;
-
+    private ClimateChart selectedClimatechart;
     public MainPanel() throws SQLException {
         continentRepository = new ContinentRepository();
 
@@ -124,12 +130,28 @@ public class MainPanel extends GridPane {
                 TreeItem<MyNode> selectedItem = newValue;
                 if(selectedItem.getValue().type.equalsIgnoreCase("ClimateChart")){
                     
-                    ClimateChart c  = continentRepository.getClimateChartByClimateChartID(selectedItem.getValue().id);
-                    updateLocationDetailPanel(c);
+                    selectedClimatechart  = continentRepository.getClimateChartByClimateChartID(selectedItem.getValue().id);
+                    updateLocationDetailPanel(selectedClimatechart);
                 }
                 
             }
         });
+        longitudeLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
+    @Override
+    public void handle(MouseEvent mouseEvent) {
+        if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+            if(mouseEvent.getClickCount() == 2){
+                
+                TextInputDialog dialog = new TextInputDialog();
+                dialog.setTitle("Verander longitude van "+selectedClimatechart.getLocation());
+                dialog.setHeaderText("Verander de longitude van "+ selectedClimatechart.getLocation());
+                dialog.setContentText("Geef nieuwe waarde in");
+
+            }
+        }
+    }
+});
+        
     }
     public void updateLocationDetailPanel(ClimateChart c)
     {
@@ -148,8 +170,37 @@ public class MainPanel extends GridPane {
     public void initMonthTable()
     {
         maandcol.setCellValueFactory(new PropertyValueFactory("month"));
-        tempCol.setCellValueFactory(new PropertyValueFactory("sed"));
-        sedCol.setCellValueFactory(new PropertyValueFactory("temp"));
+        tempCol.setCellValueFactory(new PropertyValueFactory("temp"));
+        sedCol.setCellValueFactory(new PropertyValueFactory("sed"));
+    }
+    @FXML
+    private void changeLongitude(MouseEvent event) {
+     
+//        TextInputDialog dialog = new TextInputDialog();
+//        dialog.setTitle("Verander longitude van "+selectedClimatechart.getLocation());
+//        dialog.setHeaderText("Verander de longitude van "+ selectedClimatechart.getLocation());
+//        dialog.setContentText("Geef nieuwe waarde in");
+//        dialog.showAndWait()
+//        .ifPresent(response -> {
+//        if (!response.isEmpty()){
+//            
+//}
+//
+    }
+    @FXML
+    private void changeLatitude(MouseEvent event)
+    {
+        
+    }
+    @FXML
+    private void changeBPeriod(MouseEvent event)
+    {
+        
+    }
+    @FXML
+    private void changeEPeriod(MouseEvent event)
+    {
+        
     }
 
 }
