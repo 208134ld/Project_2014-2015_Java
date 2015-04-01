@@ -1,5 +1,7 @@
 package domain;
 
+import gui.MainPanel;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -9,12 +11,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TreeCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
 
@@ -88,11 +96,26 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
         }
 
         if (getType().equalsIgnoreCase("Root")) {
-            MenuItem cmItem1 = new MenuItem("Add continent");
+            MenuItem cmItem1 = new MenuItem("Voeg werelddeel toe");
             cmItem1.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
-                    System.out.println("Geklikt!");
+                    TextInputDialog dialog = new TextInputDialog();
+                    dialog.setTitle("Voeg werelddeel toe");
+                    dialog.setHeaderText("Voeg werelddeel toe");
+                    dialog.setContentText("Geef naam in:");
+                    dialog.showAndWait()
+                            .ifPresent(response -> {
+                                if (!response.isEmpty()) {
+                                    String sql = "INSERT INTO Continents (Name) VALUES ('"+response+"')";
+                                    
+                                    try {
+                                        statement.executeUpdate(sql);
+                                    } catch (SQLException ex) {
+                                        Logger.getLogger(TextFieldTreeCellImpl.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                }
+                            });
                 }
             });
             cm.getItems().add(cmItem1);
@@ -153,8 +176,7 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
     private int getItemId() {
         return getItem() == null ? null : getItem().id;
     }
-    
-    
+
     //    private void contextMenuHelper(String word){
 //        MenuItem cmItem1 = new MenuItem("Voeg " + word + " toe!");
 //        cmItem1.setOnAction(new EventHandler<ActionEvent>() {

@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -102,6 +103,9 @@ public class MainPanel extends GridPane {
             
             root.getChildren().add(itemChild);
         }
+        
+        
+        
         root.setExpanded(true);
         initMonthTable();
         //Onderstaand gedeelte maakt het mogelijk om treeviewitems "on the spot" van naam te veranderen, dit werkt alleen met treeItem<String> dus moet nog aangepast worden
