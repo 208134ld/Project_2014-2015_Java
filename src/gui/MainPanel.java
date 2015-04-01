@@ -115,7 +115,7 @@ public class MainPanel extends GridPane {
          
         //itemChild.setExpanded(false);
         selectionTreeView.setRoot(root);
-        selectionTreeView.setShowRoot(false);
+        //selectionTreeView.setShowRoot(false);
         
         selectionTreeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<MyNode>>() {
             @Override
