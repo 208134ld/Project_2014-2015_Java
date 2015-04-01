@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.effect.*?>
@@ -9,7 +10,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" type="GridPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@Darktheme.css" type="GridPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="291.0" minWidth="10.0" prefWidth="176.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="456.0" minWidth="10.0" prefWidth="424.0" />
@@ -19,31 +20,31 @@
   </rowConstraints>
    <children>
       <TreeView fx:id="selectionTreeView" prefHeight="200.0" prefWidth="200.0" />
-      <GridPane GridPane.columnIndex="1">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <TableView prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
-              <columns>
-                <TableColumn fx:id="maandcol" prefWidth="75.0" text="Maand" />
-                <TableColumn fx:id="tempCol" prefWidth="75.0" text="Temperatuur" />
-                  <TableColumn fx:id="sedCol" prefWidth="75.0" text="Neerslag" />
-              </columns>
-            </TableView>
-            <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
-              <tabs>
-                <Tab text="Locatie info">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="1">
+        <tabs>
+          <Tab text="Locatie info">
+               <content>
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="15.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <TableView fx:id="monthTable" prefHeight="258.0" prefWidth="424.0" GridPane.rowIndex="1">
+                           <columns>
+                              <TableColumn fx:id="maandcol" prefWidth="129.0" text="Maand" />
+                              <TableColumn fx:id="tempCol" prefWidth="150.0" text="Temperatuur" />
+                              <TableColumn fx:id="sedCol" minWidth="0.0" prefWidth="122.0" text="Neerslag" />
+                           </columns>
+                        </TableView>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="anchorpane">
                            <children>
-                              <Label fx:id="locatieLable" layoutX="177.0" layoutY="1.0" prefHeight="27.0" prefWidth="70.0" text="Locatie" textOverrun="WORD_ELLIPSIS" underline="true">
+                              <Label fx:id="locatieLable" layoutX="177.0" layoutY="1.0" prefHeight="34.0" prefWidth="223.0" style="-fx-font-size: 23;" text="Locatie" textAlignment="RIGHT" textOverrun="WORD_ELLIPSIS" underline="true">
                                  <font>
-                                    <Font size="18.0" />
+                                    <Font size="17.0" />
                                  </font>
                               </Label>
                               <Label layoutX="14.0" layoutY="28.0" text="Longitude:" />
@@ -51,23 +52,23 @@
                               <Label layoutX="14.0" layoutY="62.0" text="Land:" />
                               <Label layoutX="13.0" layoutY="77.0" text="Begin periode:" />
                               <Label layoutX="13.0" layoutY="94.0" text="Eind periode:" />
-                              <Label fx:id="longitudeLabel" layoutX="108.0" layoutY="28.0" prefHeight="17.0" prefWidth="121.0" text="long" />
-                              <Label fx:id="latitudelabel" layoutX="108.0" layoutY="45.0" prefHeight="17.0" prefWidth="122.0" text="lat" />
-                              <Label fx:id="landId" layoutX="108.0" layoutY="62.0" text="Land" />
-                              <Label fx:id="beginPeriode" layoutX="107.0" layoutY="77.0" text="p1" />
-                              <Label layoutX="107.0" layoutY="94.0" text="p2" />
+                              <Label fx:id="longitudeLabel" layoutX="117.0" layoutY="28.0" prefHeight="17.0" prefWidth="121.0" text="long" />
+                              <Label fx:id="latitudelabel" layoutX="117.0" layoutY="45.0" prefHeight="17.0" prefWidth="122.0" text="lat" />
+                              <Label fx:id="landId" layoutX="117.0" layoutY="62.0" text="Land" />
+                              <Label fx:id="beginPeriode" layoutX="116.0" layoutY="77.0" text="p1" />
+                              <Label fx:id="eindPeriode" layoutX="116.0" layoutY="94.0" text="p2" />
                            </children>
                         </AnchorPane>
-                  </content>
-                </Tab>
-                <Tab text="Bekijk op site!">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                  </content>
-                </Tab>
-              </tabs>
-            </TabPane>
-         </children>
-      </GridPane>
+                     </children>
+                  </GridPane>
+               </content>
+          </Tab>
+          <Tab text="Bekijk op site!">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
    </children>
 </fx:root>

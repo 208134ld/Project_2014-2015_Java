@@ -7,23 +7,29 @@
 package domain;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 /**
  *
  * @author bremme windows
  */
 public class Months {
-    private IntegerProperty sed;
-    private IntegerProperty temp;
-    private MonthOfTheYear month;
-
+    private SimpleIntegerProperty sed;
+    private SimpleIntegerProperty temp;
+    private ObjectProperty<MonthOfTheYear> month  = new SimpleObjectProperty<>();
+    public SimpleIntegerProperty sedProperty(){return sed;}
+    public SimpleIntegerProperty tempProperty(){return temp;}
+    public ObjectProperty<MonthOfTheYear> monthProperty(){return month;}
     public MonthOfTheYear getMonth() {
-        return month;
+        return month.get();
     }
 
     public void setMonth(MonthOfTheYear month) {
-        this.month = month;
+        this.month.set(month);
     }
     
     public int getSed()
@@ -46,6 +52,8 @@ public class Months {
     {
         this.sed = new SimpleIntegerProperty(sed);
         this.temp = new SimpleIntegerProperty(temp);
-        this.month = month;
+        this.month.set(month);
+       
     }
+    
 }

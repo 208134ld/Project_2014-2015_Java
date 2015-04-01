@@ -132,7 +132,7 @@ public class ContinentRepository extends Repository {
             Logger.getLogger(ContinentRepository.class.getName()).log(Level.SEVERE, null, ex);
         }
         ClimateChart climate = new ClimateChart(loc,begin,einde,temp,sed,lat,longi,countryID);
-        System.out.println(c.getName());
+        
         climate.setCountry(c);
         return climate;
     }

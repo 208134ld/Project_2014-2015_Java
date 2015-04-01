@@ -8,24 +8,31 @@ package gui;
 import domain.ClimateChart;
 import domain.Continent;
 import domain.Country;
+import domain.MonthOfTheYear;
+import domain.Months;
 import domain.MyNode;
 import domain.TextFieldTreeCellImpl;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.Month;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
@@ -41,11 +48,13 @@ public class MainPanel extends GridPane {
     @FXML
     TreeView selectionTreeView;
     @FXML
-    private TableColumn<?, ?> maandcol;
+    private TableColumn<Months,MonthOfTheYear> maandcol;
     @FXML
-    private TableColumn<?, ?> tempCol;
+    private TableColumn<Months,String> tempCol;
     @FXML
-    private TableColumn<?, ?> sedCol;
+    private TableColumn<Months,String> sedCol;
+    @FXML
+    private TableView<Months> monthTable;
     @FXML
     private Label longitudeLabel;
     @FXML
@@ -53,7 +62,7 @@ public class MainPanel extends GridPane {
     @FXML
     private Label landId,locatieLable;
     @FXML
-    private Label beginPeriode;
+    private Label beginPeriode,eindPeriode;
     private ContinentRepository continentRepository;
 
     public MainPanel() throws SQLException {
@@ -87,7 +96,7 @@ public class MainPanel extends GridPane {
             root.getChildren().add(itemChild);
         }
         root.setExpanded(true);
-
+        initMonthTable();
         //Onderstaand gedeelte maakt het mogelijk om treeviewitems "on the spot" van naam te veranderen, dit werkt alleen met treeItem<String> dus moet nog aangepast worden
         selectionTreeView.setEditable(true);
         selectionTreeView.setCellFactory(new Callback<TreeView<MyNode>,TreeCell<MyNode>>(){
@@ -100,7 +109,7 @@ public class MainPanel extends GridPane {
                 }
                 return null;
             }
-
+ 
             
         });
          
@@ -123,10 +132,23 @@ public class MainPanel extends GridPane {
     }
     public void updateLocationDetailPanel(ClimateChart c)
     {
+       
         longitudeLabel.setText(c.getLongitude()+"");
         latitudelabel.setText(c.getLatidude()+"");
         locatieLable.setText(c.getLocation());
         landId.setText(c.getCountry().getName());
+        beginPeriode.setText(c.getBeginperiod()+"");
+        eindPeriode.setText(c.getEndperiod()+"");
+        ObservableList<Months> m = FXCollections.observableArrayList(c.getMonths());
+        
+        monthTable.setItems(FXCollections.observableArrayList(m));
+        
+    }
+    public void initMonthTable()
+    {
+        maandcol.setCellValueFactory(new PropertyValueFactory("month"));
+        tempCol.setCellValueFactory(new PropertyValueFactory("sed"));
+        sedCol.setCellValueFactory(new PropertyValueFactory("temp"));
     }
 
 }
