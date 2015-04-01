@@ -10,7 +10,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@Darktheme.css" type="GridPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@glass.css" type="GridPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="291.0" minWidth="10.0" prefWidth="176.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="456.0" minWidth="10.0" prefWidth="424.0" />
@@ -19,7 +19,7 @@
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <TreeView fx:id="selectionTreeView" prefHeight="200.0" prefWidth="200.0" />
+      <TreeView fx:id="selectionTreeView" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: 2B4B6F;" />
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="1">
         <tabs>
           <Tab text="Locatie info">
@@ -52,8 +52,15 @@
                               <Label layoutX="14.0" layoutY="62.0" text="Land:" />
                               <Label layoutX="13.0" layoutY="77.0" text="Begin periode:" />
                               <Label layoutX="13.0" layoutY="94.0" text="Eind periode:" />
-                              <Label fx:id="longitudeLabel" layoutX="117.0" layoutY="28.0" prefHeight="17.0" prefWidth="121.0" text="long" />
-                              <Label fx:id="latitudelabel" layoutX="117.0" layoutY="45.0" prefHeight="17.0" prefWidth="122.0" text="lat" />
+                              <Label fx:id="longitudeLabel" layoutX="117.0" layoutY="28.0" onMouseClicked="#changeLongitude" prefHeight="17.0" prefWidth="121.0" text="long">
+                                 <contextMenu>
+                                    <ContextMenu>
+                                      <items>
+                                        <MenuItem mnemonicParsing="false" onAction="#veranderLong" text="Edit" />
+                                      </items>
+                                    </ContextMenu>
+                                 </contextMenu></Label>
+                              <Label fx:id="latitudelabel" layoutX="117.0" layoutY="45.0" onMouseClicked="#changeLatitude" prefHeight="17.0" prefWidth="122.0" text="lat" />
                               <Label fx:id="landId" layoutX="117.0" layoutY="62.0" text="Land" />
                               <Label fx:id="beginPeriode" layoutX="116.0" layoutY="77.0" text="p1" />
                               <Label fx:id="eindPeriode" layoutX="116.0" layoutY="94.0" text="p2" />

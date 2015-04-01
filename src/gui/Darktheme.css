@@ -34,9 +34,9 @@ and open the template in the editor.
 }
 
 .table-view {
-    -fx-base: #1d1d1d;
-    -fx-control-inner-background: #1d1d1d;
-    -fx-background-color: #1d1d1d;
+    -fx-base: #738CA6;
+    -fx-control-inner-background: #738CA6;
+    -fx-background-color: #738CA6;
     -fx-table-cell-border-color: transparent;
     -fx-table-header-border-color: transparent;
     -fx-padding: 5;
@@ -148,11 +148,17 @@ and open the template in the editor.
     -fx-background-color: -fx-focus-color;
     -fx-text-fill: #ffffff;
 }
-
+.tree-view{
+    -fx-background-color: #2B4B6F;
+}
 .button:default:hover {
     -fx-background-color: derive(-fx-focus-color,30%);
 }
 .anchorpane{
-    -fx-background-color:  #1d1d1d;
+    -fx-background-color:  #4B698B;
     
 }
+.tree-cell{
+     -fx-background-color:  #728DA5;
+}
+

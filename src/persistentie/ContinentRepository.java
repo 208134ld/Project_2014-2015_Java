@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -35,7 +36,14 @@ public class ContinentRepository extends Repository {
         connection = DriverManager.getConnection(url, user, password);
         statement = connection.createStatement();
     }
-    
+    public void updateLongitude(int cID,double longi)
+    {
+        try {
+            statement.execute("update ClimateCharts set Longitude ="+longi+" where ClimateChartID = "+cID);
+        } catch (SQLException ex) {
+           JOptionPane.showMessageDialog(null,"Kon de waarde niet updaten in de database", url,JOptionPane.ERROR_MESSAGE);
+        }
+    }
     public List<Continent> getAllContinents() throws SQLException
     {
 //        getEm().getTransaction().begin();
@@ -137,10 +145,17 @@ public class ContinentRepository extends Repository {
         climate.setCountry(c);
         return climate;
     }
-    
 //    public void insertContinent(String name) throws SQLException{
 //        String sql = "INSERT INTO Continents (Name) VALUES ('"+name+"')";
 //        statement.executeUpdate(sql);
 //    }
+
+    public void updateLatitude(Integer id, double antw) {
+         try {
+            statement.execute("update ClimateCharts set Latitude ="+antw+" where ClimateChartID = "+id);
+        } catch (SQLException ex) {
+           JOptionPane.showMessageDialog(null,"Kon de waarde niet updaten in de database", url,JOptionPane.ERROR_MESSAGE);
+        }
+    }
     
 }

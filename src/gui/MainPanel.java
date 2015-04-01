@@ -140,26 +140,10 @@ public class MainPanel extends GridPane {
                 
             }
         });
-        longitudeLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
-    @Override
-    public void handle(MouseEvent mouseEvent) {
-        if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
-            if(mouseEvent.getClickCount() == 2){
-                
-                TextInputDialog dialog = new TextInputDialog();
-                dialog.setTitle("Verander longitude van "+selectedClimatechart.getLocation());
-                dialog.setHeaderText("Verander de longitude van "+ selectedClimatechart.getLocation());
-                dialog.setContentText("Geef nieuwe waarde in");
 
-            }
-        }
-    }
-});
-        
     }
     public void updateLocationDetailPanel(ClimateChart c)
     {
-       
         longitudeLabel.setText(c.getLongitude()+"");
         latitudelabel.setText(c.getLatidude()+"");
         locatieLable.setText(c.getLocation());
@@ -177,24 +161,27 @@ public class MainPanel extends GridPane {
         tempCol.setCellValueFactory(new PropertyValueFactory("temp"));
         sedCol.setCellValueFactory(new PropertyValueFactory("sed"));
     }
+    
     @FXML
     private void changeLongitude(MouseEvent event) {
-     
-//        TextInputDialog dialog = new TextInputDialog();
-//        dialog.setTitle("Verander longitude van "+selectedClimatechart.getLocation());
-//        dialog.setHeaderText("Verander de longitude van "+ selectedClimatechart.getLocation());
-//        dialog.setContentText("Geef nieuwe waarde in");
-//        dialog.showAndWait()
-//        .ifPresent(response -> {
-//        if (!response.isEmpty()){
-//            
-//}
-//
+        if(event.getClickCount()==2){
+            if(selectedClimatechart!=null)
+                
+            changeLongitudeDb();
+        }
+    }
+    @FXML
+    private void veranderLong(MouseEvent event)
+    {
+         if(selectedClimatechart!=null)
+            changeLongitudeDb();
     }
     @FXML
     private void changeLatitude(MouseEvent event)
     {
-        
+         if(event.getClickCount()==2){
+             changeLatDb();
+         }
     }
     @FXML
     private void changeBPeriod(MouseEvent event)
@@ -206,5 +193,58 @@ public class MainPanel extends GridPane {
     {
         
     }
+private void changeLongitudeDb()
+{
+    
+    TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Verander longitude van "+selectedClimatechart.getLocation());
+        dialog.setHeaderText("Verander de longitude van "+ selectedClimatechart.getLocation());
+        dialog.setContentText("Geef nieuwe waarde in:");
+        dialog.showAndWait()
+        .ifPresent(response -> {
+        if (!response.isEmpty()){
+            try{
+                 double antw=  Double.parseDouble(response);
+                 if(antw<-180 && antw >180)
+                     throw new IllegalArgumentException("longitude moet tussen -180 en 180 liggen");
+                 continentRepository.updateLongitude(selectedClimatechart.getId(), antw);
+                 longitudeLabel.setText(antw+"");
+            }catch(IllegalArgumentException ex)
+            {
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"inputError",JOptionPane.ERROR_MESSAGE);
+            }
+            catch(Exception e)
+            {
+                JOptionPane.showMessageDialog(null, "Kon het getal niet omzetten naar een geldige longitude","ConversieError",JOptionPane.ERROR_MESSAGE);
+            }
+         
+}});
+        }
+private void changeLatDb()
+{
+       TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Verander latitude van "+selectedClimatechart.getLocation());
+        dialog.setHeaderText("Verander de latitude van "+ selectedClimatechart.getLocation());
+        dialog.setContentText("Geef nieuwe waarde in:");
+        dialog.showAndWait()
+        .ifPresent(response -> {
+        if (!response.isEmpty()){
+            try{
+                 double antw=  Double.parseDouble(response);
+                 if(antw<-90 && antw >90)
+                     throw new IllegalArgumentException("latitude moet tussen -90 en 90 liggen");
+                 continentRepository.updateLatitude(selectedClimatechart.getId(), antw);
+                 latitudelabel.setText(antw+"");
+            }catch(IllegalArgumentException ex)
+            {
+                JOptionPane.showMessageDialog(null, ex.getMessage(),"inputError",JOptionPane.ERROR_MESSAGE);
+            }
+            catch(Exception e)
+            {
+                JOptionPane.showMessageDialog(null, "Kon het getal niet omzetten naar een geldige longitude","ConversieError",JOptionPane.ERROR_MESSAGE);
+            }
+         
+}});
+}
 
 }
