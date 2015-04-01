@@ -62,6 +62,18 @@ public class ContinentRepository extends Repository {
         return continents;
     }
     
+    public List<Country> getAllCountries() throws SQLException{
+        List<Country> countries = new ArrayList<>();
+        String sql = "select * from Countries";
+        ResultSet result = statement.executeQuery(sql);
+        
+        while(result.next()) {
+            countries.add(new Country(result.getString("name"), result.getInt("CountryID"), result.getInt("ContinentID")));
+        }
+        
+        return countries;
+    }
+    
     public List<Country> getCountriesOfContinent(int continentId) throws SQLException{
         List<Country> countries = new ArrayList<>();
         String sql = "select * from countries where ContinentID = "+continentId;

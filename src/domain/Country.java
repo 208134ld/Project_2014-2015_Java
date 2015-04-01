@@ -51,6 +51,12 @@ public class Country {
         climateCharts = FXCollections.observableArrayList();
     }
     
+    public Country(String name, int id, int continentId) {
+        this.name = new SimpleStringProperty(name);
+        countryId = new SimpleIntegerProperty(id);
+        climateCharts = FXCollections.observableArrayList();
+    }
+    
     
     public String getName() {
         return name.get();

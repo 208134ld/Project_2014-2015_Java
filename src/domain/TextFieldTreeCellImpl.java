@@ -100,22 +100,52 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
             cmItem1.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
-                    System.out.println(item.value);
+
+//                    try {
+//                        ti.getChildren().add(new TreeItem(new MyNode("hal", "Country", repository.getAllCountries().size())));
+//                    } catch (SQLException ex) {
+//                        Logger.getLogger(TextFieldTreeCellImpl.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+                    String tekst = "";
+                    TextInputDialog dialog1 = new TextInputDialog();
+                    dialog1.setTitle("Voeg land toe");
+                    dialog1.setHeaderText("Voeg land toe");
+                    dialog1.setContentText("Geef naam in:");
+                    dialog1.showAndWait()
+                            .ifPresent(response -> {
+                                if (!response.isEmpty()) {
+                                    TreeItem<MyNode> ti = new TreeItem<>();
+                                    for (TreeItem<MyNode> t : treeItems) {
+                                        if (t.getValue().type.equalsIgnoreCase(item.type) && t.getValue().value.equalsIgnoreCase(item.value)) {
+                                            ti = t;
+                                        }
+                                    }
+                                    try {
+                                        String sql = "INSERT INTO Countries (Name, CountryID, ContinentID) VALUES ('"+response+"', " + (repository.getAllCountries().size()+1) + ", " + item.id + ")";
+                                        statement.executeUpdate(sql);
+                                        ti.getChildren().add(new TreeItem(new MyNode(response, "Country", repository.getAllCountries().size())));
+                                    } catch (SQLException ex) {
+                                        Logger.getLogger(TextFieldTreeCellImpl.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                }
+                            });
+
+                    System.out.println(item);
                 }
             });
             cmItem2.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
                     try {
-                        String sql = "DELETE FROM Continents WHERE ContinentID=" + item.id ;
+                        String sql = "DELETE FROM Continents WHERE ContinentID=" + item.id;
                         statement.executeUpdate(sql);
                     } catch (SQLException ex) {
                         Logger.getLogger(TextFieldTreeCellImpl.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
-                    treeItems.remove(item.id-1);
+
+                    treeItems.remove(item.id - 1);
                     ObservableList obsTreeItems = FXCollections.observableArrayList(treeItems);
-                                    
+
                     root.getChildren().clear();
                     root.getChildren().addAll(obsTreeItems);
                 }
@@ -127,7 +157,7 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
 
         if (getType().equalsIgnoreCase("Root")) {
             MenuItem cmItem1 = new MenuItem("Voeg werelddeel toe");
-            
+
             cmItem1.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
@@ -139,20 +169,20 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
                             .ifPresent(response -> {
                                 if (!response.isEmpty()) {
                                     try {
-                                        String sql = "INSERT INTO Continents (Name, ContinentID) VALUES ('"+response+"', " + (repository.getAllContinents().size()+1) + ")";
+                                        String sql = "INSERT INTO Continents (Name, ContinentID) VALUES ('" + response + "', " + (repository.getAllContinents().size() + 1) + ")";
                                         statement.executeUpdate(sql);
                                     } catch (SQLException ex) {
                                         Logger.getLogger(TextFieldTreeCellImpl.class.getName()).log(Level.SEVERE, null, ex);
                                     }
-                                    
+
                                     try {
                                         treeItems.add(new TreeItem(new MyNode(response, "Continent", repository.getAllContinents().size())));
                                     } catch (SQLException ex) {
                                         Logger.getLogger(TextFieldTreeCellImpl.class.getName()).log(Level.SEVERE, null, ex);
                                     }
-                                    
+
                                     ObservableList obsTreeItems = FXCollections.observableArrayList(treeItems);
-                                    
+
                                     root.getChildren().clear();
                                     root.getChildren().addAll(obsTreeItems);
                                 }
