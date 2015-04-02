@@ -7,6 +7,7 @@ package gui;
 
 import domain.ClimateChart;
 import domain.Continent;
+import domain.ContinentBeheerder;
 import domain.Country;
 import domain.MonthOfTheYear;
 import domain.Months;
@@ -81,6 +82,7 @@ public class MainPanel extends GridPane {
     public MainPanel() throws SQLException {
         continentRepository = new ContinentRepository();
         treeItems = new ArrayList<>();
+        ContinentBeheerder cb = new ContinentBeheerder();
         
         FXMLLoader loader = new FXMLLoader(getClass().getResource("MainPanel.fxml"));
         loader.setRoot(this);
@@ -91,9 +93,13 @@ public class MainPanel extends GridPane {
             throw new RuntimeException(ex);
         }
 
+        for(Continent c : cb.getAllContinentsJPA()){
+            System.out.println(c.getName());
+        }
         final TreeItem<MyNode> root = new TreeItem<>(new MyNode("Root node", "Root", 1));
 
         for(Continent c : continentRepository.getAllContinents()){
+            
             TreeItem<MyNode> itemChild = new TreeItem<>(new MyNode(c.getName(), "Continent", c.getId()));
             
             for(Country co : continentRepository.getCountriesOfContinent(c.getId())){
@@ -131,7 +137,7 @@ public class MainPanel extends GridPane {
  
             
         });
-         
+        
         //itemChild.setExpanded(false);
         selectionTreeView.setRoot(root);
         //selectionTreeView.setShowRoot(false);

@@ -1,5 +1,6 @@
 
 package domain;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -17,23 +18,26 @@ import javax.persistence.*;
  * @author Samsung & CrazyB
  */
 @Entity
-public class Continent {
+@Table
+public class Continent implements Serializable {
     @Column(name = "Name")
     private StringProperty name;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ContinentID")
     private IntegerProperty continentId;
     @OneToMany(mappedBy="continent")
     private Connection connection;
     List<Country> countries;
     
-    public Continent(){};
     
     public Continent(String naam) throws SQLException {
         name = new SimpleStringProperty(naam);
         continentId = new SimpleIntegerProperty();
     }
+    
+    protected Continent()
+    {}
     
     public Continent(String naam,int id) throws SQLException
     {
