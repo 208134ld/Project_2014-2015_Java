@@ -3,6 +3,9 @@
   <persistence-unit name="HOGENT1415_11" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>domain.Continent</class>
+    <class>domain.Country</class>
+    <class>domain.ClimateChart</class>
+    <class>domain.Months</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=HOGENT1415_11"/>
       <property name="javax.persistence.jdbc.user" value="sa"/>

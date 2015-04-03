@@ -5,6 +5,7 @@
  */
 package domain;
 
+import java.io.Serializable;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,35 +13,142 @@ import java.util.Collections;
 import java.util.List;
 import javafx.beans.property.*;
 import static javafx.beans.property.DoubleProperty.doubleProperty;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-
-
+import javax.persistence.Transient;
 
 /**
  *
  * @author bremme windows
  */
 @Entity
-public class ClimateChart {
+@Access(AccessType.FIELD)
+public class ClimateChart implements Serializable {
 
-    @Column(name="Location")
-    private StringProperty location;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ClimateChartID")
     private int climateChartId;
-    @ManyToOne
-    private Country country;
-    private IntegerProperty beginperiod, endperiod;
+
+    @Transient
+    private final StringProperty location = new SimpleStringProperty();
+    @Transient
+    private final IntegerProperty beginperiod = new SimpleIntegerProperty();
+    @Transient
+    private final IntegerProperty endperiod = new SimpleIntegerProperty();
+    @Transient
+    private final DoubleProperty latitude = new SimpleDoubleProperty();
+    @Transient
+    private final DoubleProperty longitude = new SimpleDoubleProperty();
+    private int countryId;
     private boolean aboveEquator;
-    private DoubleProperty latitude,longitude;
-    public ClimateChart(){}
     private List<Months> months;
+
+    public ClimateChart() {
+    }
+
+    public ClimateChart(int id, String loc, int begin, int end, int[] temp, int[] sed, double latitude, double longitude) {
+        setLocation(loc);
+        setClimateChartId(id);
+        setBeginperiod(begin);
+        setEndperiod(end);
+        setLatitude(latitude);
+        setLongitude(longitude);
+        months = new ArrayList<Months>();
+        setMonthList(sed, temp);
+    }
+    
+    public ClimateChart(int id, String loc, int begin, int end, boolean equator, double latitude, double longitude, int countryId) {
+        setLocation(loc);
+        setClimateChartId(id);
+        setBeginperiod(begin);
+        setEndperiod(end);
+        setLatitude(latitude);
+        setLongitude(longitude);
+        months = new ArrayList<Months>();
+        this.countryId = countryId;
+    }
+
+    public ClimateChart(String location, int id) {
+        setLocation(location);
+        this.climateChartId = id;
+    }
+    
+    public int getCountryId(){
+        return this.countryId;
+    }
+
+    @Access(AccessType.PROPERTY)
+    public String getLocation() {
+        return location.get();
+    }
+
+    public void setLocation(String value) {
+        location.set(value);
+    }
+
+    public StringProperty nameProperty() {
+        return location;
+    }
+
+    @Access(AccessType.PROPERTY)
+    public int getBeginperiod() {
+        return beginperiod.get();
+    }
+
+    public void setBeginperiod(int value) {
+        beginperiod.set(value);
+    }
+
+    public IntegerProperty beginperiodProperty() {
+        return beginperiod;
+    }
+
+    @Access(AccessType.PROPERTY)
+    public int getEndperiod() {
+        return endperiod.get();
+    }
+
+    public void setEndperiod(int value) {
+        endperiod.set(value);
+    }
+
+    public IntegerProperty endperiodProperty() {
+        return endperiod;
+    }
+
+    @Access(AccessType.PROPERTY)
+    public double getLatitude() {
+        return latitude.get();
+    }
+
+    public void setLatitude(double value) {
+        latitude.set(value);
+    }
+
+    public DoubleProperty latitudeProperty() {
+        return latitude;
+    }
+
+    @Access(AccessType.PROPERTY)
+    public double getLongitude() {
+        return longitude.get();
+    }
+
+    public void setLongitude(double value) {
+        longitude.set(value);
+    }
+
+    public DoubleProperty longitudeProperty() {
+        return longitude;
+    }
+
     public void setClimateChartId(int climateChartId) {
         this.climateChartId = climateChartId;
     }
@@ -52,24 +160,6 @@ public class ClimateChart {
     public void setMonths(List<Months> months) {
         this.months = months;
     }
-    
-    public void setBeginperiod(int b)
-    {
-        this.beginperiod.set(b);
-    }
-    public  int getBeginperiod()
-    {
-        return this.beginperiod.get();
-    }
-    public void setEndperiod(int e)
-    {
-        this.endperiod.set(e);
-    }
-    public  int getEndperiod()
-    {
-        return this.endperiod.get();
-    }
-
 
     public boolean isAboveEquator() {
         return aboveEquator;
@@ -78,70 +168,20 @@ public class ClimateChart {
     public void setAboveEquator(boolean aboveEquator) {
         this.aboveEquator = aboveEquator;
     }
-    
-    public Country getCountry() {
-        return country;
-    }
-
-    public void setCountry(Country country) {
-        this.country = country;
-    }
-    
-    public ClimateChart(String location, int id)
-    {
-        this.location = new SimpleStringProperty(location);
-        this.climateChartId = id;
-    }
-    public ClimateChart(String loc,int begin,int end,int[]temp,int[]sed,double latidude,double longitude,int id)
-    {
-        this.location = new SimpleStringProperty(loc);
-        setClimateChartId(id);
-        this.endperiod = new SimpleIntegerProperty(end); 
-        this.beginperiod = new SimpleIntegerProperty(begin);
-        
-        this.latitude = new SimpleDoubleProperty(latidude);
-        this.longitude = new SimpleDoubleProperty(longitude);
-        months = new ArrayList<Months>();
-        setMonthList(sed,temp);
-    }
-    public StringProperty getLocationProp() {
-        return location;
-    }
-
-
-    public String getLocation() {
-        return location.get();
-    }
 
     public Integer getId() {
         return climateChartId;
     }
 
-    public double getLatidude() {
-        return latitude.get();
-    }
-
-    public void setLatidude(double latidude) {
-        this.latitude.set(latidude);
-    }
-
-    public double getLongitude() {
-        return longitude.get();
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude.set(longitude);
-    }
-    private void setMonthList(int[]sediments, int[]temperature)
-    {
-        if(temperature.length !=12||sediments.length!=12)
+    private void setMonthList(int[] sediments, int[] temperature) {
+        if (temperature.length != 12 || sediments.length != 12) {
             throw new IllegalArgumentException("Er zijn meer dan 12 maanden in deze lijst");
-        int counter=0;
-        for(MonthOfTheYear m : MonthOfTheYear.values())
-        {
-            months.add(new Months(sediments[counter],temperature[counter],m));
+        }
+        int counter = 0;
+        for (MonthOfTheYear m : MonthOfTheYear.values()) {
+            months.add(new Months(sediments[counter], temperature[counter], m));
             counter++;
         }
     }
-    
+
 }

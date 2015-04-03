@@ -6,10 +6,13 @@
 
 package domain;
 
+import javax.persistence.Entity;
+
 /**
  *
  * @author bremme windows
  */
+@Entity
 public enum MonthOfTheYear {
     Jan,Feb,Mrt,Apr,Mei,Jun,Jul,Aug,Sep,Nov,Okt,Dec
 }

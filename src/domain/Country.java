@@ -5,6 +5,7 @@
  */
 package domain;
 
+import java.io.Serializable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -17,6 +18,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 /**
@@ -24,7 +27,11 @@ import javax.persistence.OneToMany;
  * @author bremme windows
  */
 @Entity
-public class Country {
+@NamedQueries({
+    @NamedQuery(name="Country.findByName",
+                query= "select c from Country c where c.name = :countryNaam")
+})
+public class Country implements Serializable {
     @Column(name="Name")
     private StringProperty name;
     @Id

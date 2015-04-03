@@ -1,4 +1,4 @@
-package domain;
+package util;
 
 import gui.MainPanel;
 import java.io.IOException;
@@ -27,7 +27,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import persistentie.ContinentRepository;
+import repository.ContinentRepository;
+import repository.RepositoryController;
 
 public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
 
@@ -41,14 +42,14 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
     private Statement statement;
     final TreeItem<MyNode> root;
     private List<TreeItem<MyNode>> treeItems;
-    private ContinentRepository repository;
+    private RepositoryController rc;
 
-    public TextFieldTreeCellImpl(TreeItem<MyNode> root, List<TreeItem<MyNode>> treeItems) throws SQLException {
+    public TextFieldTreeCellImpl(TreeItem<MyNode> root, List<TreeItem<MyNode>> treeItems, RepositoryController rc) throws SQLException {
         connection = DriverManager.getConnection(url, user, password);
         statement = connection.createStatement();
         this.root = root;
         this.treeItems = treeItems;
-        repository = new ContinentRepository();
+        this.rc = rc;
     }
 
     @Override
@@ -121,9 +122,9 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
                                         }
                                     }
                                     try {
-                                        String sql = "INSERT INTO Countries (Name, CountryID, ContinentID) VALUES ('"+response+"', " + (repository.getAllCountries().size()+1) + ", " + item.id + ")";
+                                        String sql = "INSERT INTO Countries (Name, CountryID, ContinentID) VALUES ('"+response+"', " + (rc.getAllCountries().size()+1) + ", " + item.id + ")";
                                         statement.executeUpdate(sql);
-                                        ti.getChildren().add(new TreeItem(new MyNode(response, "Country", repository.getAllCountries().size())));
+                                        ti.getChildren().add(new TreeItem(new MyNode(response, "Country", rc.getAllCountries().size())));
                                     } catch (SQLException ex) {
                                         Logger.getLogger(TextFieldTreeCellImpl.class.getName()).log(Level.SEVERE, null, ex);
                                     }
@@ -169,14 +170,14 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
                             .ifPresent(response -> {
                                 if (!response.isEmpty()) {
                                     try {
-                                        String sql = "INSERT INTO Continents (Name, ContinentID) VALUES ('" + response + "', " + (repository.getAllContinents().size() + 1) + ")";
+                                        String sql = "INSERT INTO Continents (Name, ContinentID) VALUES ('" + response + "', " + (rc.getAllContinents().size()+1) + ")";
                                         statement.executeUpdate(sql);
                                     } catch (SQLException ex) {
                                         Logger.getLogger(TextFieldTreeCellImpl.class.getName()).log(Level.SEVERE, null, ex);
                                     }
 
                                     try {
-                                        treeItems.add(new TreeItem(new MyNode(response, "Continent", repository.getAllContinents().size())));
+                                        treeItems.add(new TreeItem(new MyNode(response, "Continent", rc.getAllContinents().size())));
                                     } catch (SQLException ex) {
                                         Logger.getLogger(TextFieldTreeCellImpl.class.getName()).log(Level.SEVERE, null, ex);
                                     }

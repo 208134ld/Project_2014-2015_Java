@@ -18,7 +18,10 @@ import javax.persistence.*;
  * @author Samsung & CrazyB
  */
 @Entity
-@Table
+@NamedQueries({
+    @NamedQuery(name="Continent.findByName",
+                query= "select c from Continent c where c.name = :continentNaam")
+})
 public class Continent implements Serializable {
     @Column(name = "Name")
     private StringProperty name;
