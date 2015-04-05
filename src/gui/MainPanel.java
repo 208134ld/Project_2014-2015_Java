@@ -94,7 +94,7 @@ public class MainPanel extends GridPane {
 
         for (Continent c : rc.getAllContinents()) {
 
-            TreeItem<MyNode> itemChild = new TreeItem<>(new MyNode(c.getName(), "Continent", c.getId()));
+            TreeItem<MyNode> itemChild = new TreeItem<>(new MyNode(c.toString(), "Continent", c.getId()));
 
             for (Country co : rc.getCountriesOfContinent(c.getId())) {
                 TreeItem<MyNode> countryChild = new TreeItem<>(new MyNode(co.getName(), "Country", co.getId()));

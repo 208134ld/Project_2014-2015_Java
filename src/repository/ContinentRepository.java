@@ -37,17 +37,19 @@ public class ContinentRepository {
     
     public List<Continent> getAllContinents() throws SQLException
     {
-//        this.em = JPAUtil.getEntityManager();
-//        return em.createQuery("select c from Continents c", Continent.class).getResultList();
-        List<Continent> continents = new ArrayList<>();
-        
-        List<Object[]> tuples = (List<Object[]>) em.createNativeQuery("SELECT * FROM Continents").getResultList();
-
-        for (Object[] tuple : tuples) 
-        {
-            continents.add(new Continent((String)tuple[1], (int)tuple[0]));
-        }
+        this.em = JPAUtil.getEntityManager();
+        List<Continent> continents = em.createQuery("select c from Continents c", Continent.class).getResultList();
         return continents;
+        
+//        List<Continent> continents = new ArrayList<>();
+//        
+//        List<Object[]> tuples = (List<Object[]>) em.createNativeQuery("SELECT * FROM Continents").getResultList();
+//
+//        for (Object[] tuple : tuples) 
+//        {
+//            continents.add(new Continent((String)tuple[1], (int)tuple[0]));
+//        }
+//        return continents;
         //TypedQuery<Continent> query = em.createNamedQuery("Continent.findAllContinents", Continent.class);
         //return query.getResultList();
     }

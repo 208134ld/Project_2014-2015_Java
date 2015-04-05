@@ -4,14 +4,14 @@ package domain;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -28,11 +28,13 @@ import javax.persistence.Transient;
 @NamedQuery(name="Continent.findAllContinents",query= "select c from Continents c")
 public class Continent implements Serializable {
 
-    @Transient
-    private final StringProperty name = new SimpleStringProperty();
+//    @Transient
+//    private final StringProperty name = new SimpleStringProperty();
+    
+    private String name;
     
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ContinentID")
     private int continentId;
     
@@ -53,17 +55,25 @@ public class Continent implements Serializable {
         setId(id);
     }
     
-    @Access(AccessType.PROPERTY)
+//    @Access(AccessType.PROPERTY)
+//    public String getName() {
+//        return name.get();
+//    }
+//
+//    public void setName(String value) {
+//        name.set(value);
+//    }
+//
+//    public StringProperty nameProperty() {
+//        return name;
+//    }
+    
     public String getName() {
-        return name.get();
+        return name;
     }
 
     public void setName(String value) {
-        name.set(value);
-    }
-
-    public StringProperty nameProperty() {
-        return name;
+        name = value;
     }
     
     public int getId() {

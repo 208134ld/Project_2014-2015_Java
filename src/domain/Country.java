@@ -30,10 +30,10 @@ import javax.persistence.Transient;
  * @author bremme windows
  */
 @Entity
-@NamedQueries({
-    @NamedQuery(name="Country.findByName",
-                query= "select c from Country c where c.name = :countryNaam")
-})
+//@NamedQueries({
+//    @NamedQuery(name="Country.findByName",
+//                query= "select c from Country c where c.name = :countryNaam")
+//})
 public class Country implements Serializable {
     
     
@@ -46,9 +46,9 @@ public class Country implements Serializable {
     private int countryId ;
     
     
-    @OneToMany(mappedBy="country")
-    private ObservableList<ClimateChart> climateCharts;
-    
+//    @OneToMany(mappedBy="country")
+//    private ObservableList<ClimateChart> climateCharts;
+//    
     
     @ManyToOne
     private Continent continent;
@@ -65,13 +65,13 @@ public class Country implements Serializable {
     public Country(String name, int id) {
         setName(name);
         setId(id);
-        climateCharts = FXCollections.observableArrayList();
+        //climateCharts = FXCollections.observableArrayList();
     }
     
     public Country(String name, int id, int continentId) {
         setName(name);
         setId(id);
-        climateCharts = FXCollections.observableArrayList();
+        //climateCharts = FXCollections.observableArrayList();
     }
     
     
@@ -96,11 +96,11 @@ public class Country implements Serializable {
         this.countryId=id;
     }
     
-    public ObservableList<ClimateChart> getClimateCharts(){
-        return climateCharts;
-    }
-    
-    public ClimateChart getClimateChart(int climateChartId){
-         return climateCharts.stream().filter(e->e.getId() == climateChartId).findFirst().get();
-    }
+//    public ObservableList<ClimateChart> getClimateCharts(){
+//        return climateCharts;
+//    }
+//    
+//    public ClimateChart getClimateChart(int climateChartId){
+//         return climateCharts.stream().filter(e->e.getId() == climateChartId).findFirst().get();
+//    }
 }
