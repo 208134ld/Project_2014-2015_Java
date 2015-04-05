@@ -8,12 +8,15 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 
 /**
@@ -24,19 +27,21 @@ import javax.persistence.Table;
 @Table(name = "Continents")
 @NamedQuery(name="Continent.findAllContinents",query= "select c from Continents c")
 public class Continent implements Serializable {
-    @Column(name = "Name")
-    private StringProperty name;
+
+    @Transient
+    private final StringProperty name = new SimpleStringProperty();
+    
     @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ContinentID")
-    private IntegerProperty continentId;
+    private int continentId;
+    
     @OneToMany(mappedBy="continent")
     List<Country> countries;
     
     
     public Continent(String naam) throws SQLException {
-        name = new SimpleStringProperty(naam);
-        continentId = new SimpleIntegerProperty();
+        setName(naam);
     }
     
     protected Continent()
@@ -44,35 +49,33 @@ public class Continent implements Serializable {
     
     public Continent(String naam,int id) throws SQLException
     {
-        this(naam);
+        setName(naam);
         setId(id);
     }
     
+    @Access(AccessType.PROPERTY)
     public String getName() {
         return name.get();
     }
-    
-    public void setName(String name) {
-        this.name.set(name);
-        
-    }
-    
-    public Integer getId() {
-        return continentId.get();
-    }
-    
-    public final void setId(int id)
-    {
-        this.continentId.set(id);
+
+    public void setName(String value) {
+        name.set(value);
     }
 
-    public StringProperty getNameProp() {
+    public StringProperty nameProperty() {
         return name;
     }
-
-    public IntegerProperty getIdProp() {
+    
+    public int getId() {
         return continentId;
     }
+    
+    public void setId(int id)
+    {
+        continentId = id;
+    }
+
+    
     
     public List<Country> getCountries()
     {
