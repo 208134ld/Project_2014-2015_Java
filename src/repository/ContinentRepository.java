@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.swing.JOptionPane;
 import util.JPAUtil;
 
@@ -36,6 +37,8 @@ public class ContinentRepository {
     
     public List<Continent> getAllContinents() throws SQLException
     {
+//        this.em = JPAUtil.getEntityManager();
+//        return em.createQuery("select c from Continents c", Continent.class).getResultList();
         List<Continent> continents = new ArrayList<>();
         
         List<Object[]> tuples = (List<Object[]>) em.createNativeQuery("SELECT * FROM Continents").getResultList();
@@ -45,6 +48,8 @@ public class ContinentRepository {
             continents.add(new Continent((String)tuple[1], (int)tuple[0]));
         }
         return continents;
+        //TypedQuery<Continent> query = em.createNamedQuery("Continent.findAllContinents", Continent.class);
+        //return query.getResultList();
     }
 
 

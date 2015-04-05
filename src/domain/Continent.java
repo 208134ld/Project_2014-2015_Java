@@ -1,27 +1,28 @@
 
 package domain;
+
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
-import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javax.persistence.*;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 
 /**
  *
  * @author Samsung & CrazyB
  */
-@Entity
-@NamedQueries({
-    @NamedQuery(name="Continent.findByName",
-                query= "select c from Continent c where c.name = :continentNaam")
-})
+@Entity(name="Continents")
+@Table(name = "Continents")
+@NamedQuery(name="Continent.findAllContinents",query= "select c from Continents c")
 public class Continent implements Serializable {
     @Column(name = "Name")
     private StringProperty name;
@@ -30,7 +31,6 @@ public class Continent implements Serializable {
     @Column(name = "ContinentID")
     private IntegerProperty continentId;
     @OneToMany(mappedBy="continent")
-    private Connection connection;
     List<Country> countries;
     
     
