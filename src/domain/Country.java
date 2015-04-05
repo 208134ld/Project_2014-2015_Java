@@ -12,6 +12,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,6 +23,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 /**
  *
@@ -32,14 +35,21 @@ import javax.persistence.OneToMany;
                 query= "select c from Country c where c.name = :countryNaam")
 })
 public class Country implements Serializable {
-    @Column(name="Name")
-    private StringProperty name;
+    
+    
+    @Transient
+    private final StringProperty name = new SimpleStringProperty();
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CountryID")
-    private IntegerProperty countryId ;
+    private int countryId ;
+    
+    
     @OneToMany(mappedBy="country")
     private ObservableList<ClimateChart> climateCharts;
+    
+    
     @ManyToOne
     private Continent continent;
 
@@ -53,40 +63,37 @@ public class Country implements Serializable {
     }
 
     public Country(String name, int id) {
-        this.name = new SimpleStringProperty(name);
-        countryId = new SimpleIntegerProperty(id);
+        setName(name);
+        setId(id);
         climateCharts = FXCollections.observableArrayList();
     }
     
     public Country(String name, int id, int continentId) {
-        this.name = new SimpleStringProperty(name);
-        countryId = new SimpleIntegerProperty(id);
+        setName(name);
+        setId(id);
         climateCharts = FXCollections.observableArrayList();
     }
     
     
+    @Access(AccessType.PROPERTY)
     public String getName() {
         return name.get();
     }
-    
-    public void setName(String name) {
-        this.name.set(name);
-    }
-    
-    public Integer getId() {
-        return countryId.get();
-    }
-    
-    public final void SetId(int id){
-        this.countryId.set(id);
+
+    public void setName(String value) {
+        name.set(value);
     }
 
-    public StringProperty getNameProp() {
+    public StringProperty nameProperty() {
         return name;
     }
-
-    public IntegerProperty getIdProp() {
+    
+    public int getId() {
         return countryId;
+    }
+    
+    public void setId(int id){
+        this.countryId=id;
     }
     
     public ObservableList<ClimateChart> getClimateCharts(){

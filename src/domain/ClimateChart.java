@@ -93,7 +93,7 @@ public class ClimateChart implements Serializable {
         location.set(value);
     }
 
-    public StringProperty nameProperty() {
+    public StringProperty locationProperty() {
         return location;
     }
 
