@@ -21,6 +21,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.Transient;
 
 /**
@@ -29,6 +30,7 @@ import javax.persistence.Transient;
  */
 @Entity
 @Access(AccessType.FIELD)
+@NamedQuery(name="FindByCID",query="SELECT cl FROM ClimateChart Cl where cl.climateChartId = :CID")
 public class ClimateChart implements Serializable {
 
     @Id
@@ -46,6 +48,10 @@ public class ClimateChart implements Serializable {
     private final DoubleProperty latitude = new SimpleDoubleProperty();
     @Transient
     private final DoubleProperty longitude = new SimpleDoubleProperty();
+    @Transient
+    private final StringProperty LCord = new SimpleStringProperty();
+    @Transient 
+    private final StringProperty BCord = new SimpleStringProperty();
     private int countryId;
     private boolean aboveEquator;
     private List<Months> months;
@@ -53,24 +59,28 @@ public class ClimateChart implements Serializable {
     public ClimateChart() {
     }
 
-    public ClimateChart(int id, String loc, int begin, int end, int[] temp, int[] sed, double latitude, double longitude) {
+    public ClimateChart(int id, String loc, int begin, int end, int[] temp, int[] sed, double latitude, double longitude,String LCord,String BCord) {
         setLocation(loc);
         setClimateChartId(id);
         setBeginperiod(begin);
         setEndperiod(end);
         setLatitude(latitude);
         setLongitude(longitude);
+        setLCord(LCord);
+        setBCord(BCord);
         months = new ArrayList<Months>();
         setMonthList(sed, temp);
     }
     
-    public ClimateChart(int id, String loc, int begin, int end, boolean equator, double latitude, double longitude, int countryId) {
+    public ClimateChart(int id, String loc, int begin, int end, boolean equator, double latitude, double longitude,String LCord,String BCord, int countryId) {
         setLocation(loc);
         setClimateChartId(id);
         setBeginperiod(begin);
         setEndperiod(end);
         setLatitude(latitude);
         setLongitude(longitude);
+        setLCord(LCord);
+        setBCord(BCord);
         months = new ArrayList<Months>();
         this.countryId = countryId;
     }
@@ -140,7 +150,32 @@ public class ClimateChart implements Serializable {
     public double getLongitude() {
         return longitude.get();
     }
-
+    @Access(AccessType.PROPERTY)
+    public String getLCord()
+    {
+        return LCord.get();
+    }
+    @Access(AccessType.PROPERTY)
+    public String getBCord()
+    {
+        return BCord.get();
+    }
+    public void setLCord(String v)
+    {
+        LCord.set(v);
+    }
+    public void setBCord(String v)
+    {
+        BCord.set(v);
+    }
+    public StringProperty LCordProperty()
+    {
+        return LCord;
+    }
+    public StringProperty BCordProperty()
+    {
+        return BCord;
+    }
     public void setLongitude(double value) {
         longitude.set(value);
     }

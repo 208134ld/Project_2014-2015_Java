@@ -28,6 +28,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
@@ -58,13 +59,25 @@ public class MainPanel extends GridPane {
     @FXML
     private TableView<Months> monthTable;
     @FXML
-    private Label longitudeLabel;
+    private TextField beginPeriode;
     @FXML
-    private Label latitudelabel;
+    private TextField eindPeriode;
     @FXML
-    private Label landId, locatieLable;
+    private TextField BGraden;
     @FXML
-    private Label beginPeriode, eindPeriode;
+    private TextField BMinuten;
+    @FXML
+    private TextField BSeconden;
+    @FXML
+    private TextField BSeconden1;
+    @FXML
+    private TextField BMinuten1,LengteParameter,BreedteParameter;
+    @FXML
+    private TextField BGraden1;
+    @FXML
+    private Label LatitudeLabel;
+    @FXML
+    private Label LongitudeLabel;
     //private ContinentRepository continentRepository;
     private ClimateChart selectedClimatechart;
 
@@ -140,8 +153,9 @@ public class MainPanel extends GridPane {
                 TreeItem<MyNode> selectedItem = newValue;
                 if (selectedItem.getValue().type.equalsIgnoreCase("ClimateChart")) {
 
-                    //selectedClimatechart = continentRepository.getClimateChartByClimateChartID(selectedItem.getValue().id);
-                    //updateLocationDetailPanel(selectedClimatechart);
+//                    selectedClimatechart = rc.getClimateChartByClimateChartID(selectedItem.getValue().id);
+                    selectedClimatechart = new ClimateChart(1,"Gent",1950,1970,true,23.34534,44.34523,"51° 3' 15 OL ","30° 45' 10 NB ",1);
+                    updateLocationDetailPanel(selectedClimatechart);
                 }
 
             }
@@ -150,15 +164,25 @@ public class MainPanel extends GridPane {
     }
 
     public void updateLocationDetailPanel(ClimateChart c) {
-        longitudeLabel.setText(c.getLongitude() + "");
-        latitudelabel.setText(c.getLatitude() + "");
-        locatieLable.setText(c.getLocation());
-        landId.setText("Moet aangepast worden");
-        beginPeriode.setText(c.getBeginperiod() + "");
-        eindPeriode.setText(c.getEndperiod() + "");
-        ObservableList<Months> m = FXCollections.observableArrayList(c.getMonths());
 
-        monthTable.setItems(FXCollections.observableArrayList(m));
+        
+        beginPeriode.setText(c.getBeginperiod()+"");
+        eindPeriode.setText(c.getEndperiod()+"");
+        LatitudeLabel.setText(c.getLatitude()+"");
+        LongitudeLabel.setText(c.getLongitude()+"");
+        // GRADEN VAN LENGTE EN BREEDTE
+        BGraden1.setText(c.getBCord().trim().split("°")[0]);
+        BMinuten1.setText(c.getBCord().trim().split("°")[1].split("'")[0]);
+        String waarde = c.getBCord().trim().split("°")[1].split("'")[1];
+        BSeconden1.setText(waarde.substring(0,waarde.length()-2).trim());
+        BreedteParameter.setText(waarde.substring(waarde.length()-2,waarde.length()));
+        BGraden.setText(c.getLCord().trim().split("°")[0]);
+        BMinuten.setText(c.getLCord().trim().split("°")[1].split("'")[0]);
+        waarde = c.getLCord().trim().split("°")[1].split("'")[1];
+        BSeconden.setText(waarde.substring(0,waarde.length()-2).trim());
+        LengteParameter.setText(waarde.substring(waarde.length()-2,waarde.length()));
+//        ObservableList<Months> m = FXCollections.observableArrayList(c.getMonths());
+//        monthTable.setItems(FXCollections.observableArrayList(m));
 
     }
 
@@ -168,88 +192,6 @@ public class MainPanel extends GridPane {
         sedCol.setCellValueFactory(new PropertyValueFactory("sed"));
     }
 
-    @FXML
-    private void changeLongitude(MouseEvent event) {
-        if (event.getClickCount() == 2) {
-            if (selectedClimatechart != null) {
-                changeLongitudeDb();
-            }
-        }
-    }
 
-    @FXML
-    private void veranderLong(MouseEvent event) {
-        if (selectedClimatechart != null) {
-            changeLongitudeDb();
-        }
-    }
-
-    @FXML
-    private void changeLatitude(MouseEvent event) {
-        if (event.getClickCount() == 2) {
-            changeLatDb();
-        }
-    }
-
-    @FXML
-    private void changeBPeriod(MouseEvent event) {
-
-    }
-
-    @FXML
-    private void changeEPeriod(MouseEvent event) {
-
-    }
-
-    private void changeLongitudeDb() {
-
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Verander longitude van " + selectedClimatechart.getLocation());
-        dialog.setHeaderText("Verander de longitude van " + selectedClimatechart.getLocation());
-        dialog.setContentText("Geef nieuwe waarde in:");
-        dialog.showAndWait()
-                .ifPresent(response -> {
-                    if (!response.isEmpty()) {
-                        try {
-                            double antw = Double.parseDouble(response);
-                            if (antw < -180 && antw > 180) {
-                                throw new IllegalArgumentException("longitude moet tussen -180 en 180 liggen");
-                            }
-                            //continentRepository.updateLongitude(selectedClimatechart.getId(), antw);
-                            longitudeLabel.setText(antw + "");
-                        } catch (IllegalArgumentException ex) {
-                            JOptionPane.showMessageDialog(null, ex.getMessage(), "inputError", JOptionPane.ERROR_MESSAGE);
-                        } catch (Exception e) {
-                            JOptionPane.showMessageDialog(null, "Kon het getal niet omzetten naar een geldige longitude", "ConversieError", JOptionPane.ERROR_MESSAGE);
-                        }
-
-                    }
-                });
-    }
-
-    private void changeLatDb() {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Verander latitude van " + selectedClimatechart.getLocation());
-        dialog.setHeaderText("Verander de latitude van " + selectedClimatechart.getLocation());
-        dialog.setContentText("Geef nieuwe waarde in:");
-        dialog.showAndWait()
-                .ifPresent(response -> {
-                    if (!response.isEmpty()) {
-                        try {
-                            double antw = Double.parseDouble(response);
-                            if (antw < -90 && antw > 90) {
-                                throw new IllegalArgumentException("latitude moet tussen -90 en 90 liggen");
-                            }
-                            //continentRepository.updateLatitude(selectedClimatechart.getId(), antw);
-                            latitudelabel.setText(antw + "");
-                        } catch (IllegalArgumentException ex) {
-                            JOptionPane.showMessageDialog(null, ex.getMessage(), "inputError", JOptionPane.ERROR_MESSAGE);
-                        } catch (Exception e) {
-                            JOptionPane.showMessageDialog(null, "Kon het getal niet omzetten naar een geldige longitude", "ConversieError", JOptionPane.ERROR_MESSAGE);
-                        }
-
-                    }
-                });
-    }
 
 }
