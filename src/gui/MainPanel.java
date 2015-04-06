@@ -23,9 +23,11 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -38,6 +40,8 @@ import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.util.Callback;
 import javax.swing.JOptionPane;
 import repository.RepositoryController;
@@ -80,6 +84,10 @@ public class MainPanel extends GridPane {
     private Label LatitudeLabel,errorBar;
     @FXML
     private Label LongitudeLabel;
+        @FXML
+    private Tab ClimateGraph;
+    @FXML
+    private WebView siteView;
     //private ContinentRepository continentRepository;
     private ClimateChart selectedClimatechart;
 
@@ -88,7 +96,7 @@ public class MainPanel extends GridPane {
 
     private DomeinController dc;
     private RepositoryController rc;
-
+    private final String WEBSITE="http://climatechart.azurewebsites.net/";
     public MainPanel() throws SQLException {
         dc = new DomeinController();
         rc = new RepositoryController();
@@ -154,7 +162,7 @@ public class MainPanel extends GridPane {
             public void changed(ObservableValue<? extends TreeItem<MyNode>> observable, TreeItem<MyNode> oldValue, TreeItem<MyNode> newValue) {
                 TreeItem<MyNode> selectedItem = newValue;
                 if (selectedItem.getValue().type.equalsIgnoreCase("ClimateChart")) {
-
+                    
 //                    selectedClimatechart = rc.getClimateChartByClimateChartID(selectedItem.getValue().id);
                     selectedClimatechart = new ClimateChart(1,"Gent",1950,1970,true,23.34534,44.34523,"30° 45' 10\" NB ","51° 3' 15\" OL ",1);
                     updateLocationDetailPanel(selectedClimatechart);
@@ -237,6 +245,15 @@ public class MainPanel extends GridPane {
             errorBar.setText("Er is een fout opgetreden "+e.getMessage());
         }
     }
+        @FXML
+    private void RefreshSite(Event event) {
+        
+        WebEngine eng = siteView.getEngine();
+        //nog het continent getten
+            eng.load(WEBSITE+"ClimateChart/ShowExercises?selectedYear=3&continentId="+1+"&countryId="+selectedClimatechart.getCountryId()+"&climateId="+selectedClimatechart.getId());
+        
+    }
+    
     
 
 }

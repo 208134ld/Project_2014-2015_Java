@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.web.*?>
 <?import java.net.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
@@ -72,16 +73,19 @@
                               <TextField fx:id="BreedteParameter" layoutX="322.0" layoutY="50.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" promptText="NB" />
                               <TextField fx:id="LengteParameter" layoutX="322.0" layoutY="90.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" promptText="OL" />
                               <Button layoutX="335.0" layoutY="221.0" mnemonicParsing="false" onMouseClicked="#saveDetaillWindow" text="Opslaan" />
-                              <Label fx:id="errorBar" layoutX="17.0" layoutY="254.0" prefHeight="21.0" prefWidth="431.0" style="-fx-text-fill: #801515;" text="FOUTMELDING FOUT" textFill="#801515" />
+                              <Label fx:id="errorBar" layoutX="17.0" layoutY="254.0" prefHeight="21.0" prefWidth="431.0" style="-fx-text-fill: #801515;" textFill="#801515" />
                            </children>
                         </AnchorPane>
                      </children>
                   </GridPane>
                </content>
           </Tab>
-          <Tab text="Bekijk op site!">
+          <Tab fx:id="ClimateGraph" onSelectionChanged="#RefreshSite" text="Bekijk op site!">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <WebView fx:id="siteView" layoutX="59.0" layoutY="14.0" prefHeight="571.0" prefWidth="456.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children></AnchorPane>
             </content>
           </Tab>
         </tabs>
