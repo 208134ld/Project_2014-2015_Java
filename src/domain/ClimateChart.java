@@ -59,7 +59,7 @@ public class ClimateChart implements Serializable {
     public ClimateChart() {
     }
 
-    public ClimateChart(int id, String loc, int begin, int end, int[] temp, int[] sed, double latitude, double longitude,String LCord,String BCord) {
+    public ClimateChart(int id, String loc, int begin, int end, int[] temp, int[] sed, double latitude, double longitude,String BCord,String LCord) {
         setLocation(loc);
         setClimateChartId(id);
         setBeginperiod(begin);
@@ -72,7 +72,7 @@ public class ClimateChart implements Serializable {
         setMonthList(sed, temp);
     }
     
-    public ClimateChart(int id, String loc, int begin, int end, boolean equator, double latitude, double longitude,String LCord,String BCord, int countryId) {
+    public ClimateChart(int id, String loc, int begin, int end, boolean equator, double latitude, double longitude,String BCord,String LCord, int countryId) {
         setLocation(loc);
         setClimateChartId(id);
         setBeginperiod(begin);
@@ -217,6 +217,29 @@ public class ClimateChart implements Serializable {
             months.add(new Months(sediments[counter], temperature[counter], m));
             counter++;
         }
+    }
+    public String giveCords(int degree,int minutes,int seconds)
+    {
+        if(degree<0||minutes<0||seconds<0)
+            throw new IllegalArgumentException("Waarden moeten positief zijn");
+        if(minutes>60||seconds>60)
+            throw new IllegalArgumentException("minuten en seconden moeten kleiner zijn dan 60");
+        return degree+"° "+minutes+"' "+seconds+"\" ";
+    }
+    public double calcDecimals(int degree,int min,int sec,String par)
+    {
+       double val;
+       float f;
+       f=min;
+       f=f/60;
+       val = degree+f;
+       f=sec;
+       f=f/3600;
+       val = val+f;
+       System.out.println(val);
+        if(par.equalsIgnoreCase("zb")||par.equalsIgnoreCase("wl"))
+            val *=-1;
+        return Math.round (val * 1000000.0) / 1000000.0;
     }
 
 }

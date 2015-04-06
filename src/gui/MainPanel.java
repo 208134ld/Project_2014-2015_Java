@@ -34,6 +34,8 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.InputMethodEvent;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
@@ -75,7 +77,7 @@ public class MainPanel extends GridPane {
     @FXML
     private TextField BGraden1;
     @FXML
-    private Label LatitudeLabel;
+    private Label LatitudeLabel,errorBar;
     @FXML
     private Label LongitudeLabel;
     //private ContinentRepository continentRepository;
@@ -154,7 +156,7 @@ public class MainPanel extends GridPane {
                 if (selectedItem.getValue().type.equalsIgnoreCase("ClimateChart")) {
 
 //                    selectedClimatechart = rc.getClimateChartByClimateChartID(selectedItem.getValue().id);
-                    selectedClimatechart = new ClimateChart(1,"Gent",1950,1970,true,23.34534,44.34523,"51° 3' 15 OL ","30° 45' 10 NB ",1);
+                    selectedClimatechart = new ClimateChart(1,"Gent",1950,1970,true,23.34534,44.34523,"30° 45' 10\" NB ","51° 3' 15\" OL ",1);
                     updateLocationDetailPanel(selectedClimatechart);
                 }
 
@@ -165,21 +167,23 @@ public class MainPanel extends GridPane {
 
     public void updateLocationDetailPanel(ClimateChart c) {
 
-        
+        errorBar.setText("");
         beginPeriode.setText(c.getBeginperiod()+"");
         eindPeriode.setText(c.getEndperiod()+"");
         LatitudeLabel.setText(c.getLatitude()+"");
         LongitudeLabel.setText(c.getLongitude()+"");
         // GRADEN VAN LENGTE EN BREEDTE
-        BGraden1.setText(c.getBCord().trim().split("°")[0]);
-        BMinuten1.setText(c.getBCord().trim().split("°")[1].split("'")[0]);
-        String waarde = c.getBCord().trim().split("°")[1].split("'")[1];
-        BSeconden1.setText(waarde.substring(0,waarde.length()-2).trim());
-        BreedteParameter.setText(waarde.substring(waarde.length()-2,waarde.length()));
-        BGraden.setText(c.getLCord().trim().split("°")[0]);
-        BMinuten.setText(c.getLCord().trim().split("°")[1].split("'")[0]);
-        waarde = c.getLCord().trim().split("°")[1].split("'")[1];
-        BSeconden.setText(waarde.substring(0,waarde.length()-2).trim());
+        
+        BGraden.setText(c.getLCord().split("°")[0].trim());
+        BMinuten.setText(c.getLCord().split("°")[1].split("'")[0].trim());
+        String waarde = c.getLCord().split("°")[1].split("'")[1].trim();
+        BSeconden.setText(waarde.substring(0,waarde.length()-4).trim());
+        BreedteParameter.setText(waarde.substring(waarde.length()-2,waarde.length()).trim());
+        BGraden1.setText(c.getBCord().split("°")[0].trim());
+        BMinuten1.setText(c.getBCord().split("°")[1].split("'")[0].trim());
+         waarde = c.getBCord().split("°")[1].split("'")[1].trim();
+        BSeconden1.setText(waarde.substring(0,waarde.length()-4).trim());
+        
         LengteParameter.setText(waarde.substring(waarde.length()-2,waarde.length()));
 //        ObservableList<Months> m = FXCollections.observableArrayList(c.getMonths());
 //        monthTable.setItems(FXCollections.observableArrayList(m));
@@ -191,7 +195,48 @@ public class MainPanel extends GridPane {
         tempCol.setCellValueFactory(new PropertyValueFactory("temp"));
         sedCol.setCellValueFactory(new PropertyValueFactory("sed"));
     }
+    
+    @FXML
+    private void saveDetaillWindow(MouseEvent event) {
+        try{
+           
+            int g1 = Integer.parseInt(BGraden.getText().trim());
+            int g2 = Integer.parseInt(BGraden1.getText().trim());
+            int m1 = Integer.parseInt(BMinuten.getText().trim());
+            int m2 = Integer.parseInt(BMinuten1.getText().trim());
+            int s1 = Integer.parseInt(BSeconden.getText().trim());
+            int s2 = Integer.parseInt(BSeconden1.getText().trim());
+            int begin = Integer.parseInt(beginPeriode.getText().trim());
+            int einde = Integer.parseInt(eindPeriode.getText().trim());     
+           if(!(BreedteParameter.getText().trim().equalsIgnoreCase("ol")||BreedteParameter.getText().trim().equalsIgnoreCase("wl")))
+               throw new IllegalArgumentException("Breedteparameter kan alleen OL of WL zijn");
+           if(!(LengteParameter.getText().equalsIgnoreCase("nb")||!LengteParameter.getText().equalsIgnoreCase("zb")))
+               throw new IllegalArgumentException("Lengteparameter kan alleen NB of ZB zijn");
+           String longi=  selectedClimatechart.giveCords(g1, m1, s1) + BreedteParameter.getText().toUpperCase().trim();
+           String lat =   selectedClimatechart.giveCords(g2, m2, s2)+ LengteParameter.getText().toUpperCase().trim();
+           selectedClimatechart.setBCord(lat);
+           selectedClimatechart.setLCord(longi);
+           selectedClimatechart.setBeginperiod(begin);
+           selectedClimatechart.setEndperiod(einde);
+           selectedClimatechart.setLatitude(selectedClimatechart.calcDecimals(g1, m1, s1,BreedteParameter.getText().trim()));
+           selectedClimatechart.setLongitude(selectedClimatechart.calcDecimals(g2, m2, s2,LengteParameter.getText().trim()));
+           //Database connectie
+           updateLocationDetailPanel(selectedClimatechart);
+            
+        }catch(NumberFormatException ex)
+        {
+            errorBar.setText("Pars error. hebt u tekst in de tekstbox staan?");
+        }
+        catch(IllegalArgumentException ilExc)
+        {
+            errorBar.setText(ilExc.getMessage());
+        }
 
-
+        catch(Exception e)
+        {
+            errorBar.setText("Er is een fout opgetreden "+e.getMessage());
+        }
+    }
+    
 
 }
