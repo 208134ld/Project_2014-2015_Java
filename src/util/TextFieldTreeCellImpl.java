@@ -1,5 +1,6 @@
 package util;
 
+import gui.LocationWizardController;
 import gui.MainPanel;
 import java.io.IOException;
 import java.sql.Connection;
@@ -25,6 +26,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import repository.ContinentRepository;
@@ -199,7 +201,8 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
             cmItem1.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
-                    System.out.println("Geklikt!");
+                    showStage();
+                    System.out.println("Geklikt! add location"+getString());
                 }
             });
             cm.getItems().add(cmItem1);
@@ -207,7 +210,18 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
         }
 
     }
+public static void showStage(){
+Stage newStage = new Stage();
+VBox comp = new VBox();
+TextField nameField = new TextField("Name");
+TextField phoneNumber = new TextField("Phone Number");
+comp.getChildren().add(nameField);
+comp.getChildren().add(phoneNumber);
 
+Scene stageScene = new Scene(new LocationWizardController(), 300, 300);
+newStage.setScene(stageScene);
+newStage.show();
+}
     private void createTextField() {
         textField = new TextField(getString());
         textField.setOnKeyReleased(new EventHandler<KeyEvent>() {
