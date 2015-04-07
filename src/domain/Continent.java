@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -26,6 +27,12 @@ import javax.persistence.Transient;
 @Entity(name="Continents")
 @Table(name = "Continents")
 @NamedQuery(name="Continent.findAllContinents",query= "select c from Continents c")
+
+@NamedQueries({
+    @NamedQuery(name="Continent.findAllContinents",query= "select c from Continents c"),
+    @NamedQuery(name="Continent.findById",
+                query="SELECT c FROM Continents c WHERE c.continentId = :continentID")
+}) 
 public class Continent implements Serializable {
 
 //    @Transient
@@ -42,7 +49,7 @@ public class Continent implements Serializable {
     List<Country> countries;
     
     
-    public Continent(String naam) throws SQLException {
+    public Continent(String naam){
         setName(naam);
     }
     
@@ -100,8 +107,9 @@ public class Continent implements Serializable {
     @Override
     public String toString()
     {
-        return getName();
+        return name;
     }
+
     
     
 }

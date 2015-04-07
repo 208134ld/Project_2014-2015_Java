@@ -31,6 +31,14 @@ public class RepositoryController {
         return continentRepo.getAllContinents();
     }
     
+    public void insertContinent(Continent c){
+        continentRepo.insertContinent(c);
+    }
+    
+    public Continent findContinentById(int id){
+        return continentRepo.findContinentById(id);
+    }
+    
     public List<Country> getAllCountries() throws SQLException{
         return countryRepo.getAllCountries();
     }

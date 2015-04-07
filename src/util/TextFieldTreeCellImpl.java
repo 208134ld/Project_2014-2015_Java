@@ -1,5 +1,6 @@
 package util;
 
+import domain.Continent;
 import gui.MainPanel;
 import java.io.IOException;
 import java.sql.Connection;
@@ -27,6 +28,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javax.persistence.EntityManager;
 import repository.ContinentRepository;
 import repository.RepositoryController;
 
@@ -43,6 +45,8 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
     final TreeItem<MyNode> root;
     private List<TreeItem<MyNode>> treeItems;
     private RepositoryController rc;
+    
+    private EntityManager em;
 
     public TextFieldTreeCellImpl(TreeItem<MyNode> root, List<TreeItem<MyNode>> treeItems, RepositoryController rc) throws SQLException {
         connection = DriverManager.getConnection(url, user, password);
@@ -50,6 +54,7 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
         this.root = root;
         this.treeItems = treeItems;
         this.rc = rc;
+        this.em = JPAUtil.getEntityManager();
     }
 
     @Override
@@ -137,14 +142,12 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
             cmItem2.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
-                    try {
-                        String sql = "DELETE FROM Continents WHERE ContinentID=" + item.id;
-                        statement.executeUpdate(sql);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(TextFieldTreeCellImpl.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-
-                    treeItems.remove(item.id - 1);
+                    em.getTransaction().begin();
+                    em.remove(rc.findContinentById(item.id));
+                    em.getTransaction().commit();
+                    
+                    treeItems.remove(getTreeItem());
+                    
                     ObservableList obsTreeItems = FXCollections.observableArrayList(treeItems);
 
                     root.getChildren().clear();
@@ -169,18 +172,14 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
                     dialog.showAndWait()
                             .ifPresent(response -> {
                                 if (!response.isEmpty()) {
-                                    try {
-                                        String sql = "INSERT INTO Continents (Name, ContinentID) VALUES ('" + response + "', " + (rc.getAllContinents().size()+1) + ")";
-                                        statement.executeUpdate(sql);
-                                    } catch (SQLException ex) {
-                                        Logger.getLogger(TextFieldTreeCellImpl.class.getName()).log(Level.SEVERE, null, ex);
-                                    }
-
-                                    try {
-                                        treeItems.add(new TreeItem(new MyNode(response, "Continent", rc.getAllContinents().size())));
-                                    } catch (SQLException ex) {
-                                        Logger.getLogger(TextFieldTreeCellImpl.class.getName()).log(Level.SEVERE, null, ex);
-                                    }
+                                    Continent c = new Continent(response);
+                                    rc.insertContinent(c);
+                                    treeItems.add(new TreeItem(new MyNode(response, "Continent", c.getId())));
+//                                    try {
+//                                        treeItems.add(new TreeItem(new MyNode(response, "Continent", rc.getAllContinents().size())));
+//                                    } catch (SQLException ex) {
+//                                        Logger.getLogger(TextFieldTreeCellImpl.class.getName()).log(Level.SEVERE, null, ex);
+//                                    }
 
                                     ObservableList obsTreeItems = FXCollections.observableArrayList(treeItems);
 

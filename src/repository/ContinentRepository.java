@@ -9,9 +9,11 @@ package repository;
 import domain.Continent;
 import java.sql.SQLException;
 import java.util.List;
+import javafx.scene.control.TreeItem;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import util.JPAUtil;
+import util.MyNode;
 
 /**
  *
@@ -21,20 +23,25 @@ public class ContinentRepository {
     
     private EntityManager em;
     
-    public ContinentRepository() throws SQLException{
+    public ContinentRepository(){
         this.em = JPAUtil.getEntityManager();
     }
     
-    public List<Continent> getAllContinents() throws SQLException
+    public List<Continent> getAllContinents()
     {
         TypedQuery<Continent> query = em.createNamedQuery("Continent.findAllContinents", Continent.class);
         return query.getResultList();
     }
 
-
-//    public void insertContinent(String name) throws SQLException{
-//        String sql = "INSERT INTO Continents (Name) VALUES ('"+name+"')";
-//        statement.executeUpdate(sql);
-//    }
+    public void insertContinent(Continent c){
+        em.getTransaction().begin();
+        em.persist(c);
+        em.getTransaction().commit();
+    }
+    
+    public Continent findContinentById(int id){
+        TypedQuery<Continent> query = em.createNamedQuery("Continent.findById", Continent.class);
+        return query.setParameter("continentID", id).getSingleResult();
+    }
     
 }
