@@ -20,15 +20,24 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 /**
  *
  * @author bremme windows
  */
-@Entity
-@Access(AccessType.FIELD)
+//@Access(AccessType.FIELD)
+@Entity(name="ClimateCharts")
+@Table(name = "ClimateCharts")
+@NamedQueries({
+    @NamedQuery(name="ClimateChart.findByCountry",
+                query="SELECT c FROM ClimateCharts c WHERE c.country.countryId = :countryID")
+}) 
 public class ClimateChart implements Serializable {
 
     @Id
@@ -36,8 +45,8 @@ public class ClimateChart implements Serializable {
     @Column(name = "ClimateChartID")
     private int climateChartId;
 
-    @Transient
-    private final StringProperty location = new SimpleStringProperty();
+    //@Transient
+    private String location;
     @Transient
     private final IntegerProperty beginperiod = new SimpleIntegerProperty();
     @Transient
@@ -46,9 +55,13 @@ public class ClimateChart implements Serializable {
     private final DoubleProperty latitude = new SimpleDoubleProperty();
     @Transient
     private final DoubleProperty longitude = new SimpleDoubleProperty();
-    private int countryId;
+
     private boolean aboveEquator;
     private List<Months> months;
+    
+    @ManyToOne
+    @JoinColumn(name = "CountryID")
+    private Country country;
 
     public ClimateChart() {
     }
@@ -72,7 +85,7 @@ public class ClimateChart implements Serializable {
         setLatitude(latitude);
         setLongitude(longitude);
         months = new ArrayList<Months>();
-        this.countryId = countryId;
+        //this.countryId = countryId;
     }
 
     public ClimateChart(String location, int id) {
@@ -80,21 +93,29 @@ public class ClimateChart implements Serializable {
         this.climateChartId = id;
     }
     
-    public int getCountryId(){
-        return this.countryId;
+    public Country getCountry(){
+        return country;
     }
 
-    @Access(AccessType.PROPERTY)
+//    @Access(AccessType.PROPERTY)
+//    public String getLocation() {
+//        return location.get();
+//    }
+//
+//    public void setLocation(String value) {
+//        location.set(value);
+//    }
+//
+//    public StringProperty locationProperty() {
+//        return location;
+//    }
+    
     public String getLocation() {
-        return location.get();
+        return location;
     }
 
     public void setLocation(String value) {
-        location.set(value);
-    }
-
-    public StringProperty locationProperty() {
-        return location;
+        location = value;
     }
 
     @Access(AccessType.PROPERTY)

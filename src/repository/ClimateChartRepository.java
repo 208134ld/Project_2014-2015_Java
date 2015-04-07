@@ -2,13 +2,11 @@ package repository;
 
 import domain.ClimateChart;
 import domain.Country;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import util.JPAUtil;
 
 public class ClimateChartRepository {
@@ -20,15 +18,18 @@ public class ClimateChartRepository {
     }
 
     public List<ClimateChart> getClimateChartsOfCountry(int countryId) throws SQLException {
-        List<ClimateChart> climateCharts = new ArrayList<>();
-
-        List<Object[]> tuples = (List<Object[]>) em.createNativeQuery("SELECT * FROM ClimateCharts WHERE CountryID = " + countryId).getResultList();
-
-        for (Object[] tuple : tuples) {
-            climateCharts.add(new ClimateChart((int) tuple[0], (String) tuple[1], (int) tuple[2], (int) tuple[3], (boolean) tuple[4], (double) tuple[5], (double) tuple[6], (int) tuple[7]));
-        }
-
-        return climateCharts;
+        
+        TypedQuery<ClimateChart> query = em.createNamedQuery("ClimateChart.findByCountry", ClimateChart.class);
+        return query.setParameter("countryID", countryId).getResultList();
+//        List<ClimateChart> climateCharts = new ArrayList<>();
+//
+//        List<Object[]> tuples = (List<Object[]>) em.createNativeQuery("SELECT * FROM ClimateCharts WHERE CountryID = " + countryId).getResultList();
+//
+//        for (Object[] tuple : tuples) {
+//            climateCharts.add(new ClimateChart((int) tuple[0], (String) tuple[1], (int) tuple[2], (int) tuple[3], (boolean) tuple[4], (double) tuple[5], (double) tuple[6], (int) tuple[7]));
+//        }
+//
+//        return climateCharts;
     }
 
     public ClimateChart getClimateChartByClimateChartID(int cID) {

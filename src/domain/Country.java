@@ -19,26 +19,33 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 /**
  *
  * @author bremme windows
  */
-@Entity
-//@NamedQueries({
-//    @NamedQuery(name="Country.findByName",
-//                query= "select c from Country c where c.name = :countryNaam")
-//})
+@Entity(name="Countries")
+@Table(name = "Countries")
+@NamedQueries({
+    @NamedQuery(name="Country.findAll",
+                query="SELECT c FROM Countries c"),
+    @NamedQuery(name="Country.findCountriesByContinent",
+                query="SELECT c FROM Countries c WHERE c.continent.continentId = :continentID")
+}) 
 public class Country implements Serializable {
     
     
-    @Transient
-    private final StringProperty name = new SimpleStringProperty();
+//    @Transient
+//    private final String name = new SimpleStringProperty();
+    
+    private String name;
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,6 +58,7 @@ public class Country implements Serializable {
 //    
     
     @ManyToOne
+    @JoinColumn(name = "ContinentID")
     private Continent continent;
 
     public Country(){}
@@ -75,17 +83,25 @@ public class Country implements Serializable {
     }
     
     
-    @Access(AccessType.PROPERTY)
+//    @Access(AccessType.PROPERTY)
+//    public String getName() {
+//        return name.get();
+//    }
+//
+//    public void setName(String value) {
+//        name.set(value);
+//    }
+//
+//    public StringProperty nameProperty() {
+//        return name;
+//    }
+    
     public String getName() {
-        return name.get();
+        return name;
     }
 
     public void setName(String value) {
-        name.set(value);
-    }
-
-    public StringProperty nameProperty() {
-        return name;
+        name = value;
     }
     
     public int getId() {
