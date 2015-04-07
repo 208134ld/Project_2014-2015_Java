@@ -78,6 +78,7 @@ public class MainPanel extends GridPane {
         dc = new DomeinController();
         rc = new RepositoryController();
         //logan test
+        //stijn test
         //continentRepository = dc.getConRepo();
         treeItems = new ArrayList<>();
 
