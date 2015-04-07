@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.web.*?>
 <?import java.net.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
@@ -11,7 +10,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" stylesheets="@Darktheme.css" type="GridPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@Darktheme.css" type="GridPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="291.0" minWidth="10.0" prefWidth="176.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="456.0" minWidth="10.0" prefWidth="424.0" />
@@ -21,7 +20,7 @@
   </rowConstraints>
    <children>
       <TreeView fx:id="selectionTreeView" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: 2B4B6F;" />
-      <TabPane tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="1">
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="1">
         <tabs>
           <Tab text="Locatie info">
                <content>
@@ -48,44 +47,32 @@
                                     <Font size="17.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="18.0" layoutY="50.0" text="Breedte graden:" />
-                              <Label layoutX="17.0" layoutY="170.0" text="Latitude:" />
-                              <Label layoutX="18.0" layoutY="130.0" text="Periode:" />
-                              <TextField fx:id="beginPeriode" layoutX="143.0" layoutY="130.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="70.0" />
-                              <TextField fx:id="eindPeriode" layoutX="242.0" layoutY="130.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="70.0" />
-                              <Label layoutX="227.0" layoutY="130.0" prefHeight="21.0" prefWidth="0.0" text=":" />
-                              <TextField fx:id="BGraden" layoutX="142.0" layoutY="50.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
-                              <Label layoutX="192.0" layoutY="40.0" text="°" />
-                              <TextField fx:id="BMinuten" layoutX="202.0" layoutY="50.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
-                              <Label layoutX="253.0" layoutY="40.0" text="'" />
-                              <TextField fx:id="BSeconden" layoutX="262.0" layoutY="50.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
-                              <Label layoutX="314.0" layoutY="40.0" text="&quot;" />
-                              <TextField fx:id="BSeconden1" layoutX="262.0" layoutY="90.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
-                              <TextField fx:id="BMinuten1" layoutX="202.0" layoutY="90.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
-                              <TextField fx:id="BGraden1" layoutX="143.0" layoutY="90.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
-                              <Label layoutX="18.0" layoutY="90.0" text="Lengte graden:" />
-                              <Label layoutX="315.0" layoutY="80.0" text="&quot;" />
-                              <Label layoutX="254.0" layoutY="80.0" text="'" />
-                              <Label layoutX="193.0" layoutY="80.0" text="°" />
-                              <Label layoutX="18.0" layoutY="210.0" text="Longitude:" />
-                              <Label fx:id="LatitudeLabel" layoutX="142.0" layoutY="170.0" prefHeight="21.0" prefWidth="175.0" />
-                              <Label fx:id="LongitudeLabel" layoutX="142.0" layoutY="210.0" prefHeight="21.0" prefWidth="175.0" />
-                              <TextField fx:id="BreedteParameter" layoutX="322.0" layoutY="50.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" promptText="NB" />
-                              <TextField fx:id="LengteParameter" layoutX="322.0" layoutY="90.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" promptText="OL" />
-                              <Button layoutX="335.0" layoutY="221.0" mnemonicParsing="false" onMouseClicked="#saveDetaillWindow" text="Opslaan" />
-                              <Label fx:id="errorBar" layoutX="17.0" layoutY="254.0" prefHeight="21.0" prefWidth="431.0" style="-fx-text-fill: #801515;" textFill="#801515" />
+                              <Label layoutX="14.0" layoutY="28.0" text="Longitude:" />
+                              <Label layoutX="14.0" layoutY="45.0" text="Latitude:" />
+                              <Label layoutX="14.0" layoutY="62.0" text="Land:" />
+                              <Label layoutX="13.0" layoutY="77.0" text="Begin periode:" />
+                              <Label layoutX="13.0" layoutY="94.0" text="Eind periode:" />
+                              <Label fx:id="longitudeLabel" layoutX="117.0" layoutY="28.0" onMouseClicked="#changeLongitude" prefHeight="17.0" prefWidth="121.0" text="long">
+                                 <contextMenu>
+                                    <ContextMenu>
+                                      <items>
+                                        <MenuItem mnemonicParsing="false" onAction="#veranderLong" text="Edit" />
+                                      </items>
+                                    </ContextMenu>
+                                 </contextMenu></Label>
+                              <Label fx:id="latitudelabel" layoutX="117.0" layoutY="45.0" onMouseClicked="#changeLatitude" prefHeight="17.0" prefWidth="122.0" text="lat" />
+                              <Label fx:id="landId" layoutX="117.0" layoutY="62.0" text="Land" />
+                              <Label fx:id="beginPeriode" layoutX="116.0" layoutY="77.0" text="p1" />
+                              <Label fx:id="eindPeriode" layoutX="116.0" layoutY="94.0" text="p2" />
                            </children>
                         </AnchorPane>
                      </children>
                   </GridPane>
                </content>
           </Tab>
-          <Tab fx:id="ClimateGraph" onSelectionChanged="#RefreshSite" text="Bekijk op site!">
+          <Tab text="Bekijk op site!">
             <content>
-              <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <WebView fx:id="siteView" layoutX="59.0" layoutY="14.0" prefHeight="571.0" prefWidth="456.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                     </children></AnchorPane>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
             </content>
           </Tab>
         </tabs>

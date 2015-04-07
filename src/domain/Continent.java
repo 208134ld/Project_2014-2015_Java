@@ -53,7 +53,6 @@ public class Continent implements Serializable {
     {
         setName(naam);
         setId(id);
-        
     }
     
 //    @Access(AccessType.PROPERTY)
