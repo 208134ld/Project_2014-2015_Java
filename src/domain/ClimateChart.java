@@ -44,8 +44,8 @@ public class ClimateChart implements Serializable {
     @Column(name = "ClimateChartID")
     private int climateChartId;
 
-    @Transient
-    private  String location;
+    
+    private String location;
     @Transient
     private final IntegerProperty beginperiod = new SimpleIntegerProperty();
     @Transient
