@@ -26,6 +26,12 @@ public class CountryRepository {
         return query.setParameter("continentID", continentId).getResultList();
         
     }
+    
+    public void insertCountry(Country c){
+        em.getTransaction().begin();
+        em.persist(c);
+        em.getTransaction().commit();
+    }
 
     
 }

@@ -54,5 +54,10 @@ public class RepositoryController {
     public ClimateChart getClimateChartByClimateChartID(int chartId){
         return chartRepo.getClimateChartByClimateChartID(chartId);
     }
+    
+    public void insertCountry(Country c){
+        countryRepo.insertCountry(c);
+    }
+
 
 }

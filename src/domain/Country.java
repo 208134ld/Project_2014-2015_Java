@@ -76,6 +76,12 @@ public class Country implements Serializable {
         //climateCharts = FXCollections.observableArrayList();
     }
     
+    public Country(String name, Continent c) {
+        setName(name);
+        setContinent(c);
+        //climateCharts = FXCollections.observableArrayList();
+    }
+    
     public Country(String name, int id, int continentId) {
         setName(name);
         setId(id);

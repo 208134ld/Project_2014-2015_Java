@@ -1,6 +1,7 @@
 package util;
 
 import domain.Continent;
+import domain.Country;
 import gui.LocationWizardController;
 import gui.MainPanel;
 import java.io.IOException;
@@ -122,19 +123,26 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
                     dialog1.showAndWait()
                             .ifPresent(response -> {
                                 if (!response.isEmpty()) {
+                                    Country c = new Country(response, rc.findContinentById(item.id));
+                                    
+                                    //treeItems.add(new TreeItem(new MyNode(response, "Continent", c.getId())));
                                     TreeItem<MyNode> ti = new TreeItem<>();
+                                    
                                     for (TreeItem<MyNode> t : treeItems) {
                                         if (t.getValue().type.equalsIgnoreCase(item.type) && t.getValue().value.equalsIgnoreCase(item.value)) {
                                             ti = t;
                                         }
                                     }
-                                    try {
-                                        String sql = "INSERT INTO Countries (Name, CountryID, ContinentID) VALUES ('"+response+"', " + (rc.getAllCountries().size()+1) + ", " + item.id + ")";
-                                        statement.executeUpdate(sql);
-                                        ti.getChildren().add(new TreeItem(new MyNode(response, "Country", rc.getAllCountries().size())));
-                                    } catch (SQLException ex) {
-                                        Logger.getLogger(TextFieldTreeCellImpl.class.getName()).log(Level.SEVERE, null, ex);
-                                    }
+                                    
+                                    rc.insertCountry(c);
+//                                    try {
+//                                        String sql = "INSERT INTO Countries (Name, CountryID, ContinentID) VALUES ('"+response+"', " + (rc.getAllCountries().size()+1) + ", " + item.id + ")";
+//                                        statement.executeUpdate(sql);
+//                                        ti.getChildren().add(new TreeItem(new MyNode(response, "Country", rc.getAllCountries().size())));
+//                                    } catch (SQLException ex) {
+//                                        Logger.getLogger(TextFieldTreeCellImpl.class.getName()).log(Level.SEVERE, null, ex);
+//                                    }
+                                    ti.getChildren().add(new TreeItem(new MyNode(response, "Country", c.getId())));
                                 }
                             });
 
