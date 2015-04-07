@@ -1,14 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button layoutX="274.0" layoutY="188.0" mnemonicParsing="false" text="Button" />
+      <Pane fx:id="pane" layoutX="200.0" layoutY="76.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label layoutX="28.0" layoutY="180.0" text="Naam:" />
+            <TextField fx:id="beginPeriode1" layoutX="153.0" layoutY="180.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="170.0" />
+         </children>
+      </Pane>
+      <TextField fx:id="LengteParameter" layoutX="332.0" layoutY="100.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" promptText="OL" />
+      <TextField fx:id="BreedteParameter" layoutX="332.0" layoutY="60.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" promptText="NB" />
+      <Label layoutX="203.0" layoutY="90.0" text="°" />
+      <Label layoutX="264.0" layoutY="90.0" text="'" />
+      <Label layoutX="325.0" layoutY="90.0" text="&quot;" />
+      <Label layoutX="28.0" layoutY="100.0" text="Lengte graden:" />
+      <TextField fx:id="BGraden1" layoutX="153.0" layoutY="100.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
+      <TextField fx:id="BMinuten1" layoutX="212.0" layoutY="100.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
+      <TextField fx:id="BSeconden1" layoutX="272.0" layoutY="100.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
+      <Label layoutX="324.0" layoutY="50.0" text="&quot;" />
+      <TextField fx:id="BSeconden" layoutX="272.0" layoutY="60.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
+      <Label layoutX="263.0" layoutY="50.0" text="'" />
+      <TextField fx:id="BMinuten" layoutX="212.0" layoutY="60.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
+      <Label layoutX="202.0" layoutY="50.0" text="°" />
+      <TextField fx:id="BGraden" layoutX="152.0" layoutY="60.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
+      <Label layoutX="237.0" layoutY="140.0" prefHeight="21.0" prefWidth="0.0" text=":" />
+      <TextField fx:id="eindPeriode" layoutX="252.0" layoutY="140.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="70.0" />
+      <TextField fx:id="beginPeriode" layoutX="153.0" layoutY="140.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="70.0" />
+      <Label layoutX="28.0" layoutY="140.0" text="Periode:" />
+      <Label layoutX="28.0" layoutY="60.0" text="Breedte graden:" />
    </children>
 </AnchorPane>

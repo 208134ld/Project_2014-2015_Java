@@ -2,8 +2,10 @@
 package domain;
 
 import java.io.Serializable;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javax.persistence.Access;
@@ -24,7 +26,7 @@ public class Months implements Serializable {
     @Transient
     private final SimpleIntegerProperty sed = new SimpleIntegerProperty();
     @Transient
-    private final SimpleIntegerProperty temp = new SimpleIntegerProperty();
+    private final SimpleDoubleProperty temp = new SimpleDoubleProperty();
     @Transient
     private final ObjectProperty<MonthOfTheYear> month  = new SimpleObjectProperty<>();
     
@@ -67,7 +69,7 @@ public class Months implements Serializable {
     }
     
     @Access(AccessType.PROPERTY)
-    public int getTemp() {
+    public double getTemp() {
         return temp.get();
     }
 
@@ -75,7 +77,7 @@ public class Months implements Serializable {
         temp.set(value);
     }
 
-    public IntegerProperty tempProperty() {
+    public DoubleProperty tempProperty() {
         return temp;
     }
 

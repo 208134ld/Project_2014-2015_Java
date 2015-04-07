@@ -11,11 +11,10 @@ import domain.Country;
 import domain.DomeinController;
 import domain.MonthOfTheYear;
 import domain.Months;
-import util.MyNode;
-import util.TextFieldTreeCellImpl;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +27,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -45,6 +45,8 @@ import javafx.scene.web.WebView;
 import javafx.util.Callback;
 import javax.swing.JOptionPane;
 import repository.RepositoryController;
+import util.MyNode;
+import util.TextFieldTreeCellImpl;
 
 /**
  * FXML Controller class
@@ -176,6 +178,7 @@ public class MainPanel extends GridPane {
 
             }
         });
+      
 
     }
 
@@ -199,14 +202,27 @@ public class MainPanel extends GridPane {
         BSeconden1.setText(waarde.substring(0,waarde.length()-4).trim());
         
         LengteParameter.setText(waarde.substring(waarde.length()-2,waarde.length()));
+        List<Months> m = new ArrayList<>();
+        m.add(new Months(23,34,MonthOfTheYear.Apr));
+                ObservableList<Months> months  = FXCollections.observableArrayList(m);
 //        ObservableList<Months> m = FXCollections.observableArrayList(c.getMonths());
-//        monthTable.setItems(FXCollections.observableArrayList(m));
+        monthTable.setItems(FXCollections.observableArrayList(months));
 
     }
 
     public void initMonthTable() {
+         Callback<TableColumn<Months, String>, TableCell<Months, String>> cellFactory =
+                new Callback<TableColumn<Months,String>, TableCell<Months,String>>() {
+                     
+                    @Override
+                    public TableCell call(TableColumn p) {
+                        return new EditingCell();
+                    }
+                };
+        monthTable.setEditable(true);
         maandcol.setCellValueFactory(new PropertyValueFactory("month"));
         tempCol.setCellValueFactory(new PropertyValueFactory("temp"));
+        tempCol.setCellFactory(cellFactory);
         sedCol.setCellValueFactory(new PropertyValueFactory("sed"));
     }
     
