@@ -37,7 +37,9 @@ import javax.persistence.Transient;
     @NamedQuery(name="Country.findAll",
                 query="SELECT c FROM Countries c"),
     @NamedQuery(name="Country.findCountriesByContinent",
-                query="SELECT c FROM Countries c WHERE c.continent.continentId = :continentID")
+                query="SELECT c FROM Countries c WHERE c.continent.continentId = :continentID"),
+        @NamedQuery(name="Country.findById",
+                query="SELECT c FROM Countries c WHERE c.countryId = :countryID")
 }) 
 public class Country implements Serializable {
     

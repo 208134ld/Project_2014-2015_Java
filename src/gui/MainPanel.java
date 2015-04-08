@@ -93,6 +93,8 @@ public class MainPanel extends GridPane {
 
     private ObservableList<TreeItem<MyNode>> obsTreeItems;
     private List<TreeItem<MyNode>> treeItems;
+    private List<TreeItem<MyNode>> continentItems;
+    private List<TreeItem<MyNode>> countryItems;
 
     private DomeinController dc;
     private RepositoryController rc;
@@ -103,6 +105,8 @@ public class MainPanel extends GridPane {
 
         //continentRepository = dc.getConRepo();
         treeItems = new ArrayList<>();
+        continentItems = new ArrayList<>();
+        countryItems = new ArrayList<>();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("MainPanel.fxml"));
         loader.setRoot(this);
@@ -127,13 +131,15 @@ public class MainPanel extends GridPane {
                     countryChild.getChildren().add(climateChartChild);
                 }
                 itemChild.getChildren().add(countryChild);
+                treeItems.add(countryChild);
+                countryItems.add(countryChild);
             }
-
+            continentItems.add(itemChild);
             treeItems.add(itemChild);
             //root.getChildren().add(itemChild);
         }
         
-        obsTreeItems = FXCollections.observableArrayList(treeItems);
+        obsTreeItems = FXCollections.observableArrayList(continentItems);
         root.getChildren().addAll(obsTreeItems);
 
         root.setExpanded(true);

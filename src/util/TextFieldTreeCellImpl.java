@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -109,12 +110,6 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
             cmItem1.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
-
-//                    try {
-//                        ti.getChildren().add(new TreeItem(new MyNode("hal", "Country", repository.getAllCountries().size())));
-//                    } catch (SQLException ex) {
-//                        Logger.getLogger(TextFieldTreeCellImpl.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
                     String tekst = "";
                     TextInputDialog dialog1 = new TextInputDialog();
                     dialog1.setTitle("Voeg land toe");
@@ -125,28 +120,26 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
                                 if (!response.isEmpty()) {
                                     Country c = new Country(response, rc.findContinentById(item.id));
                                     
-                                    //treeItems.add(new TreeItem(new MyNode(response, "Continent", c.getId())));
                                     TreeItem<MyNode> ti = new TreeItem<>();
+                                    
+                                    rc.insertCountry(c);
                                     
                                     for (TreeItem<MyNode> t : treeItems) {
                                         if (t.getValue().type.equalsIgnoreCase(item.type) && t.getValue().value.equalsIgnoreCase(item.value)) {
                                             ti = t;
                                         }
                                     }
+                                    TreeItem<MyNode> node = new TreeItem(new MyNode(response, "Country", c.getId()));
+                                    //node.
+                                    treeItems.add(node);
                                     
-                                    rc.insertCountry(c);
-//                                    try {
-//                                        String sql = "INSERT INTO Countries (Name, CountryID, ContinentID) VALUES ('"+response+"', " + (rc.getAllCountries().size()+1) + ", " + item.id + ")";
-//                                        statement.executeUpdate(sql);
-//                                        ti.getChildren().add(new TreeItem(new MyNode(response, "Country", rc.getAllCountries().size())));
-//                                    } catch (SQLException ex) {
-//                                        Logger.getLogger(TextFieldTreeCellImpl.class.getName()).log(Level.SEVERE, null, ex);
-//                                    }
-                                    ti.getChildren().add(new TreeItem(new MyNode(response, "Country", c.getId())));
+                                    
+
+                                    ti.getChildren().add(node);
                                 }
                             });
 
-                    System.out.println(item);
+                    //out.println(item);
                 }
             });
             cmItem2.setOnAction(new EventHandler<ActionEvent>() {
@@ -155,11 +148,19 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
                     em.getTransaction().begin();
                     em.remove(rc.findContinentById(item.id));
                     em.getTransaction().commit();
-                    
                     treeItems.remove(getTreeItem());
+                    List<TreeItem<MyNode>> continentItems = new ArrayList<>();
+                                    
+                    for (TreeItem<MyNode> t : treeItems) {
+                        if (t.getValue().type.equalsIgnoreCase("Continent")) {
+                            continentItems.add(t);
+                        }
+                    }
                     
-                    ObservableList obsTreeItems = FXCollections.observableArrayList(treeItems);
-
+                    
+                    //System.out.println(continentItems);
+                    ObservableList obsTreeItems = FXCollections.observableArrayList(continentItems);
+                    
                     root.getChildren().clear();
                     root.getChildren().addAll(obsTreeItems);
                 }
@@ -184,14 +185,18 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
                                 if (!response.isEmpty()) {
                                     Continent c = new Continent(response);
                                     rc.insertContinent(c);
-                                    treeItems.add(new TreeItem(new MyNode(response, "Continent", c.getId())));
-//                                    try {
-//                                        treeItems.add(new TreeItem(new MyNode(response, "Continent", rc.getAllContinents().size())));
-//                                    } catch (SQLException ex) {
-//                                        Logger.getLogger(TextFieldTreeCellImpl.class.getName()).log(Level.SEVERE, null, ex);
-//                                    }
-
-                                    ObservableList obsTreeItems = FXCollections.observableArrayList(treeItems);
+                                    TreeItem<MyNode> node = new TreeItem(new MyNode(response, "Continent", c.getId()));
+                                    
+                                    treeItems.add(node);
+                                    List<TreeItem<MyNode>> continentItems = new ArrayList<>();
+                                    
+                                    for (TreeItem<MyNode> t : treeItems) {
+                                        if (t.getValue().type.equalsIgnoreCase("Continent")) {
+                                            continentItems.add(t);
+                                        }
+                                    }
+                                    
+                                    ObservableList obsTreeItems = FXCollections.observableArrayList(continentItems);
 
                                     root.getChildren().clear();
                                     root.getChildren().addAll(obsTreeItems);
@@ -204,15 +209,40 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
         }
 
         if (getType().equalsIgnoreCase("Country")) {
-            MenuItem cmItem1 = new MenuItem("Add location");
+            MenuItem cmItem1 = new MenuItem("Voeg klimatogram toe");
+            MenuItem cmItem2 = new MenuItem("Verwijder land");
             cmItem1.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
-                    showStage();
-                    System.out.println("Geklikt! add location"+getString());
+                    //showStage();
+                    System.out.println("Nog niet geïmplementeerd.");
+                }
+            });
+            cmItem2.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    em.getTransaction().begin();
+                    em.remove(rc.findCountryById(item.id));
+                    em.getTransaction().commit();
+                    
+                    treeItems.remove(getTreeItem());
+                    
+                    TreeItem<MyNode> ti = getTreeItem();
+                    List<TreeItem<MyNode>> countryItems = new ArrayList<>();
+                    
+                    for (TreeItem<MyNode> t : treeItems) {
+                        if ((!t.getValue().value.equalsIgnoreCase(ti.getValue().value)&&(t.getParent().getValue().id==ti.getParent().getValue().id))){
+                            countryItems.add(t);
+                        }
+                    }
+                    ObservableList obsTreeItems = FXCollections.observableArrayList(countryItems);
+                    ObservableList p = ti.getParent().getChildren();
+                    p.clear();
+                    p.addAll(obsTreeItems);
                 }
             });
             cm.getItems().add(cmItem1);
+            cm.getItems().add(cmItem2);
             setContextMenu(cm);
         }
 

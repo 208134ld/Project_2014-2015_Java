@@ -58,6 +58,10 @@ public class RepositoryController {
     public void insertCountry(Country c){
         countryRepo.insertCountry(c);
     }
+    
+    public Country findCountryById(int id){
+        return countryRepo.findCountryById(id);
+    }
 
 
 }

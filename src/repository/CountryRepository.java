@@ -32,6 +32,11 @@ public class CountryRepository {
         em.persist(c);
         em.getTransaction().commit();
     }
+    
+    public Country findCountryById(int id){
+        TypedQuery<Country> query = em.createNamedQuery("Country.findById", Country.class);
+        return query.setParameter("countryID", id).getSingleResult();
+    }
 
     
 }
