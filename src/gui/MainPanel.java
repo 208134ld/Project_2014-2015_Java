@@ -23,12 +23,14 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
@@ -37,6 +39,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.InputMethodEvent;
+import static javafx.scene.input.KeyCode.S;
+import static javafx.scene.input.KeyCode.T;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -92,7 +96,7 @@ public class MainPanel extends GridPane {
     private WebView siteView;
     //private ContinentRepository continentRepository;
     private ClimateChart selectedClimatechart;
-
+    public List<Months> m;
     private ObservableList<TreeItem<MyNode>> obsTreeItems;
     private List<TreeItem<MyNode>> treeItems;
     private List<TreeItem<MyNode>> continentItems;
@@ -202,7 +206,7 @@ public class MainPanel extends GridPane {
         BSeconden1.setText(waarde.substring(0,waarde.length()-4).trim());
         
         LengteParameter.setText(waarde.substring(waarde.length()-2,waarde.length()));
-        List<Months> m = new ArrayList<>();
+       m = new ArrayList<>();
         m.add(new Months(23,34,MonthOfTheYear.Apr));
                 ObservableList<Months> months  = FXCollections.observableArrayList(m);
 //        ObservableList<Months> m = FXCollections.observableArrayList(c.getMonths());
@@ -223,6 +227,7 @@ public class MainPanel extends GridPane {
         maandcol.setCellValueFactory(new PropertyValueFactory("month"));
         tempCol.setCellValueFactory(new PropertyValueFactory("temp"));
         tempCol.setCellFactory(cellFactory);
+        
         sedCol.setCellValueFactory(new PropertyValueFactory("sed"));
     }
     
@@ -252,7 +257,6 @@ public class MainPanel extends GridPane {
            selectedClimatechart.setLongitude(selectedClimatechart.calcDecimals(g2, m2, s2,LengteParameter.getText().trim()));
            //Database connectie
            updateLocationDetailPanel(selectedClimatechart);
-            
         }catch(NumberFormatException ex)
         {
             errorBar.setText("Pars error. hebt u tekst in de tekstbox staan?");
@@ -276,6 +280,9 @@ public class MainPanel extends GridPane {
         
     }
     
-    
+        @FXML
+    private void updateCol(TableColumn.CellEditEvent<Months,String> event) {
+        System.out.println("edit shizzl");
+    }
 
 }

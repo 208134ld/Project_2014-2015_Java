@@ -14,7 +14,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-class EditingCell extends TableCell<XYChart.Data, Number> {
+class EditingCell extends TableCell<Months, Number> {
           
         private TextField textField;
           
@@ -24,7 +24,7 @@ class EditingCell extends TableCell<XYChart.Data, Number> {
         public void startEdit() {
               
             super.startEdit();
-              
+            
             if (textField == null) {
                 createTextField();
             }
@@ -71,6 +71,8 @@ class EditingCell extends TableCell<XYChart.Data, Number> {
                 @Override
                 public void handle(KeyEvent t) {
                     if (t.getCode() == KeyCode.ENTER) {
+                       
+                        System.out.println(textField.getText());
                         commitEdit(Integer.parseInt(textField.getText()));
                     } else if (t.getCode() == KeyCode.ESCAPE) {
                         cancelEdit();
