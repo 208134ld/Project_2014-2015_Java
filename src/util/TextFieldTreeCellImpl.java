@@ -3,22 +3,13 @@ package util;
 import domain.Continent;
 import domain.Country;
 import gui.LocationWizardController;
-import gui.MainPanel;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -28,24 +19,15 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javax.persistence.EntityManager;
-import repository.ContinentRepository;
 import repository.RepositoryController;
 
 public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
 
     private TextField textField;
     private ContextMenu cm = new ContextMenu();
-
-    private Connection connection;
-    private String url = "jdbc:sqlserver://localhost:1433;databaseName=HOGENT1415_11";
-    private String user = "sa";
-    private String password = "root";
-    private Statement statement;
     final TreeItem<MyNode> root;
     private List<TreeItem<MyNode>> treeItems;
     private RepositoryController rc;
@@ -53,8 +35,6 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
     private EntityManager em;
 
     public TextFieldTreeCellImpl(TreeItem<MyNode> root, List<TreeItem<MyNode>> treeItems, RepositoryController rc) throws SQLException {
-        connection = DriverManager.getConnection(url, user, password);
-        statement = connection.createStatement();
         this.root = root;
         this.treeItems = treeItems;
         this.rc = rc;
@@ -65,9 +45,9 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
     public void startEdit() {
         super.startEdit();
 
-        if (textField == null) {
+        //if (textField == null) {
             createTextField();
-        }
+        //}
         setText(null);
         setGraphic(textField);
         textField.selectAll();
@@ -267,19 +247,19 @@ newStage.show();
             public void handle(KeyEvent t) {
                 if (t.getCode() == KeyCode.ENTER) {
 
-                    String sql = "UPDATE Continents SET Name='" + textField.getText() + "' WHERE ContinentID=" + getItemId();
+                    em.getTransaction().begin();
+                    
                     if (getItem().isCountry()) {
-                        sql = "UPDATE Countries SET Name='" + textField.getText() + "' WHERE CountryID=" + getItemId();
+                        rc.findCountryById(getItemId()).setName(textField.getText());
                     }
-                    if (getItem().isClimateChart()) {
-                        sql = "UPDATE ClimateCharts SET Location='" + textField.getText() + "' WHERE ClimateChartID=" + getItemId();
+                    else if (getItem().isClimateChart()) {
+                        rc.getClimateChartByClimateChartID(getItemId()).setLocation(textField.getText());
                     }
+                    else if (getItem().isContinent()){
+                        rc.findContinentById(getItemId()).setName(textField.getText());
+                    }
+                    em.getTransaction().commit();
 
-                    try {
-                        ResultSet result = statement.executeQuery(sql);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(TextFieldTreeCellImpl.class.getName()).log(Level.SEVERE, null, ex);
-                    }
                     commitEdit(new MyNode(textField.getText(), getType(), getItemId()));
                 } else if (t.getCode() == KeyCode.ESCAPE) {
                     cancelEdit();
@@ -299,16 +279,4 @@ newStage.show();
     private int getItemId() {
         return getItem() == null ? null : getItem().id;
     }
-
-    //    private void contextMenuHelper(String word){
-//        MenuItem cmItem1 = new MenuItem("Voeg " + word + " toe!");
-//        cmItem1.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent e) {
-//                System.out.println("Geklikt!");
-//            }
-//        });
-//        cm.getItems().add(cmItem1);
-//        setContextMenu(cm);
-//    }
 }

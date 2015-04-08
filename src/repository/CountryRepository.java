@@ -37,6 +37,4 @@ public class CountryRepository {
         TypedQuery<Country> query = em.createNamedQuery("Country.findById", Country.class);
         return query.setParameter("countryID", id).getSingleResult();
     }
-
-    
 }

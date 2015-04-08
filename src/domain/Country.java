@@ -6,14 +6,6 @@
 package domain;
 
 import java.io.Serializable;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,14 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
-/**
- *
- * @author bremme windows
- */
 @Entity(name="Countries")
 @Table(name = "Countries")
 @NamedQueries({
@@ -42,10 +28,6 @@ import javax.persistence.Transient;
                 query="SELECT c FROM Countries c WHERE c.countryId = :countryID")
 }) 
 public class Country implements Serializable {
-    
-    
-//    @Transient
-//    private final String name = new SimpleStringProperty();
     
     private String name;
     
@@ -89,20 +71,6 @@ public class Country implements Serializable {
         setId(id);
         //climateCharts = FXCollections.observableArrayList();
     }
-    
-    
-//    @Access(AccessType.PROPERTY)
-//    public String getName() {
-//        return name.get();
-//    }
-//
-//    public void setName(String value) {
-//        name.set(value);
-//    }
-//
-//    public StringProperty nameProperty() {
-//        return name;
-//    }
     
     public String getName() {
         return name;

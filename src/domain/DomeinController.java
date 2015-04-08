@@ -1,7 +1,6 @@
 
 package domain;
 
-import repository.ContinentRepository;
 import java.sql.SQLException;
 import java.util.List;
 import repository.RepositoryController;
@@ -19,10 +18,6 @@ public class DomeinController {
     {
         return repoController.getAllContinents();
     }
-    
-//    public ContinentRepository getConRepo(){
-//        return repoController.getConRepo();
-//    }
     
     
 }

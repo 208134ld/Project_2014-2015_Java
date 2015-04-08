@@ -35,7 +35,9 @@ import javax.persistence.Transient;
 @Table(name = "ClimateCharts")
 @NamedQueries({
     @NamedQuery(name="ClimateChart.findByCountry",
-                query="SELECT c FROM ClimateCharts c WHERE c.country.countryId = :countryID")
+                query="SELECT c FROM ClimateCharts c WHERE c.country.countryId = :countryID"),
+    @NamedQuery(name="ClimateChart.findById",
+                query="SELECT c FROM ClimateCharts c WHERE c.climateChartId = :chartId")
 }) 
 public class ClimateChart implements Serializable {
 
@@ -102,22 +104,6 @@ public class ClimateChart implements Serializable {
     {
         return country;
     }
-//    public int getCountryId(){
-//        return this.countryId;
-//    }
-
-//    @Access(AccessType.PROPERTY)
-//    public String getLocation() {
-//        return location.get();
-//    }
-//
-//    public void setLocation(String value) {
-//        location.set(value);
-//    }
-//
-//    public StringProperty locationProperty() {
-//        return location;
-//    }
 
      public String getLocation() {
         return location;

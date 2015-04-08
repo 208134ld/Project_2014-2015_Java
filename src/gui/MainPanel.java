@@ -117,7 +117,7 @@ public class MainPanel extends GridPane {
             throw new RuntimeException(ex);
         }
 
-        final TreeItem<MyNode> root = new TreeItem<>(new MyNode("Root node", "Root", 1));
+        final TreeItem<MyNode> root = new TreeItem<>(new MyNode("Aardrijkskunde database", "Root", 1));
 
         for (Continent c : rc.getAllContinents()) {
 

@@ -26,8 +26,6 @@ import javax.persistence.Transient;
  */
 @Entity(name="Continents")
 @Table(name = "Continents")
-@NamedQuery(name="Continent.findAllContinents",query= "select c from Continents c")
-
 @NamedQueries({
     @NamedQuery(name="Continent.findAllContinents",query= "select c from Continents c"),
     @NamedQuery(name="Continent.findById",
@@ -35,9 +33,6 @@ import javax.persistence.Transient;
 }) 
 public class Continent implements Serializable {
 
-//    @Transient
-//    private final StringProperty name = new SimpleStringProperty();
-    
     private String name;
     
     @Id
@@ -62,19 +57,6 @@ public class Continent implements Serializable {
         setId(id);
     }
     
-//    @Access(AccessType.PROPERTY)
-//    public String getName() {
-//        return name.get();
-//    }
-//
-//    public void setName(String value) {
-//        name.set(value);
-//    }
-//
-//    public StringProperty nameProperty() {
-//        return name;
-//    }
-    
     public String getName() {
         return name;
     }
@@ -91,8 +73,6 @@ public class Continent implements Serializable {
     {
         continentId = id;
     }
-
-    
     
     public List<Country> getCountries()
     {
