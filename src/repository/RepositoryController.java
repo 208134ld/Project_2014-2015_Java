@@ -42,7 +42,10 @@ public class RepositoryController {
     public List<ClimateChart> getClimateChartsOfCountry(int countryId) throws SQLException{
         return chartRepo.getClimateChartsOfCountry(countryId);
     }
-    
+    public void updateClimateChart(int id,String LCord,String BCord,int bP,int eP,double longi,double lat)
+    {
+        chartRepo.updateClimateChart(id, LCord, BCord, bP, eP, longi, lat);
+    }
     public ClimateChart getClimateChartByClimateChartID(int chartId){
         return chartRepo.getClimateChartByClimateChartID(chartId);
     }

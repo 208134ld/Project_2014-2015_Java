@@ -21,6 +21,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -48,19 +50,25 @@ public class ClimateChart implements Serializable {
 
     
     private String location;
-    @Transient
-    private final IntegerProperty beginperiod = new SimpleIntegerProperty();
-    @Transient
-    private final IntegerProperty endperiod = new SimpleIntegerProperty();
-    @Transient
-    private final DoubleProperty latitude = new SimpleDoubleProperty();
-    @Transient
-    private final DoubleProperty longitude = new SimpleDoubleProperty();
-    @Transient
-    private final StringProperty LCord = new SimpleStringProperty();
-    @Transient 
-    private final StringProperty BCord = new SimpleStringProperty();
+    @Column(name="BeginPeriod")
+    private int beginperiod;
+    @Column(name="EndPeriod")
+    private int endperiod;
+    @Column(name="Latitude")
+    private double latitude;
+    @Column(name="Longitude")
+    private double longitude ;
+    @Column(name="LCord")
+    private String LCord;
+    @Column(name="BCord")
+    private String BCord;
+    @Column(name="AboveEquator")
     private boolean aboveEquator;
+    @ManyToMany
+    @JoinTable(
+      name="ClimateChartMonth",
+      joinColumns={@JoinColumn(name="ClimateChartId", referencedColumnName="ClimateChartID")},
+      inverseJoinColumns={@JoinColumn(name="MonthId", referencedColumnName="MonthID")})
     private List<Months> months;
     @ManyToOne
     @JoinColumn(name = "CountryID")
@@ -112,82 +120,129 @@ public class ClimateChart implements Serializable {
     public void setLocation(String value) {
         location = value;
     }
-    @Access(AccessType.PROPERTY)
-    public int getBeginperiod() {
-        return beginperiod.get();
-    }
 
-    public void setBeginperiod(int value) {
-        beginperiod.set(value);
-    }
-
-    public IntegerProperty beginperiodProperty() {
-        return beginperiod;
-    }
-
-    @Access(AccessType.PROPERTY)
-    public int getEndperiod() {
-        return endperiod.get();
-    }
-
-    public void setEndperiod(int value) {
-        endperiod.set(value);
-    }
-
-    public IntegerProperty endperiodProperty() {
-        return endperiod;
-    }
-
-    @Access(AccessType.PROPERTY)
+//    public int getBeginperiod() {
+//        return beginperiod.get();
+//    }
+//
+//    public void setBeginperiod(int value) {
+//        beginperiod.set(value);
+//    }
+//
+//    public IntegerProperty beginperiodProperty() {
+//        return beginperiod;
+//    }
+//   public int getEndperiod() {
+//        return endperiod.get();
+//    }
+//    public void setEndperiod(int value) {
+//        endperiod.set(value);
+//    }
+//
+//    public IntegerProperty endperiodProperty() {
+//        return endperiod;
+//    }
+//    @Access(AccessType.PROPERTY)
+//    public double getLatitude() {
+//        return latitude.get();
+//    }
+//
+//    public void setLatitude(double value) {
+//        latitude.set(value);
+//    }
+//
+//    public DoubleProperty latitudeProperty() {
+//        return latitude;
+//    }
+//    public void setLongitude(double value) {
+//        longitude.set(value);
+//    }
+//
+//    public DoubleProperty longitudeProperty() {
+//        return longitude;
+//    }
+//    @Access(AccessType.PROPERTY)
+//    public double getLongitude() {
+//        return longitude.get();
+//    }
+//    @Access(AccessType.PROPERTY)
+//    public String getLCord()
+//    {
+//        return LCord.get();
+//    }
+    //    public void setLCord(String v)
+//    {
+//        LCord.set(v);
+//    }
+    //    public StringProperty LCordProperty()
+//    {
+//        return LCord;
+//    }
     public double getLatitude() {
-        return latitude.get();
-    }
-
-    public void setLatitude(double value) {
-        latitude.set(value);
-    }
-
-    public DoubleProperty latitudeProperty() {
         return latitude;
     }
 
-    @Access(AccessType.PROPERTY)
-    public double getLongitude() {
-        return longitude.get();
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
-    @Access(AccessType.PROPERTY)
-    public String getLCord()
-    {
-        return LCord.get();
-    }
-    @Access(AccessType.PROPERTY)
-    public String getBCord()
-    {
-        return BCord.get();
-    }
-    public void setLCord(String v)
-    {
-        LCord.set(v);
-    }
-    public void setBCord(String v)
-    {
-        BCord.set(v);
-    }
-    public StringProperty LCordProperty()
-    {
-        return LCord;
-    }
-    public StringProperty BCordProperty()
-    {
-        return BCord;
-    }
-    public void setLongitude(double value) {
-        longitude.set(value);
+    public int getBeginperiod() {
+        return beginperiod;
     }
 
-    public DoubleProperty longitudeProperty() {
+    public void setBeginperiod(int beginperiod) {
+        this.beginperiod = beginperiod;
+    }
+
+    public int getEndperiod() {
+        return endperiod;
+    }
+
+    public void setEndperiod(int endperiod) {
+        this.endperiod = endperiod;
+    }
+
+    public double getLongitude() {
         return longitude;
     }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLCord() {
+        return LCord;
+    }
+
+    public void setLCord(String LCord) {
+        this.LCord = LCord;
+    }
+
+    public String getBCord() {
+        return BCord;
+    }
+
+    public void setBCord(String BCord) {
+        this.BCord = BCord;
+    }
+    
+
+
+//    @Access(AccessType.PROPERTY)
+//    public String getBCord()
+//    {
+//        return BCord.get();
+//    }
+//
+//    public void setBCord(String v)
+//    {
+//        BCord.set(v);
+//    }
+//
+//    public StringProperty BCordProperty()
+//    {
+//        return BCord;
+//    }
+
 
     public void setClimateChartId(int climateChartId) {
         this.climateChartId = climateChartId;

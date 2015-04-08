@@ -87,7 +87,7 @@ public class MainPanel extends GridPane {
     @FXML
     private TextField BGraden1;
     @FXML
-    private Label LatitudeLabel,errorBar;
+    private Label LatitudeLabel,errorBar,locatieLable;
     @FXML
     private Label LongitudeLabel;
         @FXML
@@ -175,8 +175,8 @@ public class MainPanel extends GridPane {
                 TreeItem<MyNode> selectedItem = newValue;
                 if (selectedItem.getValue().type.equalsIgnoreCase("ClimateChart")) {
                     
-//                    selectedClimatechart = rc.getClimateChartByClimateChartID(selectedItem.getValue().id);
-                    selectedClimatechart = new ClimateChart(1,"Gent",1950,1970,true,23.34534,44.34523,"30° 45' 10\" NB ","51° 3' 15\" OL ",1);
+                    selectedClimatechart = rc.getClimateChartByClimateChartID(selectedItem.getValue().id);
+//                     selectedClimatechart = new ClimateChart(1,"Gent",1950,1970,true,23.34534,44.34523,"30° 45' 10\" NB ","51° 3' 15\" OL ",1);
                     updateLocationDetailPanel(selectedClimatechart);
                 }
 
@@ -189,25 +189,27 @@ public class MainPanel extends GridPane {
     public void updateLocationDetailPanel(ClimateChart c) {
 
         errorBar.setText("");
+        locatieLable.setText(c.getLocation());
         beginPeriode.setText(c.getBeginperiod()+"");
         eindPeriode.setText(c.getEndperiod()+"");
         LatitudeLabel.setText(c.getLatitude()+"");
         LongitudeLabel.setText(c.getLongitude()+"");
         // GRADEN VAN LENGTE EN BREEDTE
         
-        BGraden.setText(c.getLCord().split("°")[0].trim());
-        BMinuten.setText(c.getLCord().split("°")[1].split("'")[0].trim());
-        String waarde = c.getLCord().split("°")[1].split("'")[1].trim();
+        BGraden.setText(c.getBCord().split("°")[0].trim());
+        BMinuten.setText(c.getBCord().split("°")[1].split("'")[0].trim());
+        String waarde = c.getBCord().split("°")[1].split("'")[1].trim();
         BSeconden.setText(waarde.substring(0,waarde.length()-4).trim());
         BreedteParameter.setText(waarde.substring(waarde.length()-2,waarde.length()).trim());
-        BGraden1.setText(c.getBCord().split("°")[0].trim());
-        BMinuten1.setText(c.getBCord().split("°")[1].split("'")[0].trim());
-         waarde = c.getBCord().split("°")[1].split("'")[1].trim();
+        BGraden1.setText(c.getLCord().split("°")[0].trim());
+        BMinuten1.setText(c.getLCord().split("°")[1].split("'")[0].trim());
+         waarde = c.getLCord().split("°")[1].split("'")[1].trim();
         BSeconden1.setText(waarde.substring(0,waarde.length()-4).trim());
         
         LengteParameter.setText(waarde.substring(waarde.length()-2,waarde.length()));
        m = new ArrayList<>();
         m.add(new Months(23,34,MonthOfTheYear.Apr));
+        m.add(new Months(34,34,MonthOfTheYear.Dec));
                 ObservableList<Months> months  = FXCollections.observableArrayList(m);
 //        ObservableList<Months> m = FXCollections.observableArrayList(c.getMonths());
         monthTable.setItems(FXCollections.observableArrayList(months));
@@ -242,20 +244,22 @@ public class MainPanel extends GridPane {
             int s1 = Integer.parseInt(BSeconden.getText().trim());
             int s2 = Integer.parseInt(BSeconden1.getText().trim());
             int begin = Integer.parseInt(beginPeriode.getText().trim());
-            int einde = Integer.parseInt(eindPeriode.getText().trim());     
-           if(!(BreedteParameter.getText().trim().equalsIgnoreCase("ol")||BreedteParameter.getText().trim().equalsIgnoreCase("wl")))
-               throw new IllegalArgumentException("Breedteparameter kan alleen OL of WL zijn");
-           if(!(LengteParameter.getText().equalsIgnoreCase("nb")||!LengteParameter.getText().equalsIgnoreCase("zb")))
-               throw new IllegalArgumentException("Lengteparameter kan alleen NB of ZB zijn");
+            int einde = Integer.parseInt(eindPeriode.getText().trim());
+            
+           if(!(LengteParameter.getText().trim().equalsIgnoreCase("ol")||LengteParameter.getText().trim().equalsIgnoreCase("wl")))
+               throw new IllegalArgumentException("Lengteparameter kan alleen OL of WL zijn");
+           if(!(BreedteParameter.getText().equalsIgnoreCase("nb")||BreedteParameter.getText().equalsIgnoreCase("zb")))
+               throw new IllegalArgumentException("Breedteparameter kan alleen NB of ZB zijn");
            String longi=  selectedClimatechart.giveCords(g1, m1, s1) + BreedteParameter.getText().toUpperCase().trim();
            String lat =   selectedClimatechart.giveCords(g2, m2, s2)+ LengteParameter.getText().toUpperCase().trim();
-           selectedClimatechart.setBCord(lat);
-           selectedClimatechart.setLCord(longi);
+           selectedClimatechart.setBCord(longi);
+           selectedClimatechart.setLCord(lat);
            selectedClimatechart.setBeginperiod(begin);
            selectedClimatechart.setEndperiod(einde);
            selectedClimatechart.setLatitude(selectedClimatechart.calcDecimals(g1, m1, s1,BreedteParameter.getText().trim()));
            selectedClimatechart.setLongitude(selectedClimatechart.calcDecimals(g2, m2, s2,LengteParameter.getText().trim()));
            //Database connectie
+           rc.updateClimateChart(selectedClimatechart.getId(),selectedClimatechart.getLCord(), selectedClimatechart.getBCord(), selectedClimatechart.getBeginperiod(), selectedClimatechart.getEndperiod(),selectedClimatechart.getLongitude(),selectedClimatechart.getLatitude());
            updateLocationDetailPanel(selectedClimatechart);
         }catch(NumberFormatException ex)
         {
@@ -282,7 +286,8 @@ public class MainPanel extends GridPane {
     
         @FXML
     private void updateCol(TableColumn.CellEditEvent<Months,String> event) {
-        System.out.println("edit shizzl");
+        System.out.println("edit shizzl"+ event.getRowValue());
+        
     }
 
 }

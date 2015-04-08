@@ -43,7 +43,7 @@
                         </TableView>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="anchorpane">
                            <children>
-                              <Label fx:id="locatieLable" layoutX="177.0" layoutY="1.0" prefHeight="34.0" prefWidth="223.0" style="-fx-font-size: 23;" text="Locatie" textAlignment="RIGHT" textOverrun="WORD_ELLIPSIS" underline="true">
+                              <Label fx:id="locatieLable" layoutX="200.0" layoutY="1.0" prefHeight="34.0" prefWidth="200.0" style="-fx-font-size: 23;" text="Locatie" textAlignment="RIGHT" textOverrun="WORD_ELLIPSIS" underline="true">
                                  <font>
                                     <Font size="17.0" />
                                  </font>

@@ -24,7 +24,11 @@ public class ClimateChartRepository {
         TypedQuery<ClimateChart> query = em.createNamedQuery("ClimateChart.findById", ClimateChart.class);
         return query.setParameter("chartId", chartId).getSingleResult();
     }
-
+public void updateClimateChart(int id,String LCord,String BCord,int bP,int eP,double longi,double lat)
+{
+        em.getTransaction().begin();
+        em.getTransaction().commit();
+}
     public void updateLatitude(Integer id, double value) {
         em.getTransaction().begin();
         getClimateChartByClimateChartID(id).setLatitude(value);
