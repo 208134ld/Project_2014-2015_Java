@@ -71,9 +71,9 @@ class EditingCell extends TableCell<Months, Number> {
                 @Override
                 public void handle(KeyEvent t) {
                     if (t.getCode() == KeyCode.ENTER) {
-                       
+                        
                         System.out.println(textField.getText());
-                        commitEdit(Integer.parseInt(textField.getText()));
+                        commitEdit(Double.parseDouble(textField.getText()));
                     } else if (t.getCode() == KeyCode.ESCAPE) {
                         cancelEdit();
                     }

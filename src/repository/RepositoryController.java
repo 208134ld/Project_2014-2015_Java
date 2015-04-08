@@ -44,7 +44,7 @@ public class RepositoryController {
     }
     public void updateClimateChart(int id,String LCord,String BCord,int bP,int eP,double longi,double lat)
     {
-        chartRepo.updateClimateChart(id, LCord, BCord, bP, eP, longi, lat);
+        chartRepo.updateClimateChart();
     }
     public ClimateChart getClimateChartByClimateChartID(int chartId){
         return chartRepo.getClimateChartByClimateChartID(chartId);

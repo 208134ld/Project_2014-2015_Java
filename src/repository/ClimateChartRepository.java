@@ -1,7 +1,10 @@
 package repository;
 
 import domain.ClimateChart;
+import domain.MonthOfTheYear;
+import domain.Months;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -17,27 +20,31 @@ public class ClimateChartRepository {
 
     public List<ClimateChart> getClimateChartsOfCountry(int countryId) throws SQLException {
         TypedQuery<ClimateChart> query = em.createNamedQuery("ClimateChart.findByCountry", ClimateChart.class);
+        
         return query.setParameter("countryID", countryId).getResultList();
     }
 
     public ClimateChart getClimateChartByClimateChartID(int chartId) {
         TypedQuery<ClimateChart> query = em.createNamedQuery("ClimateChart.findById", ClimateChart.class);
-        return query.setParameter("chartId", chartId).getSingleResult();
+        ClimateChart c = query.setParameter("chartId", chartId).getSingleResult();
+        String sql = "select m.MonthID, MonthProp,AverTemp,Sediment from ClimateCharts join ClimateChartMonth on ClimateCharts.ClimateChartID = ClimateChartMonth.ClimateChartId join Months m on ClimateChartMonth.MonthId = m.MonthID where ClimateCharts.ClimateChartID =" + chartId;
+        List<Object[]> tuples = (List<Object[]>) em.createNativeQuery(sql).getResultList();
+        List<Months> monthList = new ArrayList<>();
+        for (Object[] tuple : tuples) {
+            
+            int id = (int) tuple[0];
+            MonthOfTheYear m = MonthOfTheYear.values()[(int) tuple[1]];
+            double temp = (double) tuple[2];
+            int sed = (int) tuple[3];
+            monthList.add(new Months(id,m,temp,sed));
+        }
+        c.setMonths(monthList);
+        return c;
     }
-public void updateClimateChart(int id,String LCord,String BCord,int bP,int eP,double longi,double lat)
-{
+    
+    public void updateClimateChart()
+    {
         em.getTransaction().begin();
-        em.getTransaction().commit();
-}
-    public void updateLatitude(Integer id, double value) {
-        em.getTransaction().begin();
-        getClimateChartByClimateChartID(id).setLatitude(value);
-        em.getTransaction().commit();
-    }
-
-    public void updateLongitude(int id, double value) {
-        em.getTransaction().begin();
-        getClimateChartByClimateChartID(id).setLongitude(value);
         em.getTransaction().commit();
     }
 }

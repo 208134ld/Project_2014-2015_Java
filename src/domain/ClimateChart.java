@@ -301,5 +301,10 @@ public class ClimateChart implements Serializable {
             val *=-1;
         return Math.round (val * 1000000.0) / 1000000.0;
     }
+    public void setMonthDataById(int id,int sed,double temp)
+    {
+        months.stream().filter(e->e.getMonthId() == id).findFirst().get().setSed(sed);
+        months.stream().filter(e->e.getMonthId() == id).findFirst().get().setTemp(temp);
+    }
 
 }

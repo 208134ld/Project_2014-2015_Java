@@ -22,11 +22,13 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Worker.State;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -90,21 +92,22 @@ public class MainPanel extends GridPane {
     private Label LatitudeLabel,errorBar,locatieLable;
     @FXML
     private Label LongitudeLabel;
-        @FXML
+    @FXML
     private Tab ClimateGraph;
     @FXML
     private WebView siteView;
+    @FXML
+    private ProgressBar webProgress;
     //private ContinentRepository continentRepository;
     private ClimateChart selectedClimatechart;
-    public List<Months> m;
     private ObservableList<TreeItem<MyNode>> obsTreeItems;
     private List<TreeItem<MyNode>> treeItems;
     private List<TreeItem<MyNode>> continentItems;
     private List<TreeItem<MyNode>> countryItems;
-
     private DomeinController dc;
     private RepositoryController rc;
     private final String WEBSITE="http://climatechart.azurewebsites.net/";
+    private ObservableList<Months> monthsList;
     public MainPanel() throws SQLException {
         dc = new DomeinController();
         rc = new RepositoryController();
@@ -176,6 +179,7 @@ public class MainPanel extends GridPane {
                 if (selectedItem.getValue().type.equalsIgnoreCase("ClimateChart")) {
                     
                     selectedClimatechart = rc.getClimateChartByClimateChartID(selectedItem.getValue().id);
+                    System.out.println(selectedClimatechart.getMonths().get(0).getSed());
 //                     selectedClimatechart = new ClimateChart(1,"Gent",1950,1970,true,23.34534,44.34523,"30° 45' 10\" NB ","51° 3' 15\" OL ",1);
                     updateLocationDetailPanel(selectedClimatechart);
                 }
@@ -205,15 +209,9 @@ public class MainPanel extends GridPane {
         BMinuten1.setText(c.getLCord().split("°")[1].split("'")[0].trim());
          waarde = c.getLCord().split("°")[1].split("'")[1].trim();
         BSeconden1.setText(waarde.substring(0,waarde.length()-4).trim());
-        
         LengteParameter.setText(waarde.substring(waarde.length()-2,waarde.length()));
-       m = new ArrayList<>();
-        m.add(new Months(23,34,MonthOfTheYear.Apr));
-        m.add(new Months(34,34,MonthOfTheYear.Dec));
-                ObservableList<Months> months  = FXCollections.observableArrayList(m);
-//        ObservableList<Months> m = FXCollections.observableArrayList(c.getMonths());
-        monthTable.setItems(FXCollections.observableArrayList(months));
-
+        monthsList  = FXCollections.observableArrayList(c.getMonths());
+        monthTable.setItems(monthsList);
     }
 
     public void initMonthTable() {
@@ -261,6 +259,7 @@ public class MainPanel extends GridPane {
            //Database connectie
            rc.updateClimateChart(selectedClimatechart.getId(),selectedClimatechart.getLCord(), selectedClimatechart.getBCord(), selectedClimatechart.getBeginperiod(), selectedClimatechart.getEndperiod(),selectedClimatechart.getLongitude(),selectedClimatechart.getLatitude());
            updateLocationDetailPanel(selectedClimatechart);
+           
         }catch(NumberFormatException ex)
         {
             errorBar.setText("Pars error. hebt u tekst in de tekstbox staan?");
@@ -277,17 +276,36 @@ public class MainPanel extends GridPane {
     }
         @FXML
     private void RefreshSite(Event event) {
+        try{
+            
+        if(selectedClimatechart==null)
+            throw new NullPointerException();
         
         WebEngine eng = siteView.getEngine();
         //nog het continent getten
             eng.load(WEBSITE+"ClimateChart/ShowExercises?selectedYear=3&continentId="+1+"&countryId="+"1"+"&climateId="+selectedClimatechart.getId());
-        
+         webProgress.progressProperty().bind(eng.getLoadWorker().progressProperty());
+
+    eng.getLoadWorker().stateProperty().addListener(
+            new ChangeListener<State>() {
+                @Override
+                public void changed(ObservableValue ov, State oldState, State newState) {
+                    if (newState == State.SUCCEEDED) {
+                         // hide progress bar then page is ready
+                         webProgress.setVisible(false);
+                    }
+                }
+            });
+        }catch(Exception e)
+        {
+            
+        }
     }
     
-        @FXML
+    @FXML
     private void updateCol(TableColumn.CellEditEvent<Months,String> event) {
-        System.out.println("edit shizzl"+ event.getRowValue());
+        System.out.println("edit shizzl ");
         
-    }
 
+}
 }

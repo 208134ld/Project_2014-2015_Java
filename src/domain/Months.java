@@ -32,14 +32,14 @@ public class Months implements Serializable {
     
     public Months(){}
     
-    public Months(int sed,int temp,MonthOfTheYear month)
+    public Months(int sed,double temp,MonthOfTheYear month)
     {
         setSed(sed);
         setTemp(temp);
         setMonth(month);
     }
     
-    public Months(int sed,int temp,MonthOfTheYear month, int id)
+    public Months(int id,MonthOfTheYear month,double temp,int sed)
     {
         setMonthId(id);
         setSed(sed);
@@ -73,7 +73,7 @@ public class Months implements Serializable {
         return temp.get();
     }
 
-    public void setTemp(int value) {
+    public void setTemp(double value) {
         temp.set(value);
     }
 
