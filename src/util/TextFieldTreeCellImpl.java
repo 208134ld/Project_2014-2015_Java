@@ -194,7 +194,7 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
             cmItem1.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
-                    //showStage();
+                    showStage();
                     System.out.println("Nog niet geïmplementeerd.");
                 }
             });
@@ -229,12 +229,6 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
     }
 public static void showStage(){
 Stage newStage = new Stage();
-VBox comp = new VBox();
-TextField nameField = new TextField("Name");
-TextField phoneNumber = new TextField("Phone Number");
-comp.getChildren().add(nameField);
-comp.getChildren().add(phoneNumber);
-
 Scene stageScene = new Scene(new LocationWizardController(), 300, 300);
 newStage.setScene(stageScene);
 newStage.show();

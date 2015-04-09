@@ -306,19 +306,21 @@ public class MainPanel extends GridPane {
     }
     
     @FXML
-    private void updateCol(TableColumn.CellEditEvent<Months,String> event) {
+    private void updateCol(TableColumn.CellEditEvent<Months,Double> event) {
         int id = monthTable.getSelectionModel().getSelectedCells().get(0).getRow();
         
         if(monthTable.getSelectionModel().getSelectedCells().get(0).getColumn()==1)
         {
-            selectedClimatechart.getMonths().get(id).setTemp(INPUT_NUMBER);
-            rc.updateTemp(selectedClimatechart.getMonths().get(id).getMonthId(), INPUT_NUMBER);
+            selectedClimatechart.getMonths().get(id).setTemp(event.getNewValue());
+            rc.updateTemp(selectedClimatechart.getMonths().get(id).getMonthId(), event.getNewValue());
         }
         if(monthTable.getSelectionModel().getSelectedCells().get(0).getColumn()==2)
         {
             System.out.println("Updating sed");
-            selectedClimatechart.getMonths().get(id).setSed((int)INPUT_NUMBER);
-            rc.updateSed(selectedClimatechart.getMonths().get(id).getMonthId(), (int)INPUT_NUMBER);
+            double d = event.getNewValue();
+            int d2 = (int) d;
+            selectedClimatechart.getMonths().get(id).setSed(d2);
+            rc.updateSed(selectedClimatechart.getMonths().get(id).getMonthId(),d2);
         }
         
         

@@ -1,4 +1,5 @@
 
+import gui.LocationWizardController;
 import gui.MainPanel;
 import java.sql.SQLException;
 import javafx.application.Application;

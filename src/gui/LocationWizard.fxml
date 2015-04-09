@@ -7,33 +7,67 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="AnchorPane" prefHeight="572.0" prefWidth="489.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane fx:id="pane" layoutX="200.0" layoutY="76.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <GridPane layoutX="10.0" layoutY="10.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label layoutX="28.0" layoutY="180.0" text="Naam:" />
-            <TextField fx:id="beginPeriode1" layoutX="153.0" layoutY="180.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="170.0" />
+            <TableView fx:id="monthTable" prefHeight="327.0" prefWidth="489.0" GridPane.rowIndex="1">
+               <columns>
+                  <TableColumn fx:id="maandcol" prefWidth="129.0" text="Maand" />
+                  <TableColumn fx:id="tempCol" onEditCommit="#updateCol" prefWidth="150.0" text="Temperatuur" />
+                  <TableColumn fx:id="sedCol" minWidth="0.0" onEditCommit="#updateCol" prefWidth="122.0" text="Neerslag" />
+               </columns>
+            </TableView>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="286.0" prefWidth="472.0" styleClass="anchorpane">
+               <children>
+                  <Label fx:id="locatieLable" layoutX="200.0" layoutY="1.0" prefHeight="34.0" prefWidth="200.0" style="-fx-font-size: 23;" text="Locatie" textAlignment="RIGHT" textOverrun="WORD_ELLIPSIS" underline="true">
+                     <font>
+                        <Font size="17.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="18.0" layoutY="50.0" text="Breedte graden:" />
+                  <Label layoutX="18.0" layoutY="130.0" text="Periode:" />
+                  <TextField fx:id="beginPeriode" layoutX="143.0" layoutY="130.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="70.0" />
+                  <TextField fx:id="eindPeriode" layoutX="242.0" layoutY="130.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="70.0" />
+                  <Label layoutX="227.0" layoutY="130.0" prefHeight="21.0" prefWidth="0.0" text=":" />
+                  <TextField fx:id="BGraden" layoutX="142.0" layoutY="50.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
+                  <Label layoutX="192.0" layoutY="40.0" text="°" />
+                  <TextField fx:id="BMinuten" layoutX="202.0" layoutY="50.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
+                  <Label layoutX="253.0" layoutY="40.0" text="'" />
+                  <TextField fx:id="BSeconden" layoutX="262.0" layoutY="50.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
+                  <Label layoutX="314.0" layoutY="40.0" text="&quot;" />
+                  <TextField fx:id="BSeconden1" layoutX="262.0" layoutY="90.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
+                  <TextField fx:id="BMinuten1" layoutX="202.0" layoutY="90.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
+                  <TextField fx:id="BGraden1" layoutX="143.0" layoutY="90.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
+                  <Label layoutX="18.0" layoutY="90.0" text="Lengte graden:" />
+                  <Label layoutX="315.0" layoutY="80.0" text="&quot;" />
+                  <Label layoutX="254.0" layoutY="80.0" text="'" />
+                  <Label layoutX="193.0" layoutY="80.0" text="°" />
+                  <TextField fx:id="BreedteParameter" layoutX="322.0" layoutY="50.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" promptText="NB" />
+                  <TextField fx:id="LengteParameter" layoutX="322.0" layoutY="90.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" promptText="OL" />
+                  <Label layoutX="18.0" layoutY="158.0" text="Naam:" />
+                  <TextField fx:id="locatieNaam" layoutX="143.0" layoutY="158.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="169.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+               <children>
+                  <TextField fx:id="maandText" editable="false" layoutX="5.0" layoutY="7.0" prefHeight="25.0" prefWidth="130.0" promptText="Maand" />
+                  <TextField fx:id="temperatuurText" layoutX="135.0" layoutY="7.0" prefHeight="25.0" prefWidth="150.0" promptText="Temperatuur" />
+                  <TextField fx:id="neerslagText" layoutX="272.0" layoutY="7.0" prefHeight="25.0" prefWidth="121.0" promptText="Neerslag" />
+                  <Button fx:id="addRowButton" layoutX="401.0" layoutY="7.0" mnemonicParsing="false" onMouseClicked="#addRow" prefHeight="25.0" prefWidth="85.0" text="Voeg rij toe" />
+                  <Button fx:id="addLocationButton" layoutX="325.0" layoutY="142.0" mnemonicParsing="false" onMouseClicked="#addLocation" prefHeight="34.0" prefWidth="150.0" text="Voeg locatie Toe" />
+                  <Label fx:id="errorBar" layoutX="14.0" layoutY="159.0" prefHeight="21.0" prefWidth="297.0" style="-fx-text-fill: #801515;" textFill="#801515" />
+               </children>
+            </AnchorPane>
          </children>
-      </Pane>
-      <TextField fx:id="LengteParameter" layoutX="332.0" layoutY="100.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" promptText="OL" />
-      <TextField fx:id="BreedteParameter" layoutX="332.0" layoutY="60.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" promptText="NB" />
-      <Label layoutX="203.0" layoutY="90.0" text="°" />
-      <Label layoutX="264.0" layoutY="90.0" text="'" />
-      <Label layoutX="325.0" layoutY="90.0" text="&quot;" />
-      <Label layoutX="28.0" layoutY="100.0" text="Lengte graden:" />
-      <TextField fx:id="BGraden1" layoutX="153.0" layoutY="100.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
-      <TextField fx:id="BMinuten1" layoutX="212.0" layoutY="100.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
-      <TextField fx:id="BSeconden1" layoutX="272.0" layoutY="100.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
-      <Label layoutX="324.0" layoutY="50.0" text="&quot;" />
-      <TextField fx:id="BSeconden" layoutX="272.0" layoutY="60.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
-      <Label layoutX="263.0" layoutY="50.0" text="'" />
-      <TextField fx:id="BMinuten" layoutX="212.0" layoutY="60.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
-      <Label layoutX="202.0" layoutY="50.0" text="°" />
-      <TextField fx:id="BGraden" layoutX="152.0" layoutY="60.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
-      <Label layoutX="237.0" layoutY="140.0" prefHeight="21.0" prefWidth="0.0" text=":" />
-      <TextField fx:id="eindPeriode" layoutX="252.0" layoutY="140.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="70.0" />
-      <TextField fx:id="beginPeriode" layoutX="153.0" layoutY="140.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="70.0" />
-      <Label layoutX="28.0" layoutY="140.0" text="Periode:" />
-      <Label layoutX="28.0" layoutY="60.0" text="Breedte graden:" />
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="15.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="15.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+      </GridPane>
    </children>
 </AnchorPane>

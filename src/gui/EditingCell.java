@@ -73,7 +73,7 @@ class EditingCell extends TableCell<Months, Number> {
                 public void handle(KeyEvent t) {
                     if (t.getCode() == KeyCode.ENTER) {
                         try{
-                                                    MainPanel.INPUT_NUMBER = Double.parseDouble(textField.getText());
+                       
                         commitEdit(Double.parseDouble(textField.getText()));
                         }catch(Exception e)
                         {
