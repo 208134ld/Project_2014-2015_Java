@@ -14,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -23,6 +25,10 @@ import javax.persistence.Table;
  */
 @Entity(name="SchoolYears")
 @Table(name = "SchoolYears")
+@NamedQueries({
+    @NamedQuery(name="AllSchoolYears",
+                query="SELECT s FROM SchoolYears s")
+}) 
 public class SchoolYear implements Serializable {
     
     @Id
@@ -58,6 +64,10 @@ public class SchoolYear implements Serializable {
 
     public void setClassGroup(List<ClassGroup> classGroup) {
         this.classGroup = classGroup;
+    }
+    
+    public String getSchoolYearString(){
+        return Integer.toString(getSchoolYear());
     }
 
 }

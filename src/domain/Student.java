@@ -13,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -21,6 +23,10 @@ import javax.persistence.Table;
  */
 @Entity(name = "Students")
 @Table(name = "Students")
+@NamedQueries({
+    @NamedQuery(name="AllStudents",
+                query="SELECT s FROM Students s")
+}) 
 public class Student implements Serializable {
 
     //Naam-Voornaam-Klas-Leerjaar-Graad
@@ -92,5 +98,9 @@ public class Student implements Serializable {
      public void setGrade(Grade grade) {
      this.grade = grade;
      }*/
+    
+    public String getFullName(){
+        return (getLastName()+ " " + getFirtsName());
+    }
 
 }

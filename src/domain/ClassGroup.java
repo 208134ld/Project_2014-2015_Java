@@ -14,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -23,6 +25,10 @@ import javax.persistence.Table;
  */
 @Entity(name="ClassGroups")
 @Table(name = "ClassGroups")
+@NamedQueries({
+    @NamedQuery(name="AllClassGroups",
+                query="SELECT c FROM ClassGroups c")
+}) 
 public class ClassGroup implements Serializable {
     
     @Column(name = "Klasgroep")
