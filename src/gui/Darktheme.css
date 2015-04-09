@@ -75,7 +75,9 @@ and open the template in the editor.
     -fx-border-color: transparent #1d1d1d transparent #1d1d1d;
     -fx-background-color: transparent, derive(#1d1d1d,20%);
 }
-
+#noteBar{
+    -fx-text-fill: #0E553E;
+}
 .split-pane {
     -fx-padding: 1 0 0 0;
 }

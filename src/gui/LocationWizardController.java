@@ -6,11 +6,15 @@
 
 package gui;
 
+import domain.ClimateChart;
+import domain.DomeinController;
 import domain.MonthOfTheYear;
 import domain.Months;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,6 +39,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Callback;
+import repository.RepositoryController;
 
 /**
  * FXML Controller class
@@ -87,11 +92,17 @@ public class LocationWizardController extends AnchorPane {
     @FXML
     private Label errorBar;
     private ObservableList<Months> monthList;
-
+    private int counter;
+    private int countryID; 
+    private DomeinController dc;
+    private RepositoryController rc;
     /**
      * Initializes the controller class.
      */
-public LocationWizardController(){
+public LocationWizardController(int countryId){
+    dc = new DomeinController();
+    rc = new RepositoryController();
+    this.countryID = countryId;
     FXMLLoader loader = new FXMLLoader(getClass().getResource("LocationWizard.fxml"));
     loader.setRoot(this);
     loader.setController(this);
@@ -103,6 +114,7 @@ public LocationWizardController(){
             throw new RuntimeException(ex);
         }
 
+        initMonthTable();
 }  
 
     @FXML
@@ -111,7 +123,37 @@ public LocationWizardController(){
 
     @FXML
     private void addRow(MouseEvent event) {
-          
+        try{
+            
+           double temp= Double.parseDouble(temperatuurText.getText());
+           int n=Integer.parseInt(neerslagText.getText());
+           MonthOfTheYear m = MonthOfTheYear.valueOf(maandText.getText());
+           monthList.add(new Months(n,temp,m));
+       
+         
+          if(counter==12)
+          {
+              temperatuurText.setDisable(true);
+              neerslagText.setDisable(true);
+              addRowButton.setDisable(true);
+              errorBar.setText("*Pas individuele cellen aan door te dubbelklikken");
+          }
+          else{
+          maandText.setText(MonthOfTheYear.values()[counter]+"");
+          }
+          counter++;
+        }
+        catch(NumberFormatException numb){
+            errorBar.setText("Pars error. hebt u tekst in de tekstbox staan?");
+        }
+        catch(NullPointerException ex)
+        {
+            errorBar.setText("Elk tekstvakje moet ingevuld worden.");
+        }
+        catch(Exception e)
+        {
+            errorBar.setText("Er is een fout opgetreden. probeer het opnieuw.");
+        }
         temperatuurText.getText();
         neerslagText.getText();
     }
@@ -119,6 +161,7 @@ public LocationWizardController(){
     @FXML
     private void addLocation(MouseEvent event) {
         try{
+            
             int g1 = Integer.parseInt(BGraden.getText().trim());
             int g2 = Integer.parseInt(BGraden1.getText().trim());
             int m1 = Integer.parseInt(BMinuten.getText().trim());
@@ -133,10 +176,36 @@ public LocationWizardController(){
                throw new IllegalArgumentException("Lengteparameter kan alleen OL of WL zijn");
            if(!(BreedteParameter.getText().equalsIgnoreCase("nb")||BreedteParameter.getText().equalsIgnoreCase("zb")))
                throw new IllegalArgumentException("Breedteparameter kan alleen NB of ZB zijn");
+           if(monthList.size()!=12)
+               throw new IllegalArgumentException("Er moeten 12 maanden zijn.");
            
-        }catch(Exception e)
+           ClimateChart c = new ClimateChart(lNaam,begin,einde);
+           String Bcord = c.giveCords(g1, m1, s1);
+           String Lcord = c.giveCords(g2, m2, s2);
+           double lat = c.calcDecimals(g1, m1, s1, BreedteParameter.getText().trim());
+           double longi = c.calcDecimals(g2, m2, s2, LengteParameter.getText().trim());
+           c.setBCord(Bcord);
+           c.setLCord(Lcord);
+           c.setLatitude(lat);
+           c.setLongitude(longi);
+           c.setCountry(rc.findCountryById(countryID));
+           List<Months> maanden = new ArrayList<>();
+           monthList.stream().forEach(p->maanden.add(p));
+           c.setMonths(maanden);
+           System.out.println(c.getLocation()+"   "+c.getLCord());
+           c.getMonths().stream().forEach(m->System.out.println(m.getSed()));
+           
+           
+        } catch(NumberFormatException numb){
+            errorBar.setText("Pars error. hebt u tekst in de tekstbox staan?");
+        }
+        catch(NullPointerException ex)
         {
-            
+            errorBar.setText("Elk tekstvakje moet ingevuld worden.");
+        }
+        catch(Exception e)
+        {
+            errorBar.setText(e.getMessage());
         }
          
            
@@ -144,12 +213,13 @@ public LocationWizardController(){
 
      public void initMonthTable() {
         monthList = FXCollections.observableArrayList();
-        System.out.println(MonthOfTheYear.Jan);
-//        maandText.setText(MonthOfTheYear.Jan+"");
+        monthTable.setItems(monthList);
+        counter=1;
+        maandText.setDisable(true);
+        maandText.setText(MonthOfTheYear.Jan+"");
         monthTable.setEditable(true);
         maandcol.setCellValueFactory(new PropertyValueFactory("month"));
         tempCol.setCellValueFactory(new PropertyValueFactory("temp"));
-        
         sedCol.setCellValueFactory(new PropertyValueFactory("sed"));
         Callback<TableColumn<Months, String>, TableCell<Months, String>> cellFactory =
                 new Callback<TableColumn<Months,String>, TableCell<Months,String>>() {

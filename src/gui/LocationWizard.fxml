@@ -14,8 +14,8 @@
             <TableView fx:id="monthTable" prefHeight="327.0" prefWidth="489.0" GridPane.rowIndex="1">
                <columns>
                   <TableColumn fx:id="maandcol" prefWidth="129.0" text="Maand" />
-                  <TableColumn fx:id="tempCol" onEditCommit="#updateCol" prefWidth="150.0" text="Temperatuur" />
-                  <TableColumn fx:id="sedCol" minWidth="0.0" onEditCommit="#updateCol" prefWidth="122.0" text="Neerslag" />
+                  <TableColumn fx:id="tempCol" onEditCommit="#updateCol" prefWidth="218.0" text="Temperatuur" />
+                  <TableColumn fx:id="sedCol" minWidth="0.0" onEditCommit="#updateCol" prefWidth="141.0" text="Neerslag" />
                </columns>
             </TableView>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="286.0" prefWidth="472.0" styleClass="anchorpane">
@@ -56,7 +56,7 @@
                   <TextField fx:id="neerslagText" layoutX="272.0" layoutY="7.0" prefHeight="25.0" prefWidth="121.0" promptText="Neerslag" />
                   <Button fx:id="addRowButton" layoutX="401.0" layoutY="7.0" mnemonicParsing="false" onMouseClicked="#addRow" prefHeight="25.0" prefWidth="85.0" text="Voeg rij toe" />
                   <Button fx:id="addLocationButton" layoutX="325.0" layoutY="142.0" mnemonicParsing="false" onMouseClicked="#addLocation" prefHeight="34.0" prefWidth="150.0" text="Voeg locatie Toe" />
-                  <Label fx:id="errorBar" layoutX="14.0" layoutY="159.0" prefHeight="21.0" prefWidth="297.0" style="-fx-text-fill: #801515;" textFill="#801515" />
+                  <Label fx:id="errorBar" layoutX="14.0" layoutY="159.0" prefHeight="21.0" prefWidth="297.0" style="-fx-text-fill: #801515;" />
                </children>
             </AnchorPane>
          </children>

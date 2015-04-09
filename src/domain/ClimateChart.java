@@ -90,17 +90,11 @@ public class ClimateChart implements Serializable {
         months = new ArrayList<Months>();
         setMonthList(sed, temp);
     }
-        public ClimateChart(int id, String loc, int begin, int end, int[] temp, int[] sed, String BCord,String LCord) {
+        public ClimateChart(String loc, int begin, int end) {
         setLocation(loc);
-        setClimateChartId(id);
         setBeginperiod(begin);
         setEndperiod(end);
-        setLatitude(latitude);
-        setLongitude(longitude);
-        setLCord(LCord);
-        setBCord(BCord);
         months = new ArrayList<Months>();
-        setMonthList(sed, temp);
     }
     
     public ClimateChart(int id, String loc, int begin, int end, boolean equator, double latitude, double longitude,String BCord,String LCord, int countryId) {
@@ -119,6 +113,10 @@ public class ClimateChart implements Serializable {
     public ClimateChart(String location, int id) {
         setLocation(location);
         this.climateChartId = id;
+    }
+    public void setCountry(Country c)
+    {
+        this.country = c;
     }
     public Country getCountry()
     {
@@ -206,10 +204,13 @@ public class ClimateChart implements Serializable {
     }
 
     public int getEndperiod() {
+       
         return endperiod;
     }
 
     public void setEndperiod(int endperiod) {
+        if(endperiod<this.beginperiod)
+            throw new IllegalArgumentException("Eind periode kan niet kleiner zijn dan begin");
         this.endperiod = endperiod;
     }
 
@@ -293,7 +294,7 @@ public class ClimateChart implements Serializable {
     public String giveCords(int degree,int minutes,int seconds)
     {
         if(degree<0||minutes<0||seconds<0)
-            throw new IllegalArgumentException("Waarden moeten positief zijn");
+            throw new IllegalArgumentException("Coordinaatwaarden moeten positief zijn");
         if(minutes>60||seconds>60)
             throw new IllegalArgumentException("minuten en seconden moeten kleiner zijn dan 60");
         return degree+"° "+minutes+"' "+seconds+"\" ";
@@ -313,10 +314,6 @@ public class ClimateChart implements Serializable {
             val *=-1;
         return Math.round (val * 1000000.0) / 1000000.0;
     }
-    public void setMonthDataById(int id,int sed,double temp)
-    {
-        months.stream().filter(e->e.getMonthId() == id).findFirst().get().setSed(sed);
-        months.stream().filter(e->e.getMonthId() == id).findFirst().get().setTemp(temp);
-    }
+   
 
 }
