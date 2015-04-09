@@ -10,7 +10,7 @@ public class DomeinController {
 
     private RepositoryController repoController;
     
-    public DomeinController() throws SQLException{
+    public DomeinController(){
         repoController = new RepositoryController();
     }
     

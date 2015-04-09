@@ -14,11 +14,11 @@ public class ClimateChartRepository {
 
     private EntityManager em;
 
-    public ClimateChartRepository() throws SQLException {
+    public ClimateChartRepository() {
         this.em = JPAUtil.getEntityManager();
     }
 
-    public List<ClimateChart> getClimateChartsOfCountry(int countryId) throws SQLException {
+    public List<ClimateChart> getClimateChartsOfCountry(int countryId) {
         TypedQuery<ClimateChart> query = em.createNamedQuery("ClimateChart.findByCountry", ClimateChart.class);
         
         return query.setParameter("countryID", countryId).getResultList();

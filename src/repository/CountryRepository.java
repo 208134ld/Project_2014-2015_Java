@@ -12,16 +12,16 @@ public class CountryRepository {
     
     private EntityManager em;
     
-    public CountryRepository() throws SQLException{
+    public CountryRepository(){
         this.em = JPAUtil.getEntityManager();
     }
     
-    public List<Country> getAllCountries() throws SQLException{
+    public List<Country> getAllCountries(){
         TypedQuery<Country> query = em.createNamedQuery("Country.findAll", Country.class);
         return query.getResultList();
     }
     
-    public List<Country> getCountriesOfContinent(int continentId) throws SQLException{
+    public List<Country> getCountriesOfContinent(int continentId){
         TypedQuery<Country> query = em.createNamedQuery("Country.findCountriesByContinent", Country.class);
         return query.setParameter("continentID", continentId).getResultList();
         

@@ -30,6 +30,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import static javafx.scene.input.KeyCode.S;
 import static javafx.scene.input.KeyCode.T;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -40,7 +41,7 @@ import javafx.util.Callback;
  *
  * @author bremme windows
  */
-public class LocationWizardController extends GridPane {
+public class LocationWizardController extends AnchorPane {
     @FXML
     private TextField LengteParameter;
     @FXML
@@ -92,6 +93,7 @@ public class LocationWizardController extends GridPane {
      */
 public LocationWizardController(){
     FXMLLoader loader = new FXMLLoader(getClass().getResource("LocationWizard.fxml"));
+    loader.setRoot(this);
     loader.setController(this);
         try {
             loader.load();
@@ -117,7 +119,7 @@ public LocationWizardController(){
     @FXML
     private void addLocation(MouseEvent event) {
         try{
-               int g1 = Integer.parseInt(BGraden.getText().trim());
+            int g1 = Integer.parseInt(BGraden.getText().trim());
             int g2 = Integer.parseInt(BGraden1.getText().trim());
             int m1 = Integer.parseInt(BMinuten.getText().trim());
             int m2 = Integer.parseInt(BMinuten1.getText().trim());

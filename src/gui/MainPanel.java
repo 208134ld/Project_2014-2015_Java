@@ -109,7 +109,7 @@ public class MainPanel extends GridPane {
     private RepositoryController rc;
     private final String WEBSITE="http://climatechart.azurewebsites.net/";
     private ObservableList<Months> monthsList;
-    public MainPanel() throws SQLException {
+    public MainPanel(){
         dc = new DomeinController();
         rc = new RepositoryController();
 

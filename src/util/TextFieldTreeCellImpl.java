@@ -3,6 +3,7 @@ package util;
 import domain.Continent;
 import domain.Country;
 import gui.LocationWizardController;
+import gui.MainPanel;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -229,7 +230,7 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
     }
 public static void showStage(){
 Stage newStage = new Stage();
-Scene stageScene = new Scene(new LocationWizardController(), 300, 300);
+Scene stageScene = new Scene(new LocationWizardController());
 newStage.setScene(stageScene);
 newStage.show();
 }

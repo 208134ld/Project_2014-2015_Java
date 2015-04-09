@@ -13,13 +13,13 @@ public class RepositoryController {
     private CountryRepository countryRepo;
     private ClimateChartRepository chartRepo;
     
-    public RepositoryController() throws SQLException{
+    public RepositoryController(){
         this.continentRepo = new ContinentRepository();
         this.countryRepo = new CountryRepository();
         this.chartRepo = new ClimateChartRepository();
     }
     
-    public List<Continent> getAllContinents() throws SQLException{
+    public List<Continent> getAllContinents(){
         return continentRepo.getAllContinents();
     }
     
@@ -31,15 +31,15 @@ public class RepositoryController {
         return continentRepo.findContinentById(id);
     }
     
-    public List<Country> getAllCountries() throws SQLException{
+    public List<Country> getAllCountries(){
         return countryRepo.getAllCountries();
     }
     
-    public List<Country> getCountriesOfContinent(int continentId) throws SQLException{
+    public List<Country> getCountriesOfContinent(int continentId){
         return countryRepo.getCountriesOfContinent(continentId);
     }
     
-    public List<ClimateChart> getClimateChartsOfCountry(int countryId) throws SQLException{
+    public List<ClimateChart> getClimateChartsOfCountry(int countryId){
         return chartRepo.getClimateChartsOfCountry(countryId);
     }
     public void updateClimateChart(int id,String LCord,String BCord,int bP,int eP,double longi,double lat)
