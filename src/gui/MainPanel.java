@@ -99,6 +99,7 @@ public class MainPanel extends GridPane {
     @FXML
     private ProgressBar webProgress;
     //private ContinentRepository continentRepository;
+    public static double INPUT_NUMBER=0;
     private ClimateChart selectedClimatechart;
     private ObservableList<TreeItem<MyNode>> obsTreeItems;
     private List<TreeItem<MyNode>> treeItems;
@@ -215,7 +216,13 @@ public class MainPanel extends GridPane {
     }
 
     public void initMonthTable() {
-         Callback<TableColumn<Months, String>, TableCell<Months, String>> cellFactory =
+         
+        monthTable.setEditable(true);
+        maandcol.setCellValueFactory(new PropertyValueFactory("month"));
+        tempCol.setCellValueFactory(new PropertyValueFactory("temp"));
+        
+        sedCol.setCellValueFactory(new PropertyValueFactory("sed"));
+        Callback<TableColumn<Months, String>, TableCell<Months, String>> cellFactory =
                 new Callback<TableColumn<Months,String>, TableCell<Months,String>>() {
                      
                     @Override
@@ -223,12 +230,8 @@ public class MainPanel extends GridPane {
                         return new EditingCell();
                     }
                 };
-        monthTable.setEditable(true);
-        maandcol.setCellValueFactory(new PropertyValueFactory("month"));
-        tempCol.setCellValueFactory(new PropertyValueFactory("temp"));
         tempCol.setCellFactory(cellFactory);
-        
-        sedCol.setCellValueFactory(new PropertyValueFactory("sed"));
+        sedCol.setCellFactory(cellFactory);
     }
     
     @FXML
@@ -304,8 +307,23 @@ public class MainPanel extends GridPane {
     
     @FXML
     private void updateCol(TableColumn.CellEditEvent<Months,String> event) {
-        System.out.println("edit shizzl ");
+        int id = monthTable.getSelectionModel().getSelectedCells().get(0).getRow();
         
-
+        if(monthTable.getSelectionModel().getSelectedCells().get(0).getColumn()==1)
+        {
+            selectedClimatechart.getMonths().get(id).setTemp(INPUT_NUMBER);
+            rc.updateTemp(selectedClimatechart.getMonths().get(id).getMonthId(), INPUT_NUMBER);
+        }
+        if(monthTable.getSelectionModel().getSelectedCells().get(0).getColumn()==2)
+        {
+            System.out.println("Updating sed");
+            selectedClimatechart.getMonths().get(id).setSed((int)INPUT_NUMBER);
+            rc.updateSed(selectedClimatechart.getMonths().get(id).getMonthId(), (int)INPUT_NUMBER);
+        }
+        
+        
+      
+       
+       
 }
 }

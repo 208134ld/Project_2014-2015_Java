@@ -57,4 +57,11 @@ public class RepositoryController {
     public Country findCountryById(int id){
         return countryRepo.findCountryById(id);
     }
+    public void updateTemp(int id,double temp){
+        chartRepo.updateTemp(id, temp);
+    }
+    public void updateSed(int id,int sed)
+    {
+        chartRepo.updateSed(id,sed);
+    }
 }

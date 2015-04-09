@@ -14,6 +14,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javax.swing.JOptionPane;
 class EditingCell extends TableCell<Months, Number> {
           
         private TextField textField;
@@ -26,6 +27,7 @@ class EditingCell extends TableCell<Months, Number> {
             super.startEdit();
             
             if (textField == null) {
+                
                 createTextField();
             }
               
@@ -45,7 +47,6 @@ class EditingCell extends TableCell<Months, Number> {
         @Override
         public void updateItem(Number item, boolean empty) {
             super.updateItem(item, empty);
-              
             if (empty) {
                 setText(null);
                 setGraphic(null);
@@ -71,9 +72,15 @@ class EditingCell extends TableCell<Months, Number> {
                 @Override
                 public void handle(KeyEvent t) {
                     if (t.getCode() == KeyCode.ENTER) {
-                        
-                        System.out.println(textField.getText());
+                        try{
+                                                    MainPanel.INPUT_NUMBER = Double.parseDouble(textField.getText());
                         commitEdit(Double.parseDouble(textField.getText()));
+                        }catch(Exception e)
+                        {
+                            JOptionPane.showMessageDialog(null, "Heeft u per ongeluk tekst ingegeven? een komma wordt door een . weergegeven.","Er is een fout opgetreden", JOptionPane.ERROR_MESSAGE);
+                        }
+
+                        
                     } else if (t.getCode() == KeyCode.ESCAPE) {
                         cancelEdit();
                     }

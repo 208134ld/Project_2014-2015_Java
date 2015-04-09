@@ -47,4 +47,17 @@ public class ClimateChartRepository {
         em.getTransaction().begin();
         em.getTransaction().commit();
     }
+    public void updateTemp(int id,double temp)
+    {
+      em.getTransaction().begin();
+     em.createNativeQuery("UPDATE Months SET AverTemp="+temp+" WHERE MonthID="+id).executeUpdate();
+      
+        em.getTransaction().commit();
+    }
+
+    void updateSed(int id, int sed) {
+         em.getTransaction().begin();
+   em.createNativeQuery("UPDATE Months SET Sediment="+sed+" WHERE MonthID="+id).executeUpdate();
+        em.getTransaction().commit();
+    }
 }

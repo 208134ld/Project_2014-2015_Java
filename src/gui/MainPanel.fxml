@@ -38,7 +38,7 @@
                            <columns>
                               <TableColumn fx:id="maandcol" prefWidth="129.0" text="Maand" />
                               <TableColumn fx:id="tempCol" onEditCommit="#updateCol" prefWidth="150.0" text="Temperatuur" />
-                              <TableColumn fx:id="sedCol" minWidth="0.0" prefWidth="122.0" text="Neerslag" />
+                              <TableColumn fx:id="sedCol" minWidth="0.0" onEditCommit="#updateCol" prefWidth="122.0" text="Neerslag" />
                            </columns>
                         </TableView>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="anchorpane">
