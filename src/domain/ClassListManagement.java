@@ -6,6 +6,9 @@
 package domain;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import util.JPAUtil;
@@ -49,5 +52,16 @@ public class ClassListManagement {
     }
     
     //Update, insert methodes
+    public void insertStudent(Student s){ //name + ClassGroup
+        em.getTransaction().begin();
+        em.persist(s);
+        em.getTransaction().commit();
+    }
+
+    void removeStudent(Student s) {
+        em.getTransaction().begin();
+        em.remove(s);
+        em.getTransaction().commit();
+    }
     
 }

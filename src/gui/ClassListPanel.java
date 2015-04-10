@@ -10,7 +10,9 @@ import domain.ClassListController;
 import domain.Grade;
 import domain.SchoolYear;
 import domain.Student;
+import java.io.IOException;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 
@@ -22,13 +24,22 @@ import javafx.scene.control.TreeView;
 public class ClassListPanel extends TreeView {
 
     @FXML
-    TreeView classTreeView;
+    private TreeView classTreeView;
 
-    ClassListController controller;
+    private ClassListController controller;
 
     public ClassListPanel() {
         //Controllers
         controller = new ClassListController();
+        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("ClassListPanel.fxml"));
+        loader.setRoot(this);
+        loader.setController(this);
+        try {
+            loader.load();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
 
         TreeItem<String> rootItem = new TreeItem<>("Klassen Lijst");
         rootItem.setExpanded(true);

@@ -36,6 +36,14 @@ public class ClassListController {
         //return li.stream().map(Student::getFullName).collect(Collectors.toList());
     }
     
+    public void addStudent(Student s){
+        clm.insertStudent(s);
+    }
+    
+    public void removeStudent(Student s){
+        clm.removeStudent(s);
+    }
+    
     //MOETEN WE VOOR EEN GET METHODE NAAR DE CONTROLLER???
     public List<SchoolYear> giveSchoolYearsOfGrade(Grade g){
         return g.getSchoolYears();
@@ -45,7 +53,7 @@ public class ClassListController {
         return sy.getClassGroup();
     }
 
-    public Iterable<Student> giveStudentsOfClassGroup(ClassGroup cg) {
+    public List<Student> giveStudentsOfClassGroup(ClassGroup cg) {
         return cg.getStudents();
     }
     

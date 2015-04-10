@@ -58,6 +58,12 @@ public class Student implements Serializable {
         this.firtsName = firtsName;
     }
 
+    public Student(String lastName, String firtsName, ClassGroup classGroup) {
+        this.lastName = lastName;
+        this.firtsName = firtsName;
+        this.classGroup = classGroup;
+    }
+
     public String getLastName() {
         return lastName;
     }
