@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1024.0" type="VBox" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <MenuBar fx:id="mainMenu">
+        <menus>
+          <Menu fx:id="mManage" mnemonicParsing="false" text="Beheer">
+            <items>
+              <MenuItem fx:id="miDeterminateTabel" mnemonicParsing="false" text="Determinatietabel" />
+                  <MenuItem fx:id="miClassList" mnemonicParsing="false" text="Klaslijst" />
+                  <MenuItem fx:id="miClimateChart" mnemonicParsing="false" text="Klimatogram" />
+            </items>
+          </Menu>
+          <Menu fx:id="mOverview" mnemonicParsing="false" text="Overzicht">
+            <items>
+              <MenuItem fx:id="miStatistics" mnemonicParsing="false" text="Statistieken" />
+                  <MenuItem fx:id="miWeb" mnemonicParsing="false" text="Website" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <GridPane fx:id="workPanel" VBox.vgrow="ALWAYS">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="507.0" minWidth="10.0" prefWidth="334.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="690.0" minWidth="10.0" prefWidth="690.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+      </GridPane>
+   </children>
+</fx:root>
