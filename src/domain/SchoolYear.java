@@ -40,7 +40,7 @@ public class SchoolYear implements Serializable {
     private List<ClassGroup> classGroup;
     
     @ManyToOne
-    @JoinColumn(name = "grade")
+    @JoinColumn(name = "GradeId")
     private Grade grade;
 
     public SchoolYear() {
