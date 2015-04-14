@@ -39,15 +39,32 @@ public class ClassListManagement {
         return query.getResultList();
     }
     
+    public List<SchoolYear> getAllSchoolYearsOfGrade(Grade g){
+        TypedQuery<SchoolYear> query = em.createNamedQuery("SchoolYearsOfGrade", SchoolYear.class).setParameter("g", g);
+        return query.getResultList();
+    }
+    
     public List<ClassGroup> getAllClassGroups()
     {
         TypedQuery<ClassGroup> query = em.createNamedQuery("AllClassGroups", ClassGroup.class);
         return query.getResultList();
     }
     
+    public List<ClassGroup> getAllClassGroupsOfSchoolYear(SchoolYear sy)
+    {
+        TypedQuery<ClassGroup> query = em.createNamedQuery("ClassGroupsOfSchoolYear", ClassGroup.class).setParameter("sy", sy);
+        return query.getResultList();
+    }
+    
     public List<Student> getAllStudents()
     {
         TypedQuery<Student> query = em.createNamedQuery("AllStudents", Student.class);
+        return query.getResultList();
+    }
+    
+    public List<Student> getAllStudentsOfClassGroup(ClassGroup cg)
+    {
+        TypedQuery<Student> query = em.createNamedQuery("StudentsOfClassGroup", Student.class).setParameter("cg", cg);
         return query.getResultList();
     }
     

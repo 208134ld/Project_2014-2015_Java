@@ -27,7 +27,10 @@ import javax.persistence.Table;
 @Table(name = "ClassGroups")
 @NamedQueries({
     @NamedQuery(name="AllClassGroups",
-                query="SELECT c FROM ClassGroups c")
+                query="SELECT c FROM ClassGroups c"),
+    @NamedQuery(name = "ClassGroupsOfSchoolYear", 
+            query = "SELECT cg FROM ClassGroups cg WHERE cg.schoolYear = :sy ")
+    
 }) 
 public class ClassGroup implements Serializable {
     
@@ -55,6 +58,11 @@ public class ClassGroup implements Serializable {
         this.groupName = groupName;
     }
 
+    public ClassGroup(String groupName, SchoolYear schoolYear) {
+        this.groupName = groupName;
+        this.schoolYear = schoolYear;
+    }
+
     //GET SET
     public String getGroupName() {
         return groupName;
@@ -71,6 +79,12 @@ public class ClassGroup implements Serializable {
     public void setStudents(List<Student> students) {
         this.students = students;
     }
-    
-    
+
+    public SchoolYear getSchoolYear() {
+        return schoolYear;
+    }
+
+    public void setSchoolYear(SchoolYear schoolYear) {
+        this.schoolYear = schoolYear;
+    }
 }

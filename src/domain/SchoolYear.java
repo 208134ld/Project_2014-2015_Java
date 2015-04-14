@@ -27,7 +27,9 @@ import javax.persistence.Table;
 @Table(name = "SchoolYears")
 @NamedQueries({
     @NamedQuery(name="AllSchoolYears",
-                query="SELECT s FROM SchoolYears s")
+                query="SELECT s FROM SchoolYears s"),
+    @NamedQuery(name = "SchoolYearsOfGrade", 
+            query = "SELECT s FROM SchoolYears s WHERE s.grade = :g ")
 }) 
 public class SchoolYear implements Serializable {
     
@@ -50,6 +52,11 @@ public class SchoolYear implements Serializable {
         this.schoolYear = schoolYear;
     }
 
+    public SchoolYear(int schoolYear, Grade grade) {
+        this.schoolYear = schoolYear;
+        this.grade = grade;
+    }
+
     public int getSchoolYear() {
         return schoolYear;
     }
@@ -68,6 +75,14 @@ public class SchoolYear implements Serializable {
     
     public String getSchoolYearString(){
         return Integer.toString(getSchoolYear());
+    }
+
+    public Grade getGrade() {
+        return grade;
+    }
+
+    public void setGrade(Grade grade) {
+        this.grade = grade;
     }
 
 }

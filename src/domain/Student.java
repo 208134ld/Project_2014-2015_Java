@@ -6,6 +6,8 @@
 package domain;
 
 import java.io.Serializable;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -25,7 +28,9 @@ import javax.persistence.Table;
 @Table(name = "Students")
 @NamedQueries({
     @NamedQuery(name="AllStudents",
-                query="SELECT s FROM Students s")
+                query="SELECT s FROM Students s"), 
+    @NamedQuery(name = "StudentsOfClassGroup", 
+            query = "SELECT s FROM Students s WHERE s.classGroup = :cg ")
 }) 
 public class Student implements Serializable {
 
@@ -107,6 +112,21 @@ public class Student implements Serializable {
     
     public String getFullName(){
         return (getLastName()+ " " + getFirtsName());
+    }
+
+    @Transient
+    private SimpleStringProperty lastNameProp;
+    @Transient
+    private SimpleStringProperty firstNameProp;
+    
+    public ObservableValue<String> firstNameProperty() {
+        this.lastNameProp = new SimpleStringProperty(lastName);
+        return lastNameProp;
+    }
+
+    public ObservableValue<String> lastNameProperty() {
+        this.firstNameProp = new SimpleStringProperty(firtsName);
+        return firstNameProp;
     }
 
 }

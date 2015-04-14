@@ -44,17 +44,31 @@ public class ClassListController {
         clm.removeStudent(s);
     }
     
-    //MOETEN WE VOOR EEN GET METHODE NAAR DE CONTROLLER???
     public List<SchoolYear> giveSchoolYearsOfGrade(Grade g){
-        return g.getSchoolYears();
+        return clm.getAllSchoolYearsOfGrade(g);
     }
     
     public List<ClassGroup> giveClassGroupOfSchoolYear(SchoolYear sy){
-        return sy.getClassGroup();
+        return clm.getAllClassGroupsOfSchoolYear(sy);
     }
 
     public List<Student> giveStudentsOfClassGroup(ClassGroup cg) {
-        return cg.getStudents();
+        return clm.getAllStudentsOfClassGroup(cg);
+    }
+    
+    
+    
+    public String giveGradeInfo(ClassGroup cg){
+        StringBuilder sb = new StringBuilder();
+        
+        SchoolYear sy = cg.getSchoolYear();
+        Grade g = sy.getGrade();
+        
+        sb.append("Graad: ").append(g.getGrade());
+        sb.append("\t Leerjaar: ").append(sy.getSchoolYearString());
+        sb.append("\t Klas: ").append(cg.getGroupName());
+        
+        return sb.toString();
     }
     
 }
