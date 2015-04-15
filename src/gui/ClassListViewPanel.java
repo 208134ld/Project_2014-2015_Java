@@ -7,11 +7,17 @@ package gui;
 
 import domain.ClassGroup;
 import domain.ClassListController;
+import domain.ClimateChart;
+import domain.Continent;
+import domain.Country;
 import domain.Grade;
 import domain.SchoolYear;
 import domain.Student;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,10 +25,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
+import javafx.util.Callback;
+import util.MyNode;
+import util.TextFieldTreeCellImpl;
 
 /**
  * FXML Controller class
@@ -52,6 +62,11 @@ public class ClassListViewPanel extends GridPane {
     private int currentIndex = -1;
 
     private ClassListController controller;
+    
+    //TOEVOEGING TREEVIEW OPBOUW
+    private ObservableList<TreeItem<String>> obsTreeItems;
+    private List<TreeItem<String>> gradeItems;
+    private List<TreeItem<String>> treeItems;
 
     public ClassListViewPanel() {
 
@@ -67,7 +82,7 @@ public class ClassListViewPanel extends GridPane {
             throw new RuntimeException(ex);
         }
 
-        TreeItem<String> rootItem = new TreeItem<>("Klassen Lijst");
+        /*TreeItem<String> rootItem = new TreeItem<>("Klassen Lijst");
         rootItem.setExpanded(true);
         //data toevoegen in Tree
         for (Grade g : controller.giveAllGrades()) {
@@ -82,10 +97,63 @@ public class ClassListViewPanel extends GridPane {
                     /*for (Student s : controller.giveStudentsOfClassGroup(cg)) { //testing
                         TreeItem<String> student = new TreeItem<>(s.getFullName());
                         classGroup.getChildren().add(student); // STUDENTLIJST TOEVOEGEN
-                    }*/
+                    }
                 }
             }
         }
+
+        //TREEVIEW OPVULLEN
+        classTreeView = new TreeView<>(rootItem); */
+        
+        //controller.giveAllGrades().stream().forEach(c -> System.out.println(c.getGrade()));
+        //controller.giveAllSchoolYears().stream().forEach(c -> System.out.println(c.getSchoolYear()));
+        //controller.giveAllClassGroups().stream().forEach(c -> System.out.println(c));
+        
+        
+        TreeItem<String> rootItem = new TreeItem<>("Klassen Lijst");
+
+        for (Grade g : controller.giveAllGrades()) {
+            TreeItem<String> grade = new TreeItem<>(g.getGradeString());
+
+            for (SchoolYear sy : controller.giveSchoolYearsOfGrade(g)) {
+                TreeItem<String> schoolYear = new TreeItem<>(sy.getSchoolYearString());
+                //controller.giveSchoolYearsOfGrade(g).stream().forEach(c -> System.out.println(c.getSchoolYear()));
+
+                for (ClassGroup cg : controller.giveClassGroupOfSchoolYear(sy)) {
+                    TreeItem<String> classGroup = new TreeItem<>(cg.getGroupName());
+                    schoolYear.getChildren().add(classGroup);
+                }
+                grade.getChildren().add(schoolYear);
+                treeItems.add(schoolYear);
+            }
+            gradeItems.add(grade);
+            treeItems.add(grade);
+            //root.getChildren().add(itemChild);
+        }
+        
+        obsTreeItems = FXCollections.observableArrayList(gradeItems);
+        rootItem.getChildren().addAll(obsTreeItems);
+
+        rootItem.setExpanded(true);
+        //initMonthTable();
+        //Onderstaand gedeelte maakt het mogelijk om treeviewitems "on the spot" van naam te veranderen, dit werkt alleen met treeItem<String> dus moet nog aangepast worden
+        classTreeView.setEditable(true);
+        /*classTreeView.setCellFactory(new Callback<TreeView<MyNode>, TreeCell<MyNode>>() {
+            @Override
+            public TreeCell<MyNode> call(TreeView<MyNode> p) {
+                return new TextFieldTreeCellImpl(rootItem, treeItems, rc);
+            }
+
+        });*/
+
+        //itemChild.setExpanded(false);
+        classTreeView.setRoot(rootItem);
+        
+        
+        
+        
+        
+        
 
             //LABEL OPVULLEN
         //testing
@@ -94,9 +162,6 @@ public class ClassListViewPanel extends GridPane {
         ClassGroup cg = new ClassGroup("2A", sy);
         //end testing
         classLbl.setText(controller.giveGradeInfo(cg)); //Van de geselectreerde grade
-
-        //TREEVIEW OPVULLEN
-        classTreeView = new TreeView<>(rootItem);
 
         //TableView opvullen
             /*De eerste kolom verbinden met de property “firstName” van de klasse Student. */
@@ -113,8 +178,9 @@ public class ClassListViewPanel extends GridPane {
         //Add data to the table
         studentInfoTable.setItems(studentListObservable);
 
-            //Bij dubbelklik in een cel van firstNameCol, verandert de cel in een textfield
+        //Bij dubbelklik in een cel van firstNameCol, verandert de cel in een textfield
         //firstNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        
         //Een listener toevoegen
         studentInfoTable.getSelectionModel().selectedItemProperty().
                 addListener((observableValue, oldValue, newValue) -> {

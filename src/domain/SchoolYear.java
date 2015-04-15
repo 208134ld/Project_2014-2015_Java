@@ -35,7 +35,7 @@ public class SchoolYear implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Year")
+    @Column(name = "YearInt")
     private int schoolYear;
     
     @OneToMany(mappedBy = "schoolYear")

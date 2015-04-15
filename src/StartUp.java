@@ -1,6 +1,7 @@
 
 import gui.ClassListPanel;
 import gui.ClassListViewPanel;
+import gui.GlobalFrame;
 import gui.LocationWizardController;
 import gui.MainPanel;
 import java.sql.SQLException;

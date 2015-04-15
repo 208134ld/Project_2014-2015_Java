@@ -5,6 +5,7 @@
  */
 package domain;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
@@ -19,57 +20,59 @@ import util.JPAUtil;
  */
 public class ClassListManagement {
     //1 MANAGER KLASSE IPV 3 APARTE REPOSITORY KLASSES
-    
+
     private EntityManager em;
     
-    public ClassListManagement(){
-        this.em = JPAUtil.getEntityManager();
-    }
+    //TESTING
+    //List<SchoolYear> syList = new ArrayList<>(getAllSchoolYears());
     
+    public ClassListManagement() {
+        this.em = JPAUtil.getEntityManager();
+        //TESTING
+        /*for (SchoolYear sy : syList) {
+            ClassGroup cg = new ClassGroup( sy.getSchoolYearString() + "A", sy);
+            insertClassGroup(cg);
+        }*/
+    }
+
     //NamedQuerrys
-    public List<Grade> getAllGrades()
-    {
+    public List<Grade> getAllGrades() {
         TypedQuery<Grade> query = em.createNamedQuery("AllGrades", Grade.class);
         return query.getResultList();
     }
-    
-    public List<SchoolYear> getAllSchoolYears()
-    {
+
+    public List<SchoolYear> getAllSchoolYears() {
         TypedQuery<SchoolYear> query = em.createNamedQuery("AllSchoolYears", SchoolYear.class);
         return query.getResultList();
     }
-    
-    public List<SchoolYear> getAllSchoolYearsOfGrade(Grade g){
+
+    public List<SchoolYear> getAllSchoolYearsOfGrade(Grade g) {
         TypedQuery<SchoolYear> query = em.createNamedQuery("SchoolYearsOfGrade", SchoolYear.class).setParameter("g", g);
         return query.getResultList();
     }
-    
-    public List<ClassGroup> getAllClassGroups()
-    {
+
+    public List<ClassGroup> getAllClassGroups() {
         TypedQuery<ClassGroup> query = em.createNamedQuery("AllClassGroups", ClassGroup.class);
         return query.getResultList();
     }
-    
-    public List<ClassGroup> getAllClassGroupsOfSchoolYear(SchoolYear sy)
-    {
+
+    public List<ClassGroup> getAllClassGroupsOfSchoolYear(SchoolYear sy) {
         TypedQuery<ClassGroup> query = em.createNamedQuery("ClassGroupsOfSchoolYear", ClassGroup.class).setParameter("sy", sy);
         return query.getResultList();
     }
-    
-    public List<Student> getAllStudents()
-    {
+
+    public List<Student> getAllStudents() {
         TypedQuery<Student> query = em.createNamedQuery("AllStudents", Student.class);
         return query.getResultList();
     }
-    
-    public List<Student> getAllStudentsOfClassGroup(ClassGroup cg)
-    {
+
+    public List<Student> getAllStudentsOfClassGroup(ClassGroup cg) {
         TypedQuery<Student> query = em.createNamedQuery("StudentsOfClassGroup", Student.class).setParameter("cg", cg);
         return query.getResultList();
     }
-    
+
     //Update, insert methodes
-    public void insertStudent(Student s){ //name + ClassGroup
+    public void insertStudent(Student s) { //name + ClassGroup
         em.getTransaction().begin();
         em.persist(s);
         em.getTransaction().commit();
@@ -80,5 +83,17 @@ public class ClassListManagement {
         em.remove(s);
         em.getTransaction().commit();
     }
-    
+
+    public void insertClassGroup(ClassGroup cg) { //groupName + SchoolYear
+        em.getTransaction().begin();
+        em.persist(cg);
+        em.getTransaction().commit();
+    }
+
+    void removeClassGroup(ClassGroup cg) {
+        em.getTransaction().begin();
+        em.remove(cg);
+        em.getTransaction().commit();
+    }
+
 }
