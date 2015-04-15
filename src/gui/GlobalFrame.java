@@ -62,12 +62,10 @@ public class GlobalFrame extends VBox {
             throw new RuntimeException(ex);
         }
         
-//        try{
-//            workPanel.add(new MainPanel(), 1, 0);
-//        }
-//        catch(SQLException ex){
-//            ex.printStackTrace();
-//        }
+        
+        //workPanel.add(new LocationControllerPanel(), 0, 0);
+        
+        
         
             
     }
