@@ -5,6 +5,9 @@
  */
 package gui;
 
+import domain.ClimateChart;
+import domain.Continent;
+import domain.Country;
 import java.io.IOException;
 import java.sql.SQLException;
 import javafx.event.ActionEvent;
@@ -16,6 +19,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import repository.RepositoryController;
 
 /**
  * FXML Controller class
@@ -30,28 +34,19 @@ public class GlobalFrame extends VBox {
     @FXML
     private GridPane workPanel;
     
-    /*@FXML
-    private Menu mManage;
+    private RepositoryController repositoryController;
     
-    @FXML
-    private Menu mOverview;
+    private final LocationControllerPanel locationControllerPanel;
+    private final MainPanel mainPanel;
     
-    @FXML
-    private MenuItem miDeterminateTabel;
-    
-    @FXML
-    private MenuItem miClassList;
-    
-    @FXML
-    private MenuItem miClimateChart;
-    
-    @FXML
-    private MenuItem miStatistics;
-    
-    @FXML
-    private MenuItem miWeb;*/
-    
-    public GlobalFrame(){
+    public GlobalFrame(RepositoryController repositoryController){
+        
+        this.repositoryController = repositoryController;
+        locationControllerPanel = new LocationControllerPanel(repositoryController);
+        
+        mainPanel = new MainPanel();
+        //repositoryController.addObserver(mainPanel);
+        
         
         FXMLLoader loader = new FXMLLoader(getClass().getResource("GlobalFrame.fxml"));
         loader.setRoot(this);
@@ -63,7 +58,7 @@ public class GlobalFrame extends VBox {
         }
         
         
-        //workPanel.add(new LocationControllerPanel(), 0, 0);
+        workPanel.add(new LocationControllerPanel(repositoryController), 0, 0);
         
         
         

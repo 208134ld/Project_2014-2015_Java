@@ -5,6 +5,7 @@
  */
 package gui;
 
+import domain.ClimateChart;
 import domain.Continent;
 import domain.Country;
 import domain.MonthOfTheYear;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -23,7 +25,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+import repository.RepositoryController;
 
 /**
  * FXML Controller class
@@ -99,8 +104,10 @@ public class LocationControllerPanel extends Accordion{
     private Button btnAddClimateChart;
     @FXML
     private Button btnRemoveClimateChart;
-    private ObservableList<Months> monthList;
-    private int counter;
+    
+    private RepositoryController repositoryController;
+//    private ObservableList<Months> monthList;
+//    private int counter;
 //    private int countryID; 
 //    private DomeinController dc;
 //    private RepositoryController rc;
@@ -129,42 +136,42 @@ public class LocationControllerPanel extends Accordion{
 //    private void updateCol(TableColumn.CellEditEvent<Months,Double> event) {
 //    }
 //
-    @FXML
-    private void addRow(MouseEvent event) {
-        try{
-            
-           double temp= Double.parseDouble(txtTemp.getText());
-           int n=Integer.parseInt(txtSed.getText());
-           //MonthOfTheYear m = MonthOfTheYear.valueOf(maandText.getText());
-           //monthList.add(new Months(n,temp,m));
-       
-         
-          if(counter==12)
-          {
-              txtTemp.setDisable(true);
-              txtSed.setDisable(true);
-              btnAddRow.setDisable(true);
-              errorBar.setText("*Pas individuele cellen aan door te dubbelklikken");
-          }
-//          else{
-//          maandText.setText(MonthOfTheYear.values()[counter]+"");
+//    @FXML
+//    private void addRow(MouseEvent event) {
+//        try{
+//            
+//           double temp= Double.parseDouble(txtTemp.getText());
+//           int n=Integer.parseInt(txtSed.getText());
+//           //MonthOfTheYear m = MonthOfTheYear.valueOf(maandText.getText());
+//           //monthList.add(new Months(n,temp,m));
+//       
+//         
+//          if(counter==12)
+//          {
+//              txtTemp.setDisable(true);
+//              txtSed.setDisable(true);
+//              btnAddRow.setDisable(true);
+//              errorBar.setText("*Pas individuele cellen aan door te dubbelklikken");
 //          }
-          counter++;
-        }
-        catch(NumberFormatException numb){
-            errorBar.setText("Pars error. hebt u tekst in de tekstbox staan?");
-        }
-        catch(NullPointerException ex)
-        {
-            errorBar.setText("Elk tekstvakje moet ingevuld worden.");
-        }
-        catch(Exception e)
-        {
-            errorBar.setText("Er is een fout opgetreden. probeer het opnieuw.");
-        }
-        txtTemp.getText();
-        txtSed.getText();
-    }
+////          else{
+////          maandText.setText(MonthOfTheYear.values()[counter]+"");
+////          }
+//          counter++;
+//        }
+//        catch(NumberFormatException numb){
+//            errorBar.setText("Pars error. hebt u tekst in de tekstbox staan?");
+//        }
+//        catch(NullPointerException ex)
+//        {
+//            errorBar.setText("Elk tekstvakje moet ingevuld worden.");
+//        }
+//        catch(Exception e)
+//        {
+//            errorBar.setText("Er is een fout opgetreden. probeer het opnieuw.");
+//        }
+//        txtTemp.getText();
+//        txtSed.getText();
+//    }
 //
 //    @FXML
 //    private void addLocation(MouseEvent event) {
@@ -240,8 +247,10 @@ public class LocationControllerPanel extends Accordion{
 //        tempCol.setCellFactory(cellFactory);
 //        sedCol.setCellFactory(cellFactory);
 //    }
-    public LocationControllerPanel(){ 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("LocationControllerPanel_1.fxml"));
+    public LocationControllerPanel(RepositoryController repositoryController){
+        this.repositoryController = repositoryController;
+        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("LocationControllerPanel.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -251,4 +260,35 @@ public class LocationControllerPanel extends Accordion{
         } 
     }
     
+    @FXML
+    private void addContinent(ActionEvent event) {
+        //repositoryController.insertContinent(new Continent(txtContinentName.getText()));
+        txtContinentName.clear();
+    }
+    
+    @FXML
+    private void removeContinent(ActionEvent event) {
+        txtContinentName.clear();
+    }
+    
+    @FXML
+    private void addCountry(ActionEvent event) {
+        //repositoryController.insertCo(new Continent(txtContinentName.getText()));
+        txtCountryName.clear();
+    }
+    
+    @FXML
+    private void removeCountry(ActionEvent event) {
+        txtCountryName.clear();
+    }
+    
+    @FXML
+    private void addClimateChart(ActionEvent event) {
+        txtLocation.clear();
+    }
+    
+    @FXML
+    private void removeClimateChart(ActionEvent event) {
+        txtLocation.clear();
+    }
 }
