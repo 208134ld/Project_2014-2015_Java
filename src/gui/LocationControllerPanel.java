@@ -13,6 +13,7 @@ import domain.Months;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -106,7 +107,9 @@ public class LocationControllerPanel extends Accordion{
     private Button btnRemoveClimateChart;
     
     private RepositoryController repositoryController;
-//    private ObservableList<Months> monthList;
+    private ObservableList<Months> monthList;
+    private ObservableList<Continent> continentList;
+    private ObservableList<Country> countryList;
 //    private int counter;
 //    private int countryID; 
 //    private DomeinController dc;
@@ -249,6 +252,13 @@ public class LocationControllerPanel extends Accordion{
 //    }
     public LocationControllerPanel(RepositoryController repositoryController){
         this.repositoryController = repositoryController;
+        
+        //repositoryController.getAllContinents().stream().forEach(System.out::println);
+        
+        /*continentList.addAll(repositoryController.getAllContinents().stream().forEach(continent -> continent.));
+        
+        cbContinentCountry.setItems(continentList);
+        cbContinentClimateChart.setItems(continentList);*/
         
         FXMLLoader loader = new FXMLLoader(getClass().getResource("LocationControllerPanel.fxml"));
         loader.setRoot(this);

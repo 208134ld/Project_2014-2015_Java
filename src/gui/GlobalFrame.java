@@ -39,9 +39,9 @@ public class GlobalFrame extends VBox {
     private final LocationControllerPanel locationControllerPanel;
     private final MainPanel mainPanel;
     
-    public GlobalFrame(RepositoryController repositoryController){
+    public GlobalFrame(){
         
-        this.repositoryController = repositoryController;
+        this.repositoryController = new RepositoryController();
         locationControllerPanel = new LocationControllerPanel(repositoryController);
         
         mainPanel = new MainPanel();
@@ -58,7 +58,7 @@ public class GlobalFrame extends VBox {
         }
         
         
-        workPanel.add(new LocationControllerPanel(repositoryController), 0, 0);
+        workPanel.add(locationControllerPanel, 0, 0);
         
         
         
