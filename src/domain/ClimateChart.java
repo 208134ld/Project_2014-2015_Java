@@ -58,9 +58,11 @@ public class ClimateChart implements Serializable {
     private double latitude;
     @Column(name="Longitude")
     private double longitude ;
-    @Column(name="LCord")
+    @Transient
+    //@Column(name="LCord")
     private String LCord;
-    @Column(name="BCord")
+    @Transient
+    //@Column(name="BCord")
     private String BCord;
     @Column(name="AboveEquator")
     private boolean aboveEquator;
