@@ -15,6 +15,7 @@ import domain.SchoolYear;
 import domain.Student;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -72,7 +73,9 @@ public class ClassListViewPanel extends GridPane {
 
         //Controllers
         controller = new ClassListController();
-
+        treeItems = new ArrayList<>();
+        gradeItems = new ArrayList<>();
+        
         FXMLLoader loader = new FXMLLoader(getClass().getResource("ClassListViewPanel.fxml"));
         loader.setRoot(this);
         loader.setController(this);

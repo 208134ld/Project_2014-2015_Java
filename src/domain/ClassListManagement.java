@@ -24,15 +24,16 @@ public class ClassListManagement {
     private EntityManager em;
     
     //TESTING
-    //List<SchoolYear> syList = new ArrayList<>(getAllSchoolYears());
+    List<SchoolYear> syList;
     
     public ClassListManagement() {
         this.em = JPAUtil.getEntityManager();
+        syList = new ArrayList<>(getAllSchoolYears());
         //TESTING
-        /*for (SchoolYear sy : syList) {
+        for (SchoolYear sy : syList) {
             ClassGroup cg = new ClassGroup( sy.getSchoolYearString() + "A", sy);
             insertClassGroup(cg);
-        }*/
+        }
     }
 
     //NamedQuerrys

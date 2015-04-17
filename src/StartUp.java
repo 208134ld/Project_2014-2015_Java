@@ -17,7 +17,7 @@ public class StartUp extends Application {
     
     @Override
     public void start(Stage stage) throws SQLException{
-        Scene scene = new Scene(new GlobalFrame());
+        Scene scene = new Scene(new ClassListViewPanel());
         
         stage.setTitle("Aardrijkskunde");
         stage.setScene(scene);
