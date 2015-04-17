@@ -16,9 +16,13 @@ import domain.Student;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -59,6 +63,7 @@ public class ClassListViewPanel extends GridPane {
 
     private List<Student> studentList;
     private ObservableList<Student> studentListObservable;
+    private ClassGroup selectedClassGroup;
 
     private int currentIndex = -1;
 
@@ -83,47 +88,19 @@ public class ClassListViewPanel extends GridPane {
             loader.load();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
-        }
-
-        /*TreeItem<String> rootItem = new TreeItem<>("Klassen Lijst");
-        rootItem.setExpanded(true);
-        //data toevoegen in Tree
-        for (Grade g : controller.giveAllGrades()) {
-            TreeItem<String> grade = new TreeItem<>(g.getGradeString());
-            rootItem.getChildren().add(grade); //GRADE TOEVOEGEN
-            for (SchoolYear sy : controller.giveSchoolYearsOfGrade(g)) {
-                TreeItem<String> schoolYear = new TreeItem<>(sy.getSchoolYearString());
-                grade.getChildren().add(schoolYear); //SCHOOLYEARS TOEVOEGEN
-                for (ClassGroup cg : controller.giveClassGroupOfSchoolYear(sy)) {
-                    TreeItem<String> classGroup = new TreeItem<>(cg.getGroupName());
-                    schoolYear.getChildren().add(classGroup); //KLASSEN TOEVOEGEN
-                    /*for (Student s : controller.giveStudentsOfClassGroup(cg)) { //testing
-                        TreeItem<String> student = new TreeItem<>(s.getFullName());
-                        classGroup.getChildren().add(student); // STUDENTLIJST TOEVOEGEN
-                    }
-                }
-            }
-        }
-
-        //TREEVIEW OPVULLEN
-        classTreeView = new TreeView<>(rootItem); */
-        
-        //controller.giveAllGrades().stream().forEach(c -> System.out.println(c.getGrade()));
-        //controller.giveAllSchoolYears().stream().forEach(c -> System.out.println(c.getSchoolYear()));
-        //controller.giveAllClassGroups().stream().forEach(c -> System.out.println(c));
-        
+        }        
         
         TreeItem<String> rootItem = new TreeItem<>("Klassen Lijst");
 
         for (Grade g : controller.giveAllGrades()) {
-            TreeItem<String> grade = new TreeItem<>(g.getGradeString());
+            TreeItem<String> grade = new TreeItem<>("Graad " + g.getGradeString());
 
             for (SchoolYear sy : controller.giveSchoolYearsOfGrade(g)) {
-                TreeItem<String> schoolYear = new TreeItem<>(sy.getSchoolYearString());
+                TreeItem<String> schoolYear = new TreeItem<>("Leerjaar " + sy.getSchoolYearString());
                 //controller.giveSchoolYearsOfGrade(g).stream().forEach(c -> System.out.println(c.getSchoolYear()));
 
                 for (ClassGroup cg : controller.giveClassGroupOfSchoolYear(sy)) {
-                    TreeItem<String> classGroup = new TreeItem<>(cg.getGroupName());
+                    TreeItem<String> classGroup = new TreeItem<>("Klas " + cg.getGroupName());
                     schoolYear.getChildren().add(classGroup);
                 }
                 grade.getChildren().add(schoolYear);
@@ -152,19 +129,18 @@ public class ClassListViewPanel extends GridPane {
         //itemChild.setExpanded(false);
         classTreeView.setRoot(rootItem);
         
-        
-        
-        
-        
-        
-
-            //LABEL OPVULLEN
-        //testing
-        Grade g = new Grade(1);
-        SchoolYear sy = new SchoolYear(2, g);
-        ClassGroup cg = new ClassGroup("2A", sy);
-        //end testing
-        classLbl.setText(controller.giveGradeInfo(cg)); //Van de geselectreerde grade
+        classTreeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<String>>() {
+            @Override
+            public void changed(ObservableValue<? extends TreeItem<String>> observable, TreeItem<String> oldValue, TreeItem<String> newValue) {
+                TreeItem<String> selectedItem = newValue;
+                if (selectedItem.getValue().contains("Klas")) {
+                    selectedClassGroup = controller.giveClassGroupWithName(selectedItem.getValue().substring(5));
+                    System.out.println(selectedClassGroup.getGroupName());
+//                     selectedClimatechart = new ClimateChart(1,"Gent",1950,1970,true,23.34534,44.34523,"30° 45' 10\" NB ","51° 3' 15\" OL ",1);
+                    updateLocationDetailPanel(selectedClassGroup);
+                }
+            }
+        });
 
         //TableView opvullen
             /*De eerste kolom verbinden met de property “firstName” van de klasse Student. */
@@ -175,11 +151,11 @@ public class ClassListViewPanel extends GridPane {
         lastNameCol.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
 
         //tableView opvullen met data
-        studentList = controller.giveStudentsOfClassGroup(cg); // ---> TESTING, normaal geselecteerde klas!!!!!!!!!!!!
+        /*studentList = controller.giveStudentsOfClassGroup(selectedClassGroup);
         studentListObservable = FXCollections.observableArrayList(studentList);
 
         //Add data to the table
-        studentInfoTable.setItems(studentListObservable);
+        studentInfoTable.setItems(studentListObservable);*/
 
         //Bij dubbelklik in een cel van firstNameCol, verandert de cel in een textfield
         //firstNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -199,6 +175,17 @@ public class ClassListViewPanel extends GridPane {
                     }
                 });
 
+    }
+    
+     public void updateLocationDetailPanel(ClassGroup cg) {
+         classLbl.setText(controller.giveGradeInfo(cg)); //Van de geselectreerde grade
+         
+        studentList = controller.giveStudentsOfClassGroup(cg);
+        studentList = studentList.stream().sorted(Comparator.comparing(Student::getLastName).thenComparing(Student::getFirtsName)).collect(Collectors.toList());
+        studentListObservable = FXCollections.observableArrayList(studentList);
+        
+        studentInfoTable.setItems(studentListObservable);
+        
     }
 
 }

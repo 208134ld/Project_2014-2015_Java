@@ -56,6 +56,9 @@ public class ClassListController {
         return clm.getAllStudentsOfClassGroup(cg);
     }
     
+    public ClassGroup giveClassGroupWithName(String name){
+        return clm.getClassGroupWithName(name);
+    }
     
     
     public String giveGradeInfo(ClassGroup cg){

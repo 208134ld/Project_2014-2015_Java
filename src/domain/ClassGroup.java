@@ -29,7 +29,9 @@ import javax.persistence.Table;
     @NamedQuery(name="AllClassGroups",
                 query="SELECT c FROM ClassGroups c"),
     @NamedQuery(name = "ClassGroupsOfSchoolYear", 
-            query = "SELECT cg FROM ClassGroups cg WHERE cg.schoolYear = :sy ")
+            query = "SELECT cg FROM ClassGroups cg WHERE cg.schoolYear = :sy "), 
+    @NamedQuery(name = "ClassGroupWithName", 
+            query = "SELECT cg FROM ClassGroups cg WHERE cg.groupName = :name ")
     
 }) 
 public class ClassGroup implements Serializable {
