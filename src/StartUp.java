@@ -14,11 +14,10 @@ import repository.RepositoryController;
 
 public class StartUp extends Application {
 
-    private RepositoryController rc;
     
     @Override
     public void start(Stage stage) throws SQLException{
-        Scene scene = new Scene(new GlobalFrame(rc));
+        Scene scene = new Scene(new GlobalFrame());
         
         stage.setTitle("Aardrijkskunde");
         stage.setScene(scene);
