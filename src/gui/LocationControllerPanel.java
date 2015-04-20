@@ -260,8 +260,10 @@ public class LocationControllerPanel extends Accordion{
 //    }
     public LocationControllerPanel(RepositoryController repositoryController){
         this.repositoryController = repositoryController;
+        cbContinentCountry = new ComboBox<>();
+        cbContinentClimateChart = new ComboBox<>();
+        cbCountryClimateChart = new ComboBox<>();
         
-        continentList = FXCollections.observableList(repositoryController.getAllContinents());
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("LocationControllerPanel.fxml"));
         loader.setRoot(this);
@@ -272,8 +274,12 @@ public class LocationControllerPanel extends Accordion{
             throw new RuntimeException(ex);
         } 
         
-        cbContinentCountry = new ComboBox<Continent>(continentList);
+        continentList = FXCollections.observableList(repositoryController.getAllContinents());
+        cbContinentCountry.setItems(continentList);
+        cbContinentClimateChart.setItems(continentList);
         
+        countryList = FXCollections.observableList(repositoryController.getAllCountries());
+        cbCountryClimateChart.setItems(countryList);
         
     }
     
