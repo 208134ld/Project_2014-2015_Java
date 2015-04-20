@@ -60,6 +60,10 @@ public class ClassListController {
         return clm.getClassGroupWithName(name);
     }
     
+    public Grade giveGradeWithName(String naam){
+        return clm.getGradeWithName(naam);
+    }
+    
     
     public String giveGradeInfo(ClassGroup cg){
         StringBuilder sb = new StringBuilder();

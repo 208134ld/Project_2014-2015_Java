@@ -25,7 +25,9 @@ import javax.persistence.Table;
 @Table(name = "Grades")
 @NamedQueries({
     @NamedQuery(name="AllGrades",
-                query="SELECT g FROM Grades g")
+                query="SELECT g FROM Grades g"),
+    @NamedQuery(name="SelectedGrade",
+                query="SELECT g FROM Grades g where g.grade = :graad")
 }) 
 public class Grade implements Serializable {
     

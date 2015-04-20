@@ -58,6 +58,11 @@ public class ClassListManagement {
         TypedQuery<Grade> query = em.createNamedQuery("AllGrades", Grade.class);
         return query.getResultList();
     }
+    
+    public Grade getGradeWithName(String graad){
+        TypedQuery<Grade> query = em.createNamedQuery("SelectedGrade", Grade.class).setParameter("graad", graad);
+        return query.getSingleResult();
+    }
 
     public List<SchoolYear> getAllSchoolYears() {
         TypedQuery<SchoolYear> query = em.createNamedQuery("AllSchoolYears", SchoolYear.class);
