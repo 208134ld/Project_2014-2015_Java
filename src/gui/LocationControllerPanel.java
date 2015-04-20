@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -37,6 +38,13 @@ import repository.RepositoryController;
  * @author Logan Dupont
  */
 public class LocationControllerPanel extends Accordion{
+    
+    @FXML
+    private TitledPane tpContinent;
+    @FXML
+    private TitledPane tpCountry;
+    @FXML
+    private TitledPane tpClimateChart;
     
     //Continent-Part
     @FXML
@@ -253,13 +261,8 @@ public class LocationControllerPanel extends Accordion{
     public LocationControllerPanel(RepositoryController repositoryController){
         this.repositoryController = repositoryController;
         
-        //repositoryController.getAllContinents().stream().forEach(System.out::println);
-        
-        /*continentList.addAll(repositoryController.getAllContinents().stream().forEach(continent -> continent.));
-        
-        cbContinentCountry.setItems(continentList);
-        cbContinentClimateChart.setItems(continentList);*/
-        
+        continentList = FXCollections.observableList(repositoryController.getAllContinents());
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("LocationControllerPanel.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -268,6 +271,10 @@ public class LocationControllerPanel extends Accordion{
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         } 
+        
+        cbContinentCountry = new ComboBox<Continent>(continentList);
+        
+        
     }
     
     @FXML
