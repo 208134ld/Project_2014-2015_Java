@@ -194,7 +194,7 @@ public LocationWizardController(int countryId){
            c.setMonths(maanden);
            System.out.println(c.getLocation()+"   "+c.getLCord());
            c.getMonths().stream().forEach(m->System.out.println(m.getSed()));
-           
+           rc.InsertClimatechart(c);
            
         } catch(NumberFormatException numb){
             errorBar.setText("Pars error. hebt u tekst in de tekstbox staan?");

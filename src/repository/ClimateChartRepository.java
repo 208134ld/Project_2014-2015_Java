@@ -60,4 +60,10 @@ public class ClimateChartRepository {
    em.createNativeQuery("UPDATE Months SET Sediment="+sed+" WHERE MonthID="+id).executeUpdate();
         em.getTransaction().commit();
     }
+
+    void insertClimateChart(ClimateChart c) {
+        em.getTransaction().begin();
+        em.persist(c);
+        em.getTransaction().commit();
+         }
 }

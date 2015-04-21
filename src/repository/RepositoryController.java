@@ -64,4 +64,8 @@ public class RepositoryController {
     {
         chartRepo.updateSed(id,sed);
     }
+    public void InsertClimatechart(ClimateChart c)
+    {
+        chartRepo.insertClimateChart(c);
+    }
 }

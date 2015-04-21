@@ -80,7 +80,7 @@ public class ClimateChart implements Serializable {
     public ClimateChart() {
     }
 
-    public ClimateChart(int id, String loc, int begin, int end, int[] temp, int[] sed, double latitude, double longitude,String BCord,String LCord) {
+    public ClimateChart(int id, String loc, int begin, int end, double[] temp, int[] sed, double latitude, double longitude,String BCord,String LCord) {
         setLocation(loc);
         setClimateChartId(id);
         setBeginperiod(begin);
@@ -283,7 +283,7 @@ public class ClimateChart implements Serializable {
         return climateChartId;
     }
 
-    private void setMonthList(int[] sediments, int[] temperature) {
+    private void setMonthList(int[] sediments, double[] temperature) {
         if (temperature.length != 12 || sediments.length != 12) {
             throw new IllegalArgumentException("Er zijn meer dan 12 maanden in deze lijst");
         }
