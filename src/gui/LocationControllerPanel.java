@@ -5,21 +5,16 @@
  */
 package gui;
 
-import domain.ClimateChart;
-import domain.Continent;
-import domain.Country;
 import domain.MonthOfTheYear;
 import domain.Months;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.List;
+import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -29,7 +24,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import repository.RepositoryController;
 
 /**
@@ -56,7 +50,7 @@ public class LocationControllerPanel extends Accordion{
     
     //Country-Part
     @FXML
-    private ComboBox<Continent> cbContinentCountry;
+    private ComboBox<String> cbContinentCountry;
     @FXML
     private TextField txtCountryName;
     @FXML
@@ -66,9 +60,9 @@ public class LocationControllerPanel extends Accordion{
     
     //ClimateChart-Part
     @FXML
-    private ComboBox<Continent> cbContinentClimateChart;
+    private ComboBox<String> cbContinentClimateChart;
     @FXML
-    private ComboBox<Country> cbCountryClimateChart;
+    private ComboBox<String> cbCountryClimateChart;
     @FXML
     private TextField txtLocation;
     @FXML
@@ -96,9 +90,9 @@ public class LocationControllerPanel extends Accordion{
     @FXML
     private TableColumn<Months, MonthOfTheYear> monthcol;
     @FXML
-    private TableColumn<Months, String> tempCol;
+    private TableColumn<Months, Double> tempCol;
     @FXML
-    private TableColumn<Months, String> sedCol;
+    private TableColumn<Months, Integer> sedCol;
     @FXML
     private ComboBox<MonthOfTheYear> cbMonth;
     @FXML
@@ -115,13 +109,15 @@ public class LocationControllerPanel extends Accordion{
     private Button btnRemoveClimateChart;
     
     private RepositoryController repositoryController;
-    private ObservableList<Months> monthList;
-    private ObservableList<Continent> continentList;
-    private ObservableList<Country> countryList;
-//    private int counter;
+    private ObservableList<MonthOfTheYear> monthOfTheYearList;
+    private ObservableList<String> continentList;
+    private ObservableList<String> countryList;
+    private List<Months> monthList;
+    private ObservableList<Months> tableMonthList;
+    private int counter = 0;
 //    private int countryID; 
 //    private DomeinController dc;
-//    private RepositoryController rc;
+
     /**
      * Initializes the controller class.
      */
@@ -147,42 +143,48 @@ public class LocationControllerPanel extends Accordion{
 //    private void updateCol(TableColumn.CellEditEvent<Months,Double> event) {
 //    }
 //
-//    @FXML
-//    private void addRow(MouseEvent event) {
-//        try{
-//            
-//           double temp= Double.parseDouble(txtTemp.getText());
-//           int n=Integer.parseInt(txtSed.getText());
-//           //MonthOfTheYear m = MonthOfTheYear.valueOf(maandText.getText());
-//           //monthList.add(new Months(n,temp,m));
-//       
-//         
-//          if(counter==12)
-//          {
-//              txtTemp.setDisable(true);
-//              txtSed.setDisable(true);
-//              btnAddRow.setDisable(true);
-//              errorBar.setText("*Pas individuele cellen aan door te dubbelklikken");
-//          }
-////          else{
-////          maandText.setText(MonthOfTheYear.values()[counter]+"");
-////          }
-//          counter++;
-//        }
-//        catch(NumberFormatException numb){
-//            errorBar.setText("Pars error. hebt u tekst in de tekstbox staan?");
-//        }
-//        catch(NullPointerException ex)
-//        {
-//            errorBar.setText("Elk tekstvakje moet ingevuld worden.");
-//        }
-//        catch(Exception e)
-//        {
-//            errorBar.setText("Er is een fout opgetreden. probeer het opnieuw.");
-//        }
-//        txtTemp.getText();
-//        txtSed.getText();
-//    }
+    @FXML
+    private void addRow(MouseEvent event) {
+        try{
+            double temp= Double.parseDouble(txtTemp.getText());
+            int n=Integer.parseInt(txtSed.getText());
+            MonthOfTheYear m = cbMonth.getValue();
+            monthList.add(new Months(n, temp, m));
+
+            txtTemp.clear();
+            txtSed.clear();
+         
+            if(counter==12)
+            {
+                cbMonth.setDisable(true);
+                txtTemp.setDisable(true);
+                txtSed.setDisable(true);
+                btnAddRow.setDisable(true);
+                errorBar.setText("*Pas individuele cellen aan door te dubbelklikken");
+            }
+            else{
+             if(monthList.stream().map(mo -> mo.getMonth()).collect(Collectors.toList())
+                     .contains(cbMonth.getValue())){
+                 errorBar.setText("Deze maand is al reeds in gebruik");
+             }
+ 
+            }
+          counter++;
+        }
+        catch(NumberFormatException numb){
+            errorBar.setText("Pars error. hebt u tekst in de tekstbox staan?");
+        }
+        catch(NullPointerException ex)
+        {
+            errorBar.setText("Elk tekstvakje moet ingevuld worden.");
+        }
+        catch(Exception e)
+        {
+            errorBar.setText("Er is een fout opgetreden. probeer het opnieuw.");
+        }
+           
+        
+    }
 //
 //    @FXML
 //    private void addLocation(MouseEvent event) {
@@ -238,31 +240,31 @@ public class LocationControllerPanel extends Accordion{
 //    }
 //
 //     public void initMonthTable() {
-//        monthList = FXCollections.observableArrayList();
-//        monthTable.setItems(monthList);
-//        counter=1;
-//        maandText.setDisable(true);
-//        maandText.setText(MonthOfTheYear.Jan+"");
+//        tableMonthList = FXCollections.observableList(monthList);
+//        monthTable.setItems(tableMonthList);
 //        monthTable.setEditable(true);
-//        maandcol.setCellValueFactory(new PropertyValueFactory("month"));
-//        tempCol.setCellValueFactory(new PropertyValueFactory("temp"));
-//        sedCol.setCellValueFactory(new PropertyValueFactory("sed"));
-//        Callback<TableColumn<Months, String>, TableCell<Months, String>> cellFactory =
+//        monthcol.setCellValueFactory(cellData -> cellData.getValue().monthProperty());
+//        tempCol.setCellValueFactory(cellData -> cellData.getValue().tempProperty());
+//        sedCol.setCellValueFactory(cellData -> cellData.getValue().sedProperty());
+//        
+//        /*Callback<TableColumn<Months, String>, TableCell<Months, String>> cellFactory =
 //                new Callback<TableColumn<Months,String>, TableCell<Months,String>>() {
 //                     
 //                    @Override
 //                    public TableCell call(TableColumn p) {
 //                        return new EditingCell();
 //                    }
-//                };
+//                };*/
 //        tempCol.setCellFactory(cellFactory);
 //        sedCol.setCellFactory(cellFactory);
 //    }
+     
     public LocationControllerPanel(RepositoryController repositoryController){
         this.repositoryController = repositoryController;
         cbContinentCountry = new ComboBox<>();
         cbContinentClimateChart = new ComboBox<>();
         cbCountryClimateChart = new ComboBox<>();
+        cbMonth = new ComboBox<>();
         
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("LocationControllerPanel.fxml"));
@@ -274,12 +276,20 @@ public class LocationControllerPanel extends Accordion{
             throw new RuntimeException(ex);
         } 
         
-        continentList = FXCollections.observableList(repositoryController.getAllContinents());
+        setExpandedPane(tpContinent);
+        
+        continentList = FXCollections.observableList(repositoryController.getAllContinents()
+                .stream().map(c -> c.getName()).sorted().collect(Collectors.toList()));
         cbContinentCountry.setItems(continentList);
         cbContinentClimateChart.setItems(continentList);
         
-        countryList = FXCollections.observableList(repositoryController.getAllCountries());
+        countryList = FXCollections.observableList(repositoryController.getAllCountries()
+                .stream().map(c -> c.getName()).sorted().collect(Collectors.toList()));
         cbCountryClimateChart.setItems(countryList);
+        
+        monthOfTheYearList = FXCollections.observableList(repositoryController.getMonthsOfTheYear());
+        cbMonth.setItems(monthOfTheYearList);
+        cbMonth.setVisibleRowCount(3);
         
     }
     

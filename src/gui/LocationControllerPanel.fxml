@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root fx:id="location" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="669.0" prefWidth="600.0" type="Accordion" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="location" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" type="Accordion" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <panes>
       <TitledPane fx:id="tpContinent" animated="false" text="Werelddeel">
          <content>
@@ -140,9 +140,9 @@
                   <AnchorPane prefHeight="40.0" prefWidth="578.0">
                      <children>
                         <ComboBox fx:id="cbMonth" layoutY="7.0" prefHeight="25.0" prefWidth="135.0" promptText="Maand" />
-                        <TextField fx:id="txtTemp" layoutX="135.0" layoutY="7.0" prefHeight="25.0" prefWidth="150.0" promptText="Temperatuur" />
+                        <TextField fx:id="txtTemp" layoutX="135.0" layoutY="7.0" prefHeight="25.0" prefWidth="136.0" promptText="Temperatuur" />
                         <TextField fx:id="txtSed" layoutX="272.0" layoutY="7.0" prefHeight="25.0" prefWidth="121.0" promptText="Neerslag" />
-                        <Button fx:id="btnAddRow" layoutX="401.0" layoutY="7.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="85.0" text="Voeg rij toe" />
+                        <Button fx:id="btnAddRow" layoutX="401.0" layoutY="7.0" mnemonicParsing="false" onAction="#addRow" prefHeight="25.0" prefWidth="85.0" text="Voeg rij toe" />
                      </children>
                   </AnchorPane>
                   <Label fx:id="errorBar" prefHeight="17.0" prefWidth="628.0" textFill="RED" VBox.vgrow="ALWAYS" />

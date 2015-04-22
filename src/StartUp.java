@@ -1,4 +1,6 @@
 import gui.GlobalFrame;
+import gui.LocationViewPanel;
+import gui.MainPanel;
 import java.sql.SQLException;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
@@ -6,9 +8,9 @@ import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import repository.RepositoryController;
 
 public class StartUp extends Application {
-
     
     @Override
     public void start(Stage stage) throws SQLException{

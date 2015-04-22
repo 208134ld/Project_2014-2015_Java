@@ -21,7 +21,7 @@ import javax.persistence.Table;
 @Table(name = "Countries")
 @NamedQueries({
     @NamedQuery(name="Country.findAll",
-                query="SELECT c FROM Countries c"),
+                query="select c from Countries c"),
     @NamedQuery(name="Country.findCountriesByContinent",
                 query="SELECT c FROM Countries c WHERE c.continent.continentId = :continentID"),
         @NamedQuery(name="Country.findById",

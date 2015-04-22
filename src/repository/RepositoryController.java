@@ -4,7 +4,9 @@ package repository;
 import domain.ClimateChart;
 import domain.Continent;
 import domain.Country;
+import domain.MonthOfTheYear;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 public class RepositoryController {
@@ -67,5 +69,9 @@ public class RepositoryController {
     public void InsertClimatechart(ClimateChart c)
     {
         chartRepo.insertClimateChart(c);
+    }
+    
+    public List<MonthOfTheYear> getMonthsOfTheYear(){
+        return Arrays.asList(MonthOfTheYear.values());
     }
 }
