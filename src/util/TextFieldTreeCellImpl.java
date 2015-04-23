@@ -29,7 +29,7 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
 
     private TextField textField;
     private ContextMenu cm = new ContextMenu();
-    final TreeItem<MyNode> root;
+    private TreeItem<MyNode> root;
     private List<TreeItem<MyNode>> treeItems;
     private RepositoryController rc;
     

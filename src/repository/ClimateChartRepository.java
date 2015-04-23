@@ -34,7 +34,7 @@ public class ClimateChartRepository {
             
             int id = (int) tuple[0];
             MonthOfTheYear m = MonthOfTheYear.values()[(int) tuple[1]];
-            double temp = (double) tuple[2];
+            int temp = (int) tuple[2];
             int sed = (int) tuple[3];
             monthList.add(new Months(id,m,temp,sed));
         }

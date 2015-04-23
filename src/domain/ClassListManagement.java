@@ -55,7 +55,7 @@ public class ClassListManagement {
 
     //NamedQuerrys
     public List<Grade> getAllGrades() {
-        TypedQuery<Grade> query = em.createNamedQuery("AllGrades", Grade.class);
+        TypedQuery<Grade> query = em.createNamedQuery("Grade.AllGrades", Grade.class);
         return query.getResultList();
     }
     

@@ -10,6 +10,8 @@
     <class>domain.Grade</class>
     <class>domain.SchoolYear</class>
     <class>domain.Student</class>
+    <class>domain.ClauseComponent</class>
+    <class>domain.Parameter</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=HOGENT1415_11"/>
       <property name="javax.persistence.jdbc.user" value="sa"/>

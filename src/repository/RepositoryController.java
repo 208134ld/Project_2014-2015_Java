@@ -1,9 +1,12 @@
 
 package repository;
 
+import domain.Clause;
+import domain.ClauseComponent;
 import domain.ClimateChart;
 import domain.Continent;
 import domain.Country;
+import domain.Grade;
 import domain.MonthOfTheYear;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -14,11 +17,15 @@ public class RepositoryController {
     private ContinentRepository continentRepo;
     private CountryRepository countryRepo;
     private ClimateChartRepository chartRepo;
+    private DeterminateTableRepository determinateRepo;
+    private GradeRepository gradeRepo;
     
     public RepositoryController(){
         this.continentRepo = new ContinentRepository();
         this.countryRepo = new CountryRepository();
         this.chartRepo = new ClimateChartRepository();
+        this.determinateRepo = new DeterminateTableRepository();
+        this.gradeRepo = new GradeRepository();
     }
     
     public List<Continent> getAllContinents(){
@@ -73,5 +80,21 @@ public class RepositoryController {
     
     public List<MonthOfTheYear> getMonthsOfTheYear(){
         return Arrays.asList(MonthOfTheYear.values());
+    }
+    
+    public Grade findGradeById(int id){
+        return gradeRepo.findById(id);
+    }
+    
+    public List<ClauseComponent> findClauseComponentsByDeterminateTableId(int id){
+        return determinateRepo.getAllClauseComponentsOfDeterminateTable(id);
+    }
+    
+    public List<ClauseComponent> findClausesByDeterminateTableId(int id){
+        return determinateRepo.getAllClausesOfDeterminateTable(id);
+    }
+    
+    public ClauseComponent findClauseById(int clauseId){
+        return determinateRepo.findClauseById(clauseId);
     }
 }

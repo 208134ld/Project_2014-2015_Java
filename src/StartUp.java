@@ -1,6 +1,8 @@
+import gui.ClassListViewPanel;
 import gui.GlobalFrame;
 import gui.LocationViewPanel;
 import gui.MainPanel;
+import gui.ManageDeterminateTable;
 import java.sql.SQLException;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
@@ -14,7 +16,8 @@ public class StartUp extends Application {
     
     @Override
     public void start(Stage stage) throws SQLException{
-        Scene scene = new Scene(new GlobalFrame());
+        Scene scene = new Scene(new ManageDeterminateTable());
+        //Scene scene = new Scene(new ClassListViewPanel());
         
         stage.setTitle("Aardrijkskunde");
         stage.setScene(scene);
@@ -23,10 +26,10 @@ public class StartUp extends Application {
         Rectangle2D bounds = screen.getVisualBounds();
 
         stage.setOnShown((WindowEvent t) -> {
-            stage.setMinWidth(bounds.getWidth());
-            stage.setMinHeight(bounds.getHeight());
-            //stage.setX();
-            //stage.setY();
+            //stage.setMinWidth(bounds.getWidth());
+            //stage.setMinHeight(bounds.getHeight());
+            //stage.setX(70);
+            //stage.setY(0);
         });
         stage.show();
     }

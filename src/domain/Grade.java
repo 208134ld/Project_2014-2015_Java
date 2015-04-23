@@ -24,9 +24,9 @@ import javax.persistence.Table;
 @Entity(name="Grades")
 @Table(name = "Grades")
 @NamedQueries({
-    @NamedQuery(name="AllGrades",
+    @NamedQuery(name="Grade.AllGrades",
                 query="SELECT g FROM Grades g"),
-    @NamedQuery(name="SelectedGrade",
+    @NamedQuery(name="Grade.FindById",
                 query="SELECT g FROM Grades g where g.grade = :graad")
 }) 
 public class Grade implements Serializable {
@@ -38,6 +38,8 @@ public class Grade implements Serializable {
     
     @OneToMany(mappedBy = "grade")
     private List<SchoolYear> schoolYears;
+    
+    private int DeterminateTableId;
 
     //CTOR
     public Grade() {
@@ -58,6 +60,14 @@ public class Grade implements Serializable {
 
     public List<SchoolYear> getSchoolYears() {
         return schoolYears;
+    }
+    
+    public int getDeterminateTableId() {
+        return DeterminateTableId;
+    }
+    
+    public void setDeterminateTableId(int DeterminateTableId) {
+        this.DeterminateTableId = DeterminateTableId;
     }
 
     public void setSchoolYears(List<SchoolYear> schoolYears) {
