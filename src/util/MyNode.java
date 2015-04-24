@@ -1,41 +1,58 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package util;
 
-/**
- *
- * @author Stijn
- */
 public class MyNode {
-        public String value;
-        public String type;
-        public int id;
 
-        public MyNode(String value, String type, int id) {
-            this.type = type;
-            this.value = value;
-            this.id = id;
-        }
+    private String value;
+    private String type;
+    private int id;
 
-        public boolean isContinent() {
-            return type.equalsIgnoreCase("Continent");
-        }
+    public MyNode(String value, String type, int id) {
+        this.type = type;
+        this.value = value;
+        this.id = id;
+    }
 
-        public boolean isCountry() {
-            return type.equalsIgnoreCase("Country");
-        }
+    public int getId() {
+        return id;
+    }
 
-        public boolean isClimateChart() {
-            return type.equalsIgnoreCase("ClimateChart");
-        }
+    public String getValue() {
+        return value;
+    }
 
-        @Override
-        public String toString() {
-            return value;
+    public void setValue(String value) {
+        this.value = value;
+    }
 
-        }
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public boolean isContinent() {
+        return type.equalsIgnoreCase("Continent");
+    }
+
+    public boolean isCountry() {
+        return type.equalsIgnoreCase("Country");
+    }
+
+    public boolean isClimateChart() {
+        return type.equalsIgnoreCase("ClimateChart");
+    }
     
+    public boolean isClause(){
+        return type.equalsIgnoreCase("Clause");
+    }
+
+    @Override
+    public String toString() {
+        return value;
+
+    }
+
 }

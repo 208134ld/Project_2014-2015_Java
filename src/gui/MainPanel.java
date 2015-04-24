@@ -177,9 +177,9 @@ public class MainPanel extends GridPane {
             @Override
             public void changed(ObservableValue<? extends TreeItem<MyNode>> observable, TreeItem<MyNode> oldValue, TreeItem<MyNode> newValue) {
                 TreeItem<MyNode> selectedItem = newValue;
-                if (selectedItem.getValue().type.equalsIgnoreCase("ClimateChart")) {
+                if (selectedItem.getValue().getType().equalsIgnoreCase("ClimateChart")) {
                     
-                    selectedClimatechart = rc.getClimateChartByClimateChartID(selectedItem.getValue().id);
+                    selectedClimatechart = rc.getClimateChartByClimateChartID(selectedItem.getValue().getId());
                     System.out.println(selectedClimatechart.getMonths().get(0).getSed());
 //                     selectedClimatechart = new ClimateChart(1,"Gent",1950,1970,true,23.34534,44.34523,"30° 45' 10\" NB ","51° 3' 15\" OL ",1);
                     updateLocationDetailPanel(selectedClimatechart);

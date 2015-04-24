@@ -57,7 +57,7 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
     @Override
     public void cancelEdit() {
         super.cancelEdit();
-        setText((String) getItem().value);
+        setText((String) getItem().getValue());
         setGraphic(getTreeItem().getGraphic());
     }
 
@@ -99,14 +99,14 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
                     dialog1.showAndWait()
                             .ifPresent(response -> {
                                 if (!response.isEmpty()) {
-                                    Country c = new Country(response, rc.findContinentById(item.id));
+                                    Country c = new Country(response, rc.findContinentById(item.getId()));
                                     
                                     TreeItem<MyNode> ti = new TreeItem<>();
                                     
                                     rc.insertCountry(c);
                                     
                                     for (TreeItem<MyNode> t : treeItems) {
-                                        if (t.getValue().type.equalsIgnoreCase(item.type) && t.getValue().value.equalsIgnoreCase(item.value)) {
+                                        if (t.getValue().getType().equalsIgnoreCase(item.getType()) && t.getValue().getValue().equalsIgnoreCase(item.getValue())) {
                                             ti = t;
                                         }
                                     }
@@ -127,13 +127,13 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
                 @Override
                 public void handle(ActionEvent e) {
                     em.getTransaction().begin();
-                    em.remove(rc.findContinentById(item.id));
+                    em.remove(rc.findContinentById(item.getId()));
                     em.getTransaction().commit();
                     treeItems.remove(getTreeItem());
                     List<TreeItem<MyNode>> continentItems = new ArrayList<>();
                                     
                     for (TreeItem<MyNode> t : treeItems) {
-                        if (t.getValue().type.equalsIgnoreCase("Continent")) {
+                        if (t.getValue().getType().equalsIgnoreCase("Continent")) {
                             continentItems.add(t);
                         }
                     }
@@ -172,7 +172,7 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
                                     List<TreeItem<MyNode>> continentItems = new ArrayList<>();
                                     
                                     for (TreeItem<MyNode> t : treeItems) {
-                                        if (t.getValue().type.equalsIgnoreCase("Continent")) {
+                                        if (t.getValue().getType().equalsIgnoreCase("Continent")) {
                                             continentItems.add(t);
                                         }
                                     }
@@ -203,7 +203,7 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
                 @Override
                 public void handle(ActionEvent e) {
                     em.getTransaction().begin();
-                    em.remove(rc.findCountryById(item.id));
+                    em.remove(rc.findCountryById(item.getId()));
                     em.getTransaction().commit();
                     
                     treeItems.remove(getTreeItem());
@@ -212,7 +212,7 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
                     List<TreeItem<MyNode>> countryItems = new ArrayList<>();
                     
                     for (TreeItem<MyNode> t : treeItems) {
-                        if ((!t.getValue().value.equalsIgnoreCase(ti.getValue().value)&&(t.getParent().getValue().id==ti.getParent().getValue().id))){
+                        if ((!t.getValue().getValue().equalsIgnoreCase(ti.getValue().getValue())&&(t.getParent().getValue().getId()==ti.getParent().getValue().getId()))){
                             countryItems.add(t);
                         }
                     }
@@ -268,10 +268,10 @@ newStage.show();
     }
 
     private String getType() {
-        return getItem() == null ? "" : getItem().type;
+        return getItem() == null ? "" : getItem().getType();
     }
 
     private int getItemId() {
-        return getItem() == null ? null : getItem().id;
+        return getItem() == null ? null : getItem().getId();
     }
 }

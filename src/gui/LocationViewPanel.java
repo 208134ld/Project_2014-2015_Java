@@ -125,9 +125,9 @@ public class LocationViewPanel extends GridPane{
             @Override
             public void changed(ObservableValue<? extends TreeItem<MyNode>> observable, TreeItem<MyNode> oldValue, TreeItem<MyNode> newValue) {
                 TreeItem<MyNode> selectedItem = newValue;
-                if (selectedItem.getValue().type.equalsIgnoreCase("ClimateChart")) {
+                if (selectedItem.getValue().getType().equalsIgnoreCase("ClimateChart")) {
                     
-                    selectedClimatechart = rc.getClimateChartByClimateChartID(selectedItem.getValue().id);
+                    selectedClimatechart = rc.getClimateChartByClimateChartID(selectedItem.getValue().getId());
                     //System.out.println(selectedClimatechart.getMonths().get(0).getSed());
                     //updateLocationDetailPanel(selectedClimatechart);
                 }
