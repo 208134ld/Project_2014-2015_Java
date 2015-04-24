@@ -83,8 +83,7 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
         }
 
         cm.getItems().clear();
-
-        //onderstaande if's wou ik in een switch gieten maar dit leverde een contextmenu op met 3 items bij alle levels...
+        
         if (getType().equalsIgnoreCase("Continent")) {
             MenuItem cmItem1 = new MenuItem("Voeg land toe");
             MenuItem cmItem2 = new MenuItem("Verwijder werelddeel");
@@ -253,6 +252,11 @@ newStage.show();
                     else if (getItem().isContinent()){
                         rc.findContinentById(getItemId()).setName(textField.getText());
                     }
+                    
+                    if(getItem().isClause()){
+                        rc.findClauseById(getItemId()).setName(textField.getText());
+                    }
+                    
                     em.getTransaction().commit();
 
                     commitEdit(new MyNode(textField.getText(), getType(), getItemId()));

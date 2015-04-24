@@ -22,17 +22,53 @@ public class ClauseComponent implements Serializable
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int ClauseComponentId;
+    private int ClauseComponentId;
     private int determinateTableId;
     private String discriminator;
     private String Name;
     private int YesClause_ClauseComponentId;
     private int NoClause_ClauseComponentId;
     private String Climatefeature;
-
+    
     public ClauseComponent()
     {
 
+    }
+    
+    public int getDeterminateTableId() {
+        return determinateTableId;
+    }
+
+    public void setDeterminateTableId(int determinateTableId) {
+        this.determinateTableId = determinateTableId;
+    }
+
+    public String getDiscriminator() {
+        return discriminator;
+    }
+
+    public void setName(String Name) {
+        this.Name = Name;
+    }
+    
+    public void setDiscriminator(String discriminator) {
+        this.discriminator = discriminator;
+    }
+
+    public int getYesClause_ClauseComponentId() {
+        return YesClause_ClauseComponentId;
+    }
+
+    public void setYesClause_ClauseComponentId(int YesClause_ClauseComponentId) {
+        this.YesClause_ClauseComponentId = YesClause_ClauseComponentId;
+    }
+
+    public int getNoClause_ClauseComponentId() {
+        return NoClause_ClauseComponentId;
+    }
+
+    public void setNoClause_ClauseComponentId(int NoClause_ClauseComponentId) {
+        this.NoClause_ClauseComponentId = NoClause_ClauseComponentId;
     }
     
     public String getClimatefeature() {
