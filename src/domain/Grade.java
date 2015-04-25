@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package domain;
 
 import java.io.Serializable;
@@ -16,23 +21,25 @@ import javax.persistence.Table;
  *
  * @author SAMUEL
  */
-@Entity(name = "Grades")
+@Entity(name="Grades")
 @Table(name = "Grades")
 @NamedQueries({
-    @NamedQuery(name = "AllGrades",
-            query = "SELECT g FROM Grades g"),
-    @NamedQuery(name = "SelectedGrade",
-            query = "SELECT g FROM Grades g where g.grade = :graad")
-})
+    @NamedQuery(name="Grade.AllGrades",
+                query="SELECT g FROM Grades g"),
+    @NamedQuery(name="Grade.FindById",
+                query="SELECT g FROM Grades g where g.grade = :graad")
+}) 
 public class Grade implements Serializable {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "GradeId")
     private int grade;
-
+    
     @OneToMany(mappedBy = "grade")
     private List<SchoolYear> schoolYears;
+    
+    private int DeterminateTableId;
 
     //CTOR
     public Grade() {
@@ -41,7 +48,7 @@ public class Grade implements Serializable {
     public Grade(int grade) {
         this.grade = grade;
     }
-
+    
     //GET SET
     public int getGrade() {
         return grade;
@@ -54,13 +61,23 @@ public class Grade implements Serializable {
     public List<SchoolYear> getSchoolYears() {
         return schoolYears;
     }
+    
+    public int getDeterminateTableId() {
+        return DeterminateTableId;
+    }
+    
+    public void setDeterminateTableId(int DeterminateTableId) {
+        this.DeterminateTableId = DeterminateTableId;
+    }
 
     public void setSchoolYears(List<SchoolYear> schoolYears) {
         this.schoolYears = schoolYears;
     }
-
-    public String getGradeString() {
+    
+    public String getGradeString(){
         return Integer.toString(grade);
     }
-
+    
+    
+    
 }
