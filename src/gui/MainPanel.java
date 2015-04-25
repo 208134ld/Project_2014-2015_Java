@@ -309,19 +309,19 @@ public class MainPanel extends GridPane {
     private void updateCol(TableColumn.CellEditEvent<Months,Double> event) {
         int id = monthTable.getSelectionModel().getSelectedCells().get(0).getRow();
         
-        if(monthTable.getSelectionModel().getSelectedCells().get(0).getColumn()==1)
-        {
-            selectedClimatechart.getMonths().get(id).setTemp(event.getNewValue());
-            rc.updateTemp(selectedClimatechart.getMonths().get(id).getMonthId(), event.getNewValue());
-        }
-        if(monthTable.getSelectionModel().getSelectedCells().get(0).getColumn()==2)
-        {
-            System.out.println("Updating sed");
-            double d = event.getNewValue();
-            int d2 = (int) d;
-            selectedClimatechart.getMonths().get(id).setSed(d2);
-            rc.updateSed(selectedClimatechart.getMonths().get(id).getMonthId(),d2);
-        }
+//        if(monthTable.getSelectionModel().getSelectedCells().get(0).getColumn()==1)
+//        {
+//            selectedClimatechart.getMonths().get(id).setTemp(event.getNewValue());
+//            rc.updateTemp(selectedClimatechart.getMonths().get(id).getMonthId(), event.getNewValue());
+//        }
+//        if(monthTable.getSelectionModel().getSelectedCells().get(0).getColumn()==2)
+//        {
+//            System.out.println("Updating sed");
+//            double d = event.getNewValue();
+//            int d2 = (int) d;
+//            selectedClimatechart.getMonths().get(id).setSed(d2);
+//            rc.updateSed(selectedClimatechart.getMonths().get(id).getMonthId(),d2);
+//        }
         
         
       

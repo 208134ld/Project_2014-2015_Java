@@ -5,6 +5,7 @@ import domain.ClimateChart;
 import domain.Continent;
 import domain.Country;
 import domain.MonthOfTheYear;
+import domain.Months;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
@@ -14,11 +15,13 @@ public class RepositoryController {
     private ContinentRepository continentRepo;
     private CountryRepository countryRepo;
     private ClimateChartRepository chartRepo;
+    private MonthRepository monthRepo;
     
     public RepositoryController(){
         this.continentRepo = new ContinentRepository();
         this.countryRepo = new CountryRepository();
         this.chartRepo = new ClimateChartRepository();
+        this.monthRepo = new MonthRepository();
     }
     
     public List<Continent> getAllContinents(){
@@ -73,5 +76,9 @@ public class RepositoryController {
     
     public List<MonthOfTheYear> getMonthsOfTheYear(){
         return Arrays.asList(MonthOfTheYear.values());
+    }
+    
+    public List<Months> getMonthsOfClimateChart(int climateChartId){
+        return monthRepo.getMonthsOfClimateChart(climateChartId);
     }
 }

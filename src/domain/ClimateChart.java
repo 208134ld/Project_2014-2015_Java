@@ -1,46 +1,32 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package domain;
 
 import java.io.Serializable;
-import java.time.Month;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import javafx.beans.property.*;
-import static javafx.beans.property.DoubleProperty.doubleProperty;
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 /**
  *
  * @author bremme windows
  */
-@Entity(name="ClimateCharts")
+@Entity(name = "ClimateCharts")
 @Table(name = "ClimateCharts")
 @NamedQueries({
-    @NamedQuery(name="ClimateChart.findByCountry",
-                query="SELECT c FROM ClimateCharts c WHERE c.country.countryId = :countryID"),
-    @NamedQuery(name="ClimateChart.findById",
-                query="SELECT c FROM ClimateCharts c WHERE c.climateChartId = :chartId")
-}) 
+    @NamedQuery(name = "ClimateChart.findByCountry",
+            query = "SELECT c FROM ClimateCharts c WHERE c.country.countryId = :countryID"),
+    @NamedQuery(name = "ClimateChart.findById",
+            query = "SELECT c FROM ClimateCharts c WHERE c.climateChartId = :chartId")
+})
 public class ClimateChart implements Serializable {
 
     @Id
@@ -48,84 +34,79 @@ public class ClimateChart implements Serializable {
     @Column(name = "ClimateChartID")
     private int climateChartId;
 
-    
     private String location;
-    @Column(name="BeginPeriod")
+    @Column(name = "BeginPeriod")
     private int beginperiod;
-    @Column(name="EndPeriod")
+    @Column(name = "EndPeriod")
     private int endperiod;
-    @Column(name="Latitude")
+    @Column(name = "Latitude")
     private double latitude;
-    @Column(name="Longitude")
-    private double longitude ;
-    @Transient
-    //@Column(name="LCord")
+    @Column(name = "Longitude")
+    private double longitude;
+    @Column(name = "LCord")
     private String LCord;
-    @Transient
-    //@Column(name="BCord")
+    @Column(name = "BCord")
     private String BCord;
-    @Column(name="AboveEquator")
+    @Column(name = "AboveEquator")
     private boolean aboveEquator;
-    @ManyToMany
-    @JoinTable(
-      name="ClimateChartMonth",
-      joinColumns={@JoinColumn(name="ClimateChartId", referencedColumnName="ClimateChartID")},
-      inverseJoinColumns={@JoinColumn(name="MonthId", referencedColumnName="MonthID")})
+    @OneToMany(mappedBy = "climateChart")
     private List<Months> months;
     @ManyToOne
     @JoinColumn(name = "CountryID")
     private Country country;
-   
 
     public ClimateChart() {
+        months = new ArrayList<>();
     }
 
-    public ClimateChart(int id, String loc, int begin, int end, double[] temp, int[] sed, double latitude, double longitude,String BCord,String LCord) {
+//    public ClimateChart(int id, String loc, int begin, int end, double[] temp, int[] sed, double latitude, double longitude,String BCord,String LCord) {
+//        setLocation(loc);
+//        setClimateChartId(id);
+//        setBeginperiod(begin);
+//        setEndperiod(end);
+//        setLatitude(latitude);
+//        setLongitude(longitude);
+//        setLCord(LCord);
+//        setBCord(BCord);
+//        months = new ArrayList<Months>();
+//        setMonthList(sed, temp);
+//    }
+    public ClimateChart(Country country, String loc, int begin, int end, String BC, String LC, List<Months> ms) {
+        months = new ArrayList<>();
+        setCountry(country);
         setLocation(loc);
-        setClimateChartId(id);
         setBeginperiod(begin);
+        setBCord(BC);
+        setLCord(LC);
         setEndperiod(end);
-        setLatitude(latitude);
-        setLongitude(longitude);
-        setLCord(LCord);
-        setBCord(BCord);
-        months = new ArrayList<Months>();
-        setMonthList(sed, temp);
-    }
-        public ClimateChart(String loc, int begin, int end) {
-        setLocation(loc);
-        setBeginperiod(begin);
-        setEndperiod(end);
-        months = new ArrayList<Months>();
-    }
-    
-    public ClimateChart(int id, String loc, int begin, int end, boolean equator, double latitude, double longitude,String BCord,String LCord, int countryId) {
-        setLocation(loc);
-        setClimateChartId(id);
-        setBeginperiod(begin);
-        setEndperiod(end);
-        setLatitude(latitude);
-        setLongitude(longitude);
-        setLCord(LCord);
-        setBCord(BCord);
-        months = new ArrayList<Months>();
-//        this.countryId = countryId;
+        setMonths(ms);
     }
 
-    public ClimateChart(String location, int id) {
-        setLocation(location);
-        this.climateChartId = id;
-    }
-    public void setCountry(Country c)
-    {
+//    public ClimateChart(int id, String loc, int begin, int end, boolean equator, double latitude, double longitude,String BCord,String LCord, int countryId) {
+//        setLocation(loc);
+//        setClimateChartId(id);
+//        setBeginperiod(begin);
+//        setEndperiod(end);
+//        setLatitude(latitude);
+//        setLongitude(longitude);
+//        setLCord(LCord);
+//        setBCord(BCord);
+//        months = new ArrayList<Months>();
+////        this.countryId = countryId;
+//    }
+//    public ClimateChart(String location, int id) {
+//        setLocation(location);
+//        this.climateChartId = id;
+//    }
+    public void setCountry(Country c) {
         this.country = c;
     }
-    public Country getCountry()
-    {
+
+    public Country getCountry() {
         return country;
     }
 
-     public String getLocation() {
+    public String getLocation() {
         return location;
     }
 
@@ -197,6 +178,7 @@ public class ClimateChart implements Serializable {
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
+
     public int getBeginperiod() {
         return beginperiod;
     }
@@ -206,13 +188,14 @@ public class ClimateChart implements Serializable {
     }
 
     public int getEndperiod() {
-       
+
         return endperiod;
     }
 
     public void setEndperiod(int endperiod) {
-        if(endperiod<this.beginperiod)
+        if (endperiod < this.beginperiod) {
             throw new IllegalArgumentException("Eind periode kan niet kleiner zijn dan begin");
+        }
         this.endperiod = endperiod;
     }
 
@@ -239,8 +222,6 @@ public class ClimateChart implements Serializable {
     public void setBCord(String BCord) {
         this.BCord = BCord;
     }
-    
-
 
 //    @Access(AccessType.PROPERTY)
 //    public String getBCord()
@@ -257,8 +238,6 @@ public class ClimateChart implements Serializable {
 //    {
 //        return BCord;
 //    }
-
-
     public void setClimateChartId(int climateChartId) {
         this.climateChartId = climateChartId;
     }
@@ -293,29 +272,31 @@ public class ClimateChart implements Serializable {
             counter++;
         }
     }
-    public String giveCords(int degree,int minutes,int seconds)
-    {
-        if(degree<0||minutes<0||seconds<0)
+
+    public String giveCords(int degree, int minutes, int seconds) {
+        if (degree < 0 || minutes < 0 || seconds < 0) {
             throw new IllegalArgumentException("Coordinaatwaarden moeten positief zijn");
-        if(minutes>60||seconds>60)
+        }
+        if (minutes > 60 || seconds > 60) {
             throw new IllegalArgumentException("minuten en seconden moeten kleiner zijn dan 60");
-        return degree+"° "+minutes+"' "+seconds+"\" ";
+        }
+        return degree + "° " + minutes + "' " + seconds + "\" ";
     }
-    public double calcDecimals(int degree,int min,int sec,String par)
-    {
-       double val;
-       float f;
-       f=min;
-       f=f/60;
-       val = degree+f;
-       f=sec;
-       f=f/3600;
-       val = val+f;
-       System.out.println(val);
-        if(par.equalsIgnoreCase("zb")||par.equalsIgnoreCase("wl"))
-            val *=-1;
-        return Math.round (val * 1000000.0) / 1000000.0;
+
+    public double calcDecimals(int degree, int min, int sec, String par) {
+        double val;
+        float f;
+        f = min;
+        f = f / 60;
+        val = degree + f;
+        f = sec;
+        f = f / 3600;
+        val = val + f;
+        System.out.println(val);
+        if (par.equalsIgnoreCase("zb") || par.equalsIgnoreCase("wl")) {
+            val *= -1;
+        }
+        return Math.round(val * 1000000.0) / 1000000.0;
     }
-   
 
 }

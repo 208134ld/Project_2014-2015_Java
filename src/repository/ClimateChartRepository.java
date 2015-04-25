@@ -26,20 +26,7 @@ public class ClimateChartRepository {
 
     public ClimateChart getClimateChartByClimateChartID(int chartId) {
         TypedQuery<ClimateChart> query = em.createNamedQuery("ClimateChart.findById", ClimateChart.class);
-        ClimateChart c = query.setParameter("chartId", chartId).getSingleResult();
-        String sql = "select m.MonthID, MonthProp,AverTemp,Sediment from ClimateCharts join ClimateChartMonth on ClimateCharts.ClimateChartID = ClimateChartMonth.ClimateChartId join Months m on ClimateChartMonth.MonthId = m.MonthID where ClimateCharts.ClimateChartID =" + chartId;
-        List<Object[]> tuples = (List<Object[]>) em.createNativeQuery(sql).getResultList();
-        List<Months> monthList = new ArrayList<>();
-        for (Object[] tuple : tuples) {
-            
-            int id = (int) tuple[0];
-            MonthOfTheYear m = MonthOfTheYear.values()[(int) tuple[1]];
-            double temp = (double) tuple[2];
-            int sed = (int) tuple[3];
-            monthList.add(new Months(id,m,temp,sed));
-        }
-        c.setMonths(monthList);
-        return c;
+        return query.setParameter("chartId", chartId).getSingleResult();
     }
     
     public void updateClimateChart()
@@ -49,15 +36,15 @@ public class ClimateChartRepository {
     }
     public void updateTemp(int id,double temp)
     {
-      em.getTransaction().begin();
-     em.createNativeQuery("UPDATE Months SET AverTemp="+temp+" WHERE MonthID="+id).executeUpdate();
+        em.getTransaction().begin();
+        em.createNativeQuery("UPDATE Months SET AverTemp="+temp+" WHERE MonthID="+id).executeUpdate();
       
         em.getTransaction().commit();
     }
 
     void updateSed(int id, int sed) {
-         em.getTransaction().begin();
-   em.createNativeQuery("UPDATE Months SET Sediment="+sed+" WHERE MonthID="+id).executeUpdate();
+        em.getTransaction().begin();
+        em.createNativeQuery("UPDATE Months SET Sediment="+sed+" WHERE MonthID="+id).executeUpdate();
         em.getTransaction().commit();
     }
 
@@ -65,5 +52,5 @@ public class ClimateChartRepository {
         em.getTransaction().begin();
         em.persist(c);
         em.getTransaction().commit();
-         }
+    }
 }

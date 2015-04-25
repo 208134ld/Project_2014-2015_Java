@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package domain;
 
 import java.io.Serializable;
@@ -23,24 +18,24 @@ import javax.persistence.Table;
  *
  * @author SAMUEL
  */
-@Entity(name="SchoolYears")
+@Entity(name = "SchoolYears")
 @Table(name = "SchoolYears")
 @NamedQueries({
-    @NamedQuery(name="AllSchoolYears",
-                query="SELECT s FROM SchoolYears s"),
-    @NamedQuery(name = "SchoolYearsOfGrade", 
+    @NamedQuery(name = "AllSchoolYears",
+            query = "SELECT s FROM SchoolYears s"),
+    @NamedQuery(name = "SchoolYearsOfGrade",
             query = "SELECT s FROM SchoolYears s WHERE s.grade = :g ")
-}) 
+})
 public class SchoolYear implements Serializable {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "YearInt")
     private int schoolYear;
-    
+
     @OneToMany(mappedBy = "schoolYear")
     private List<ClassGroup> classGroup;
-    
+
     @ManyToOne
     @JoinColumn(name = "GradeId")
     private Grade grade;
@@ -72,8 +67,8 @@ public class SchoolYear implements Serializable {
     public void setClassGroup(List<ClassGroup> classGroup) {
         this.classGroup = classGroup;
     }
-    
-    public String getSchoolYearString(){
+
+    public String getSchoolYearString() {
         return Integer.toString(getSchoolYear());
     }
 

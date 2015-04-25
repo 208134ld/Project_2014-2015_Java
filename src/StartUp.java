@@ -1,3 +1,4 @@
+
 import gui.GlobalFrame;
 import gui.LocationViewPanel;
 import gui.MainPanel;
@@ -11,24 +12,30 @@ import javafx.stage.WindowEvent;
 import repository.RepositoryController;
 
 public class StartUp extends Application {
-    
+
     @Override
-    public void start(Stage stage) throws SQLException{
+    public void start(Stage stage) throws SQLException {
         Scene scene = new Scene(new GlobalFrame());
-        
+
         stage.setTitle("Aardrijkskunde");
         stage.setScene(scene);
-        
+
         Screen screen = Screen.getPrimary();
         Rectangle2D bounds = screen.getVisualBounds();
 
         stage.setOnShown((WindowEvent t) -> {
             stage.setMinWidth(bounds.getWidth());
             stage.setMinHeight(bounds.getHeight());
-            //stage.setX();
-            //stage.setY();
+
         });
         stage.show();
+
+        double x = bounds.getMinX() + (bounds.getWidth() - stage.getWidth()) / 2.0;
+        double y = bounds.getMinY() + (bounds.getHeight() - stage.getHeight()) / 2.0;
+
+        stage.setX(x);
+        stage.setY(y);
+
     }
 
     public static void main(String... args) {

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package domain;
 
 import java.io.Serializable;
@@ -27,15 +22,14 @@ import javax.persistence.Transient;
 @Entity(name = "Students")
 @Table(name = "Students")
 @NamedQueries({
-    @NamedQuery(name="AllStudents",
-                query="SELECT s FROM Students s"), 
-    @NamedQuery(name = "StudentsOfClassGroup", 
+    @NamedQuery(name = "AllStudents",
+            query = "SELECT s FROM Students s"),
+    @NamedQuery(name = "StudentsOfClassGroup",
             query = "SELECT s FROM Students s WHERE s.classGroup = :cg ")
-}) 
+})
 public class Student implements Serializable {
 
     //Naam-Voornaam-Klas-Leerjaar-Graad
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "StudentID")
@@ -54,7 +48,6 @@ public class Student implements Serializable {
     /*private SchoolYear schoolYear;
     
      private Grade grade;*/
-    
     public Student() {
     }
 
@@ -109,16 +102,16 @@ public class Student implements Serializable {
      public void setGrade(Grade grade) {
      this.grade = grade;
      }*/
-    
-    public String getFullName(){
-        return (getLastName()+ " " + getFirtsName());
+
+    public String getFullName() {
+        return (getLastName() + " " + getFirtsName());
     }
 
     @Transient
     private SimpleStringProperty lastNameProp;
     @Transient
     private SimpleStringProperty firstNameProp;
-    
+
     public ObservableValue<String> firstNameProperty() {
         this.lastNameProp = new SimpleStringProperty(lastName);
         return lastNameProp;

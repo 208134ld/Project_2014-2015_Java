@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gui;
 
 import domain.ClimateChart;
@@ -11,19 +6,18 @@ import domain.Country;
 import domain.MonthOfTheYear;
 import domain.Months;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
@@ -39,11 +33,11 @@ import util.MyNode;
  *
  * @author Logan Dupont
  */
-public class LocationViewPanel extends GridPane{
+public class LocationViewPanel extends GridPane {
 
     @FXML
     private TreeView selectionTreeView;
-    
+
     @FXML
     private TextField txtLocation;
     @FXML
@@ -56,16 +50,16 @@ public class LocationViewPanel extends GridPane{
     private TextField txtTempYear;
     @FXML
     private TextField txtSedYear;
-    
+
     @FXML
     private TableView<Months> monthTable;
     @FXML
-    private TableColumn<Months, MonthOfTheYear> maandcol;
+    private TableColumn<Months, MonthOfTheYear> monthCol;
     @FXML
-    private TableColumn<Months, String> tempCol;
+    private TableColumn<Months, Number> tempCol;
     @FXML
-    private TableColumn<Months, String> sedCol;
-    
+    private TableColumn<Months, Number> sedCol;
+
     private RepositoryController rc;
     private ClimateChart selectedClimatechart;
     private ObservableList<TreeItem<MyNode>> obsTreeItems;
@@ -73,10 +67,10 @@ public class LocationViewPanel extends GridPane{
     private List<TreeItem<MyNode>> continentItems;
     private List<TreeItem<MyNode>> countryItems;
     private ObservableList<Months> monthsList;
-    
-    public LocationViewPanel(RepositoryController repositoryController){
+
+    public LocationViewPanel(RepositoryController repositoryController) {
         rc = repositoryController;
-        
+
         treeItems = new ArrayList<>();
         continentItems = new ArrayList<>();
         countryItems = new ArrayList<>();
@@ -99,7 +93,7 @@ public class LocationViewPanel extends GridPane{
             for (Country co : rc.getCountriesOfContinent(c.getId())) {
                 TreeItem<MyNode> countryChild = new TreeItem<>(new MyNode(co.getName(), "Country", co.getId()));
 
-                for(ClimateChart chart : rc.getClimateChartsOfCountry(co.getId())){
+                for (ClimateChart chart : rc.getClimateChartsOfCountry(co.getId())) {
                     TreeItem<MyNode> climateChartChild = new TreeItem<>(new MyNode(chart.getLocation(), "ClimateChart", chart.getId()));
                     countryChild.getChildren().add(climateChartChild);
                 }
@@ -109,15 +103,15 @@ public class LocationViewPanel extends GridPane{
             }
             continentItems.add(itemChild);
             treeItems.add(itemChild);
-           
+
         }
-        
+
         obsTreeItems = FXCollections.observableArrayList(continentItems);
         root.getChildren().addAll(obsTreeItems);
 
         root.setExpanded(true);
-        //initMonthTable();
-        
+        initMonthTable();
+
         selectionTreeView.setRoot(root);
         //selectionTreeView.setShowRoot(false);
 
@@ -126,62 +120,59 @@ public class LocationViewPanel extends GridPane{
             public void changed(ObservableValue<? extends TreeItem<MyNode>> observable, TreeItem<MyNode> oldValue, TreeItem<MyNode> newValue) {
                 TreeItem<MyNode> selectedItem = newValue;
                 if (selectedItem.getValue().type.equalsIgnoreCase("ClimateChart")) {
-                    
+
                     selectedClimatechart = rc.getClimateChartByClimateChartID(selectedItem.getValue().id);
-                    //System.out.println(selectedClimatechart.getMonths().get(0).getSed());
-                    //updateLocationDetailPanel(selectedClimatechart);
+                    selectedClimatechart.setMonths(rc.getMonthsOfClimateChart(selectedItem.getValue().id));
+                    updateLocationDetailPanel(selectedClimatechart);
                 }
 
             }
         });
-        
+
     }
-    
+
     public void updateLocationDetailPanel(ClimateChart c) {
 
-        
         txtLocation.setText(c.getLocation());
-//        txtBCoord.setText(c.getBCord());
-//        txtLCoord.setText(c.getLCord());
+        txtBCoord.setText(c.getBCord());
+        txtLCoord.setText(c.getLCord());
+        txtPeriod.setText(c.getBeginperiod() + " - " + c.getEndperiod());
+        monthsList = FXCollections.observableArrayList(c.getMonths());
+//        c.getMonths().stream().map(m->m.getMonthProp()).collect(Collectors.toList()).forEach(System.out::println);
+//        monthCol.setCellValueFactory(cellData -> cellData.getValue().monthProperty());
+//        sedCol.setCellValueFactory(cellData -> cellData.getValue().sedProperty());
+//        tempCol.setCellValueFactory(cellData -> cellData.getValue().tempProperty());
         
-//        beginPeriode.setText(c.getBeginperiod()+"");
-//        eindPeriode.setText(c.getEndperiod()+"");
-//        LatitudeLabel.setText(c.getLatitude()+"");
-//        LongitudeLabel.setText(c.getLongitude()+"");
-        
-        // GRADEN VAN LENGTE EN BREEDTE
-        
-//        BGraden.setText(c.getBCord().split("°")[0].trim());
-//        BMinuten.setText(c.getBCord().split("°")[1].split("'")[0].trim());
-//        String waarde = c.getBCord().split("°")[1].split("'")[1].trim();
-//        BSeconden.setText(waarde.substring(0,waarde.length()-4).trim());
-//        BreedteParameter.setText(waarde.substring(waarde.length()-2,waarde.length()).trim());
-//        BGraden1.setText(c.getLCord().split("°")[0].trim());
-//        BMinuten1.setText(c.getLCord().split("°")[1].split("'")[0].trim());
-//         waarde = c.getLCord().split("°")[1].split("'")[1].trim();
-//        BSeconden1.setText(waarde.substring(0,waarde.length()-4).trim());
-//        LengteParameter.setText(waarde.substring(waarde.length()-2,waarde.length()));
-//        monthsList  = FXCollections.observableArrayList(c.getMonths());
-//        monthTable.setItems(monthsList);
+        monthTable.setItems(monthsList);
     }
 
     public void initMonthTable() {
-         
-//        monthTable.setEditable(true);
-//        maandcol.setCellValueFactory(new PropertyValueFactory("month"));
-//        tempCol.setCellValueFactory(new PropertyValueFactory("temp"));
+//        tempCol = new TableColumn<Months,Number>("Temperatuur (C°)");
+//        sedCol = new TableColumn<Months,Number>("Neerslag (mmN)");
+//        tempCol.setCellFactory(new PropertyValueFactory("temp"));
+//        sedCol.setCellFactory(new PropertyValueFactory("sed"));
+//        monthCol = new TableColumn<Months,MonthOfTheYear>("Maand");
+//        monthCol.setCellValueFactory(new Callback<CellDataFeatures<Months,MonthOfTheYear>, ObservableValue<MonthOfTheYear>>() {
+//            public ObservableValue<MonthOfTheYear> call(CellDataFeatures<Months, MonthOfTheYear> p) {
+//                return p.getValue().monthProperty();
+//            }
+//         });
 //        
-//        sedCol.setCellValueFactory(new PropertyValueFactory("sed"));
-//        Callback<TableColumn<Months, String>, TableCell<Months, String>> cellFactory =
-//                new Callback<TableColumn<Months,String>, TableCell<Months,String>>() {
-//                     
-//                    @Override
-//                    public TableCell call(TableColumn p) {
-//                        return new EditingCell();
-//                    }
-//                };
-//        tempCol.setCellFactory(cellFactory);
-//        sedCol.setCellFactory(cellFactory);
+//        tempCol = new TableColumn<Months,Number>("Temperatuur (C°)");
+//        tempCol.setCellValueFactory(new Callback<CellDataFeatures<Months,Number>, ObservableValue<Number>>() {
+//            public ObservableValue<Number> call(CellDataFeatures<Months, Number> p) {
+//                // p.getValue() returns the Person instance for a particular TableView row
+//                return p.getValue().tempProperty();
+//            }
+//         });
+//        
+//        sedCol = new TableColumn<Months,Number>("Neerslag (mmN)");
+//        sedCol.setCellValueFactory(new Callback<CellDataFeatures<Months,Number>, ObservableValue<Number>>() {
+//            public ObservableValue<Number> call(CellDataFeatures<Months, Number> p) {
+//                // p.getValue() returns the Person instance for a particular TableView row
+//                return p.getValue().sedProperty();
+//            }
+//         });
     }
-    
+
 }

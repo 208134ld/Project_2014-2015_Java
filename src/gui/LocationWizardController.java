@@ -158,58 +158,58 @@ public LocationWizardController(int countryId){
         neerslagText.getText();
     }
 
-    @FXML
-    private void addLocation(MouseEvent event) {
-        try{
-            
-            int g1 = Integer.parseInt(BGraden.getText().trim());
-            int g2 = Integer.parseInt(BGraden1.getText().trim());
-            int m1 = Integer.parseInt(BMinuten.getText().trim());
-            int m2 = Integer.parseInt(BMinuten1.getText().trim());
-            int s1 = Integer.parseInt(BSeconden.getText().trim());
-            int s2 = Integer.parseInt(BSeconden1.getText().trim());
-            int begin = Integer.parseInt(beginPeriode.getText().trim());
-            int einde = Integer.parseInt(eindPeriode.getText().trim());
-            String lNaam = locatieNaam.getText().trim();
-             
-           if(!(LengteParameter.getText().trim().equalsIgnoreCase("ol")||LengteParameter.getText().trim().equalsIgnoreCase("wl")))
-               throw new IllegalArgumentException("Lengteparameter kan alleen OL of WL zijn");
-           if(!(BreedteParameter.getText().equalsIgnoreCase("nb")||BreedteParameter.getText().equalsIgnoreCase("zb")))
-               throw new IllegalArgumentException("Breedteparameter kan alleen NB of ZB zijn");
-           if(monthList.size()!=12)
-               throw new IllegalArgumentException("Er moeten 12 maanden zijn.");
-           
-           ClimateChart c = new ClimateChart(lNaam,begin,einde);
-           String Bcord = c.giveCords(g1, m1, s1);
-           String Lcord = c.giveCords(g2, m2, s2);
-           double lat = c.calcDecimals(g1, m1, s1, BreedteParameter.getText().trim());
-           double longi = c.calcDecimals(g2, m2, s2, LengteParameter.getText().trim());
-           c.setBCord(Bcord);
-           c.setLCord(Lcord);
-           c.setLatitude(lat);
-           c.setLongitude(longi);
-           c.setCountry(rc.findCountryById(countryID));
-           List<Months> maanden = new ArrayList<>();
-           monthList.stream().forEach(p->maanden.add(p));
-           c.setMonths(maanden);
-           System.out.println(c.getLocation()+"   "+c.getLCord());
-           c.getMonths().stream().forEach(m->System.out.println(m.getSed()));
-           rc.InsertClimatechart(c);
-           
-        } catch(NumberFormatException numb){
-            errorBar.setText("Pars error. hebt u tekst in de tekstbox staan?");
-        }
-        catch(NullPointerException ex)
-        {
-            errorBar.setText("Elk tekstvakje moet ingevuld worden.");
-        }
-        catch(Exception e)
-        {
-            errorBar.setText(e.getMessage());
-        }
-         
-           
-    }
+//    @FXML
+//    private void addLocation(MouseEvent event) {
+//        try{
+//            
+//            int g1 = Integer.parseInt(BGraden.getText().trim());
+//            int g2 = Integer.parseInt(BGraden1.getText().trim());
+//            int m1 = Integer.parseInt(BMinuten.getText().trim());
+//            int m2 = Integer.parseInt(BMinuten1.getText().trim());
+//            int s1 = Integer.parseInt(BSeconden.getText().trim());
+//            int s2 = Integer.parseInt(BSeconden1.getText().trim());
+//            int begin = Integer.parseInt(beginPeriode.getText().trim());
+//            int einde = Integer.parseInt(eindPeriode.getText().trim());
+//            String lNaam = locatieNaam.getText().trim();
+//             
+//           if(!(LengteParameter.getText().trim().equalsIgnoreCase("ol")||LengteParameter.getText().trim().equalsIgnoreCase("wl")))
+//               throw new IllegalArgumentException("Lengteparameter kan alleen OL of WL zijn");
+//           if(!(BreedteParameter.getText().equalsIgnoreCase("nb")||BreedteParameter.getText().equalsIgnoreCase("zb")))
+//               throw new IllegalArgumentException("Breedteparameter kan alleen NB of ZB zijn");
+//           if(monthList.size()!=12)
+//               throw new IllegalArgumentException("Er moeten 12 maanden zijn.");
+//           
+//           ClimateChart c = new ClimateChart(lNaam,begin,einde);
+//           String Bcord = c.giveCords(g1, m1, s1);
+//           String Lcord = c.giveCords(g2, m2, s2);
+//           double lat = c.calcDecimals(g1, m1, s1, BreedteParameter.getText().trim());
+//           double longi = c.calcDecimals(g2, m2, s2, LengteParameter.getText().trim());
+//           c.setBCord(Bcord);
+//           c.setLCord(Lcord);
+//           c.setLatitude(lat);
+//           c.setLongitude(longi);
+//           c.setCountry(rc.findCountryById(countryID));
+//           List<Months> maanden = new ArrayList<>();
+//           monthList.stream().forEach(p->maanden.add(p));
+//           c.setMonths(maanden);
+//           System.out.println(c.getLocation()+"   "+c.getLCord());
+//           c.getMonths().stream().forEach(m->System.out.println(m.getSed()));
+//           rc.InsertClimatechart(c);
+//           
+//        } catch(NumberFormatException numb){
+//            errorBar.setText("Pars error. hebt u tekst in de tekstbox staan?");
+//        }
+//        catch(NullPointerException ex)
+//        {
+//            errorBar.setText("Elk tekstvakje moet ingevuld worden.");
+//        }
+//        catch(Exception e)
+//        {
+//            errorBar.setText(e.getMessage());
+//        }
+//         
+//           
+//    }
 
      public void initMonthTable() {
         monthList = FXCollections.observableArrayList();
