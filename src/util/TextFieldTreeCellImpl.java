@@ -275,7 +275,7 @@ newStage.show();
         return getItem() == null ? "" : getItem().getType();
     }
 
-    private int getItemId() {
+    public int getItemId() {
         return getItem() == null ? null : getItem().getId();
     }
 }

@@ -70,6 +70,23 @@
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                   </content>
                 </TitledPane>
+                  <TitledPane animated="false" text="Wijzig knoop">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ComboBox fx:id="parDropd" layoutX="10.0" layoutY="70.0" prefHeight="25.0" prefWidth="70.0" />
+                              <ComboBox fx:id="operatorDropd" layoutX="110.0" layoutY="70.0" prefHeight="25.0" prefWidth="70.0" />
+                              <TextField fx:id="waardeParameter" layoutX="205.0" layoutY="70.0" prefHeight="25.0" prefWidth="84.0" promptText="waarde" />
+                              <TextField fx:id="beschrijving" layoutX="110.0" layoutY="115.0" prefHeight="25.0" prefWidth="181.0" promptText="beschrijving" />
+                              <Label layoutX="10.0" layoutY="119.0" text="Beschrijving:" />
+                              <Button fx:id="saveItem" layoutX="322.0" layoutY="392.0" mnemonicParsing="false" onMouseClicked="#saveDetItem" prefHeight="34.0" prefWidth="62.0" text="Opslaan" />
+                              <Label layoutX="10.0" layoutY="168.0" text="Vegetatiekenmerk:" />
+                              <TextField fx:id="vegetatie" layoutX="110.0" layoutY="164.0" prefHeight="25.0" prefWidth="181.0" promptText="(alleen mogelijk bij resultaat)" />
+                              <Text fx:id="foutmelding" fill="#901d1d" layoutX="7.0" layoutY="431.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="275.13671875" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </TitledPane>
               </panes>
             </Accordion>
          </children>

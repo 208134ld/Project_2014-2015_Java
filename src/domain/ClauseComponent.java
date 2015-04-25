@@ -16,6 +16,7 @@ import javax.persistence.Table;
     @NamedQuery(name="ClauseComponent.findClauseComponentsByDeterminateTableId",query= "select c from ClauseComponents c WHERE c.determinateTableId = :determinateTableId"),
     @NamedQuery(name="Clause.findClausesByDeterminateTableId",query= "select c from ClauseComponents c WHERE c.determinateTableId = :determinateTableId AND c.discriminator = :discriminator"),
     @NamedQuery(name="Clause.findClauseById",query= "select c from ClauseComponents c WHERE c.ClauseComponentId = :clauseId")
+        
 }) 
 public class ClauseComponent implements Serializable
 {
@@ -29,10 +30,29 @@ public class ClauseComponent implements Serializable
     private int YesClause_ClauseComponentId;
     private int NoClause_ClauseComponentId;
     private String Climatefeature;
-    
+    private int Waarde;
+    private String Operator;
+    private int Par1_ParameterId;
+    private String Vegetationfeature;
     public ClauseComponent()
     {
 
+    }
+
+    public String getVegetationfeature() {
+        return Vegetationfeature;
+    }
+
+    public void setVegetationfeature(String Vegetationfeature) {
+        this.Vegetationfeature = Vegetationfeature;
+    }
+
+    public int getPar1_ParameterId() {
+        return Par1_ParameterId;
+    }
+
+    public void setPar1_ParameterId(int Par1_ParameterId) {
+        this.Par1_ParameterId = Par1_ParameterId;
     }
     
     public int getDeterminateTableId() {
@@ -90,4 +110,21 @@ public class ClauseComponent implements Serializable
     public int getNoClause() {
         return NoClause_ClauseComponentId;
     }
+
+    public int getWaarde() {
+        return Waarde;
+    }
+
+    public void setWaarde(int Waarde) {
+        this.Waarde = Waarde;
+    }
+
+    public String getOperator() {
+        return Operator;
+    }
+
+    public void setOperator(String Operator) {
+        this.Operator = Operator;
+    }
+    
 }

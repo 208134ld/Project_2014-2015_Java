@@ -3,6 +3,7 @@ package repository;
 
 import domain.Clause;
 import domain.ClauseComponent;
+import domain.Parameter;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -31,6 +32,23 @@ public class DeterminateTableRepository {
     public ClauseComponent findClauseById(int clauseId){
         TypedQuery<ClauseComponent> query = em.createNamedQuery("Clause.findClauseById", ClauseComponent.class);
         return query.setParameter("clauseId", clauseId).getSingleResult();
+    }
+    public List<Parameter> getAllParameters()
+    {
+        TypedQuery<Parameter> q = em.createNamedQuery("Parameter.findAll",Parameter.class);
+        return q.getResultList();
+    }
+    public Parameter getParameterById(int parameterId)
+    {
+        TypedQuery<Parameter> query = em.createNamedQuery("Parameter.findById", Parameter.class);
+        return query.setParameter("parameterId",parameterId).getSingleResult();
+    }
+    public void updateRepo()
+    {
+          
+        em.getTransaction().begin();
+        em.getTransaction().commit();
+    
     }
     
 }

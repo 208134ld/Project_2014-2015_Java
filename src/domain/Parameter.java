@@ -5,19 +5,34 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity(name="Parameter")
 @Table(name = "Parameter")
+@NamedQueries({
+    @NamedQuery(name="Parameter.findAll",query="select p from Parameter p"),
+    @NamedQuery(name="Parameter.findById",query="select p from Parameter p where p.ParameterId = :parameterId")
+})
 public class Parameter {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int ParameterId;
     public String Beschrijving;
-
+    private String Discriminator;
+    
     public Parameter(){
         
+    }
+
+    public String getDiscriminator() {
+        return Discriminator;
+    }
+
+    public void setDiscriminator(String Discriminator) {
+        this.Discriminator = Discriminator;
     }
     
     public int getParameterId() {
