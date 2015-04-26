@@ -120,5 +120,9 @@ public class RepositoryController {
  {
      return determinateRepo.getParameterByName(name);
  }
+ public List<Grade> getAllGrades()
+ {
+     return gradeRepo.getAllGrades();
+ }
  
 }

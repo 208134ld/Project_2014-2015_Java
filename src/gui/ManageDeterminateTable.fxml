@@ -38,8 +38,8 @@
                   <Insets left="15.0" />
                </GridPane.margin>
             </Label>
-            <TextField fx:id="txtGradeField" GridPane.columnIndex="1" />
             <Label fx:id="lblActiveDeterminateTable" text="U bekijkt momenteel geen determinatietabel." GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <ComboBox fx:id="gradeCombo" prefWidth="150.0" GridPane.columnIndex="1" />
          </children>
       </GridPane>
       <GridPane GridPane.rowIndex="1">

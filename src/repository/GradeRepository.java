@@ -21,4 +21,8 @@ public class GradeRepository {
         TypedQuery<Grade> query = em.createNamedQuery("SelectedGrade", Grade.class);
         return query.setParameter("graad", gradeId).getSingleResult();
     }
+        public List<Grade> getAllGrades() {
+        TypedQuery<Grade> query = em.createNamedQuery("Grade.AllGrades", Grade.class);
+        return query.getResultList();
+    }
 }

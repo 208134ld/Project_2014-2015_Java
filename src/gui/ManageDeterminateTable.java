@@ -36,8 +36,6 @@ public class ManageDeterminateTable extends GridPane {
     @FXML
     TreeView treeViewDeterminateTable;
     @FXML
-    private TextField txtGradeField;
-    @FXML
     private Button btnViewDeterminateTable;
     @FXML
     private Label lblActiveDeterminateTable;
@@ -45,6 +43,8 @@ public class ManageDeterminateTable extends GridPane {
     private ComboBox<String> parDropd;
     @FXML
     private ComboBox<String> operatorDropd;
+    @FXML
+    private ComboBox<String> gradeCombo;
     @FXML
     private TextField waardeParameter;
     @FXML
@@ -63,6 +63,7 @@ public class ManageDeterminateTable extends GridPane {
     private ObservableList<String> operatoren;
     private List<Parameter> paraLijst;
     private ClauseComponent selectedClauseComponent;
+    private ObservableList<String>graden;
     public ManageDeterminateTable() {
         dc = new DomeinController();
         rc = new RepositoryController();
@@ -73,8 +74,14 @@ public class ManageDeterminateTable extends GridPane {
         loader.setController(this);
         operatoren = FXCollections.observableArrayList("=",">",">=","<","<=","!=");
         paraLijst = rc.findAllParamaters();
+        List<String> discLijst = new ArrayList<>();
+        rc.getAllGrades().stream().forEach(g->discLijst.add("Graad "+g.getGrade()));
+        graden = FXCollections.observableArrayList(discLijst);
+        
         try {
             loader.load();
+            gradeCombo.setItems(graden);
+            gradeCombo.setValue(graden.get(0));
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
@@ -86,11 +93,16 @@ public class ManageDeterminateTable extends GridPane {
         List<String> discLijst = new ArrayList<>();
         paraLijst.stream().forEach(s->discLijst.add(s.getDiscriminator()));
         parDropd.setItems(FXCollections.observableArrayList(discLijst));
-        List<ClauseComponent> clauses = rc.findClausesByDeterminateTableId(rc.findGradeById(Integer.parseInt(txtGradeField.getText())).getDeterminateTableId());
+        int graad = Integer.parseInt(gradeCombo.getSelectionModel().getSelectedItem().split(" ")[1]);
+        List<ClauseComponent> clauses = rc.findClausesByDeterminateTableId(rc.findGradeById(graad).getDeterminateTableId());
         List<Integer> ids = new ArrayList<>();
-
+        parDropd.setDisable(true);
+        operatorDropd.setDisable(true);
+        waardeParameter.setDisable(true);
+        vegetatie.setDisable(true);
+        beschrijving.setDisable(true);
         lblActiveDeterminateTable.setText(String.format("U bekijkt momenteel determinatietabel %d, deze hoort bij graad %d.",
-                rc.findGradeById(Integer.parseInt(txtGradeField.getText())).getDeterminateTableId(), Integer.parseInt(txtGradeField.getText())));
+                rc.findGradeById(graad).getDeterminateTableId(),graad));
         
         clauses.stream().map((c) -> {
             ids.add(c.getYesClause());
@@ -139,6 +151,7 @@ public class ManageDeterminateTable extends GridPane {
                     foutmelding.setText("");
                     selectedClauseComponent = rc.findClauseById(newValue.getValue().getId());
             if(newValue.getValue().getType().equals("Clause")){
+                beschrijving.setDisable(false);
                  parDropd.setDisable(false);
                 operatorDropd.setDisable(false);
                 waardeParameter.setDisable(false);
@@ -151,6 +164,7 @@ public class ManageDeterminateTable extends GridPane {
             
             }else
             {
+                beschrijving.setDisable(false);
                 vegetatie.setDisable(false);
                 vegetatie.setText(selectedClauseComponent.getVegetationfeature());
                 beschrijving.setText(selectedClauseComponent.getClimatefeature());
