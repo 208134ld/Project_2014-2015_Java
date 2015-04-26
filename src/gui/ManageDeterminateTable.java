@@ -137,16 +137,18 @@ public class ManageDeterminateTable extends GridPane {
             public void changed(ObservableValue<? extends TreeItem<MyNode>> observable, TreeItem<MyNode> oldValue, TreeItem<MyNode> newValue) {
                 try{
                     foutmelding.setText("");
-                          selectedClauseComponent = rc.findClauseById(newValue.getValue().getId());
+                    selectedClauseComponent = rc.findClauseById(newValue.getValue().getId());
             if(newValue.getValue().getType().equals("Clause")){
                  parDropd.setDisable(false);
                 operatorDropd.setDisable(false);
                 waardeParameter.setDisable(false);
                 vegetatie.setDisable(true);
-            operatorDropd.setPromptText(selectedClauseComponent.getOperator());
-            parDropd.setPromptText(rc.findParameterById(selectedClauseComponent.getPar1_ParameterId()).getDiscriminator());
+                operatorDropd.setValue(selectedClauseComponent.getOperator());
+                System.out.println(rc.findParameterById(selectedClauseComponent.getPar1_ParameterId()).getDiscriminator() + "<----DISCRIMINATOR");
+            parDropd.setValue(rc.findParameterById(selectedClauseComponent.getPar1_ParameterId()).getDiscriminator());
             waardeParameter.setText(selectedClauseComponent.getWaarde()+"");
             beschrijving.setText(selectedClauseComponent.getName());
+            
             }else
             {
                 vegetatie.setDisable(false);
@@ -194,7 +196,7 @@ public class ManageDeterminateTable extends GridPane {
                 if(operatorDropd.getSelectionModel().getSelectedItem()!=null)
                     selectedClauseComponent.setOperator(operatorDropd.getSelectionModel().getSelectedItem());
                 if(parDropd.getSelectionModel().getSelectedItem()!=null)
-                    selectedClauseComponent.setOperator(parDropd.getSelectionModel().getSelectedItem());
+                    selectedClauseComponent.setPar1_ParameterId(rc.findParameterByName(parDropd.getSelectionModel().getSelectedItem()).getParameterId());
                 selectedClauseComponent.setWaarde(Integer.parseInt(waardeParameter.getText()));
                 selectedClauseComponent.setName(beschrijving.getText());
                 rc.updateRepo();

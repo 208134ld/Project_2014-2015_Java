@@ -13,7 +13,8 @@ import javax.persistence.Table;
 @Table(name = "Parameter")
 @NamedQueries({
     @NamedQuery(name="Parameter.findAll",query="select p from Parameter p"),
-    @NamedQuery(name="Parameter.findById",query="select p from Parameter p where p.ParameterId = :parameterId")
+    @NamedQuery(name="Parameter.findById",query="select p from Parameter p where p.ParameterId = :parameterId"),
+    @NamedQuery(name="Parameter.findByName",query="select p from Parameter p where p.Discriminator = :name")
 })
 public class Parameter {
 

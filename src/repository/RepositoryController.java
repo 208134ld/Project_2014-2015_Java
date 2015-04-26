@@ -9,6 +9,7 @@ import domain.Country;
 import domain.Grade;
 import domain.MonthOfTheYear;
 import domain.Months;
+import domain.Parameter;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
@@ -104,4 +105,20 @@ public class RepositoryController {
     public ClauseComponent findClauseById(int clauseId){
         return determinateRepo.findClauseById(clauseId);
     }
+     public Parameter findParameterById(int parameterId)
+    {
+        return determinateRepo.getParameterById(parameterId);
+    }
+    public void updateRepo(){
+        determinateRepo.updateRepo();
+    }
+ public List<Parameter> findAllParamaters()
+    {
+        return determinateRepo.getAllParameters();
+    }
+ public Parameter findParameterByName(String name)
+ {
+     return determinateRepo.getParameterByName(name);
+ }
+ 
 }

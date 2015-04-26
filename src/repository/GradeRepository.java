@@ -18,7 +18,7 @@ public class GradeRepository {
     
     public Grade findById(int gradeId)
     {
-        TypedQuery<Grade> query = em.createNamedQuery("Grade.FindById", Grade.class);
+        TypedQuery<Grade> query = em.createNamedQuery("SelectedGrade", Grade.class);
         return query.setParameter("graad", gradeId).getSingleResult();
     }
 }

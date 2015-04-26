@@ -90,6 +90,10 @@ public class ClauseComponent implements Serializable
     public void setNoClause_ClauseComponentId(int NoClause_ClauseComponentId) {
         this.NoClause_ClauseComponentId = NoClause_ClauseComponentId;
     }
+
+    public void setClimatefeature(String Climatefeature) {
+        this.Climatefeature = Climatefeature;
+    }
     
     public String getClimatefeature() {
         return Climatefeature;

@@ -59,18 +59,18 @@ public class ClimateChart implements Serializable {
         months = new ArrayList<>();
     }
 
-//    public ClimateChart(int id, String loc, int begin, int end, double[] temp, int[] sed, double latitude, double longitude,String BCord,String LCord) {
-//        setLocation(loc);
-//        setClimateChartId(id);
-//        setBeginperiod(begin);
-//        setEndperiod(end);
-//        setLatitude(latitude);
-//        setLongitude(longitude);
-//        setLCord(LCord);
-//        setBCord(BCord);
-//        months = new ArrayList<Months>();
-//        setMonthList(sed, temp);
-//    }
+    public ClimateChart(int id, String loc, int begin, int end, double[] temp, int[] sed, double latitude, double longitude,String BCord,String LCord) {
+        setLocation(loc);
+        setClimateChartId(id);
+        setBeginperiod(begin);
+        setEndperiod(end);
+        setLatitude(latitude);
+        setLongitude(longitude);
+        setLCord(LCord);
+        setBCord(BCord);
+        months = new ArrayList<Months>();
+        setMonthList(sed, temp);
+    }
     public ClimateChart(Country country, String loc, int begin, int end, String BC, String LC, List<Months> ms) {
         months = new ArrayList<>();
         setCountry(country);

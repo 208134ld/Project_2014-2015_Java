@@ -43,6 +43,11 @@ public class DeterminateTableRepository {
         TypedQuery<Parameter> query = em.createNamedQuery("Parameter.findById", Parameter.class);
         return query.setParameter("parameterId",parameterId).getSingleResult();
     }
+    public Parameter getParameterByName(String name)
+    {
+        TypedQuery<Parameter> query = em.createNamedQuery("Parameter.findByName",Parameter.class);
+        return query.setParameter("name",name).getSingleResult();
+    }
     public void updateRepo()
     {
           
