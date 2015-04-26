@@ -72,4 +72,12 @@ public class ClassListController {
         return sb.toString();
     }
     
+    public void addClassGroup(ClassGroup cg){
+        clm.insertClassGroup(cg);
+    }
+    
+    public void removeClassGroup(ClassGroup cg){
+        clm.removeClassGroup(cg);
+    }
+    
 }

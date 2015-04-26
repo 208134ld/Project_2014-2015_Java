@@ -60,7 +60,7 @@ public class ClassListManagement {
     }
     
     public Grade getGradeWithName(String graad){
-        TypedQuery<Grade> query = em.createNamedQuery("SelectedGrade", Grade.class).setParameter("graad", graad);
+        TypedQuery<Grade> query = em.createNamedQuery("SelectedGrade", Grade.class).setParameter("graad", Integer.parseInt(graad));
         return query.getSingleResult();
     }
 

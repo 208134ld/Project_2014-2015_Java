@@ -1,7 +1,6 @@
 
 package gui;
 
-import domain.Clause;
 import domain.ClauseComponent;
 import domain.DomeinController;
 import domain.Parameter;
