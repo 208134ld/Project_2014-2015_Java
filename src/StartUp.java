@@ -1,4 +1,5 @@
 
+import gui.ClassListControllerPanel;
 import gui.GlobalFrame;
 import gui.LocationViewPanel;
 import gui.MainPanel;
@@ -16,7 +17,7 @@ public class StartUp extends Application {
 
     @Override
     public void start(Stage stage) throws SQLException {
-           Scene scene = new Scene(new ManageDeterminateTable());
+           Scene scene = new Scene(new ClassListControllerPanel());
         //Scene scene = new Scene(new GlobalFrame());
         
         stage.setTitle("Aardrijkskunde");
