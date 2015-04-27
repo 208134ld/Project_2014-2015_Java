@@ -24,7 +24,9 @@ import javax.persistence.Table;
     @NamedQuery(name = "AllSchoolYears",
             query = "SELECT s FROM SchoolYears s"),
     @NamedQuery(name = "SchoolYearsOfGrade",
-            query = "SELECT s FROM SchoolYears s WHERE s.grade = :g ")
+            query = "SELECT s FROM SchoolYears s WHERE s.grade = :g "),
+    @NamedQuery(name = "SchoolYearWithName", 
+            query = "SELECT s FROM SchoolYears s WHERE s.schoolYear = :sy ")
 })
 public class SchoolYear implements Serializable {
 

@@ -11,6 +11,8 @@ import domain.Grade;
 import domain.SchoolYear;
 import domain.Student;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -58,7 +60,9 @@ public class ClassListControllerPanel extends Accordion {
     @FXML
     private ComboBox<String> dbLeerlingKlas;
     @FXML
-    private ListView<String> listLeerlingen;
+    private TextField txtNaam;
+    @FXML
+    private TextField txtVoornaam;
     @FXML
     private Button btnLeerlingToevoegen;
     @FXML
@@ -68,16 +72,18 @@ public class ClassListControllerPanel extends Accordion {
     //lijst voor klas deel
     private ObservableList<String> gradeList;
     private ObservableList<String> schoolyearList;
+    private ObservableList<String> classGroupList;
 
     public ClassListControllerPanel() {
 
+        controller = new ClassListController();
         dbKlasGraad = new ComboBox<>();
         dbKlasLeerjaar = new ComboBox<>();
         dbLeerlingGraad = new ComboBox<>();
         dbLeerlingLeerjaar = new ComboBox<>();
         dbLeerlingKlas = new ComboBox<>();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("LocationControllerPanel.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("ClassListControllerPanel.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -86,8 +92,9 @@ public class ClassListControllerPanel extends Accordion {
             throw new RuntimeException(ex);
         }
 
+        //Klas deel
         setExpandedPane(tpKlas);
-        
+
         gradeList = FXCollections.observableList(controller.giveAllGrades()
                 .stream().map(c -> c.getGradeString()).sorted().collect(Collectors.toList()));
         dbKlasGraad.setItems(gradeList);
@@ -96,12 +103,32 @@ public class ClassListControllerPanel extends Accordion {
             public void changed(ObservableValue ov, Object t, Object t1) {
 
                 schoolyearList = FXCollections.observableList(controller.giveSchoolYearsOfGrade(controller.giveGradeWithName(t1.toString()))
-                .stream().map(c -> c.getSchoolYearString()).sorted().collect(Collectors.toList()));
+                        .stream().map(c -> c.getSchoolYearString()).sorted().collect(Collectors.toList()));
                 dbKlasLeerjaar.setItems(schoolyearList);
             }
         });
-        
-        
+
+        //Leerling deel
+        dbLeerlingGraad.setItems(gradeList);
+        dbLeerlingGraad.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue ov, Object t, Object t1) {
+
+                schoolyearList = FXCollections.observableList(controller.giveSchoolYearsOfGrade(controller.giveGradeWithName(t1.toString()))
+                        .stream().map(c -> c.getSchoolYearString()).sorted().collect(Collectors.toList()));
+                dbLeerlingLeerjaar.setItems(schoolyearList);
+                dbLeerlingKlas.setItems(null);
+                dbLeerlingLeerjaar.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ObservableValue ov, Object t, Object t1) {
+
+                        classGroupList = FXCollections.observableList(controller.giveClassGroupOfSchoolYear(controller.giveSchoolYearWithName(t1.toString()))
+                                .stream().map(c -> c.getGroupName()).sorted().collect(Collectors.toList()));
+                        dbLeerlingKlas.setItems(classGroupList);
+                    }
+                });
+            }
+        });
 
     }
 
@@ -115,13 +142,22 @@ public class ClassListControllerPanel extends Accordion {
 
     @FXML
     private void removeKlas(ActionEvent event) {
-        controller.removeClassGroup(controller.giveClassGroupWithName(txtKlasName.getText()));
-        txtKlasName.clear();
+        try {
+            controller.removeClassGroup(controller.giveClassGroupWithName(txtKlasName.getText()));
+            txtKlasName.clear();
+        } catch (Exception e) {
+            System.out.println("Klas niet gevonden");
+        }
     }
 
     @FXML
     private void addLeerling(ActionEvent event) {
-        //Show nieuw popup venster
+        Grade g = new Grade(Integer.parseInt(dbLeerlingGraad.getSelectionModel().getSelectedItem()));
+        SchoolYear sy = new SchoolYear(Integer.parseInt(dbLeerlingLeerjaar.getSelectionModel().getSelectedItem()), g);
+        ClassGroup cg = new ClassGroup(dbLeerlingKlas.getSelectionModel().getSelectedItem(), sy);
+        controller.addStudent(new Student(txtNaam.getText(), txtVoornaam.getText(), cg));
+        txtNaam.clear();
+        txtVoornaam.clear();
     }
 
     @FXML

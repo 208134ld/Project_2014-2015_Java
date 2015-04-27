@@ -138,11 +138,11 @@ public class LocationViewPanel extends GridPane {
         txtLCoord.setText(c.getLCord());
         txtPeriod.setText(c.getBeginperiod() + " - " + c.getEndperiod());
         monthsList = FXCollections.observableArrayList(c.getMonths());
-//        c.getMonths().stream().map(m->m.getMonthProp()).collect(Collectors.toList()).forEach(System.out::println);
-//        monthCol.setCellValueFactory(cellData -> cellData.getValue().monthProperty());
-//        sedCol.setCellValueFactory(cellData -> cellData.getValue().sedProperty());
-//        tempCol.setCellValueFactory(cellData -> cellData.getValue().tempProperty());
-        
+        c.getMonths().stream().map(m->m.getMonthProp()).collect(Collectors.toList()).forEach(System.out::println);
+        monthCol.setCellValueFactory(cellData -> cellData.getValue().monthProperty());
+        sedCol.setCellValueFactory(cellData -> cellData.getValue().sedProperty());
+        tempCol.setCellValueFactory(cellData -> cellData.getValue().tempProperty());
+    
         monthTable.setItems(monthsList);
     }
 
