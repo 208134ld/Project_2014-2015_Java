@@ -30,7 +30,7 @@ public class DeterminateTableRepository {
     
     
     public ClauseComponent findClauseById(int clauseId){
-        System.out.println("FETCHING CLAUSE WITH "+clauseId);
+       
         TypedQuery<ClauseComponent> query = em.createNamedQuery("Clause.findClauseById", ClauseComponent.class);
         
         return query.setParameter("clauseId", clauseId).getSingleResult();

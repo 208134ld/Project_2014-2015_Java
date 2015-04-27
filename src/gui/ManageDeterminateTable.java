@@ -30,6 +30,7 @@ import javafx.util.Callback;
 import repository.RepositoryController;
 import util.MyNode;
 import util.TextFieldTreeCellImpl;
+import util.TreeIterator;
 
 public class ManageDeterminateTable extends GridPane {
 
@@ -125,11 +126,8 @@ public class ManageDeterminateTable extends GridPane {
         
         obsTreeItems = FXCollections.observableArrayList(treeItems);
         root.getChildren().addAll(obsTreeItems);
-
         root.setExpanded(true);
-
         treeViewDeterminateTable.setRoot(root);
-        
         treeViewDeterminateTable.setEditable(true);
         treeViewDeterminateTable.setCellFactory(new Callback<TreeView<MyNode>, TreeCell<MyNode>>() {
             @Override
@@ -157,7 +155,7 @@ public class ManageDeterminateTable extends GridPane {
                 waardeParameter.setDisable(false);
                 vegetatie.setDisable(true);
                 operatorDropd.setValue(selectedClauseComponent.getOperator());
-                System.out.println(rc.findParameterById(selectedClauseComponent.getPar1_ParameterId()).getDiscriminator() + "<----DISCRIMINATOR");
+               
             parDropd.setValue(rc.findParameterById(selectedClauseComponent.getPar1_ParameterId()).getDiscriminator());
             waardeParameter.setText(selectedClauseComponent.getWaarde()+"");
             beschrijving.setText(selectedClauseComponent.getName());
@@ -206,22 +204,30 @@ public class ManageDeterminateTable extends GridPane {
             if(selectedClauseComponent!=null){
             if(selectedClauseComponent.getDiscriminator().equals("Clause"))
             {
-                 System.out.println("WE ZIJN ER");
                 if(operatorDropd.getSelectionModel().getSelectedItem()!=null)
                     selectedClauseComponent.setOperator(operatorDropd.getSelectionModel().getSelectedItem());
                 if(parDropd.getSelectionModel().getSelectedItem()!=null)
                     selectedClauseComponent.setPar1_ParameterId(rc.findParameterByName(parDropd.getSelectionModel().getSelectedItem()).getParameterId());
                 selectedClauseComponent.setWaarde(Integer.parseInt(waardeParameter.getText()));
                 selectedClauseComponent.setName(beschrijving.getText());
-                rc.updateRepo();
-                foutmelding.setText("Opslaan succesvol");
             }else
             {
-                selectedClauseComponent.setName(beschrijving.getText());
+                selectedClauseComponent.setClimatefeature(beschrijving.getText());
                 selectedClauseComponent.setVegetationfeature(vegetatie.getText());
-                rc.updateRepo();
-                foutmelding.setText("Opslaan succesvol");
             }
+            TreeIterator<MyNode> iterator = new TreeIterator<>(root);
+                    while(iterator.hasNext())
+                    {
+                        MyNode node= iterator.next().getValue();
+                        if(node.getId()==selectedClauseComponent.getClauseComponentId())
+                        {
+                            node.setValue(beschrijving.getText());
+                            iterator.expand();
+                            break;
+                        }
+                    } 
+                    rc.updateRepo();
+                    foutmelding.setText("Opslaan succesvol");
         }
         }
         catch(NumberFormatException ex){

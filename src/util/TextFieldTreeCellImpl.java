@@ -253,7 +253,6 @@ newStage.show();
                     }
                     
                     if(getItem().isClause()){
-                        System.out.println(getItemId());
                         ClauseComponent c =rc.findClauseById(getItemId());
                         c.setName(textField.getText());
                         rc.updateRepo();
