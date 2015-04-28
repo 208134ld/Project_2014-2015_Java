@@ -20,7 +20,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -36,7 +38,7 @@ import util.TreeIterator;
 public class ManageDeterminateTable extends GridPane {
 
     @FXML
-    TreeView treeViewDeterminateTable;
+    private TreeView treeViewDeterminateTable;
     @FXML
     private Button btnViewDeterminateTable;
     @FXML
@@ -67,6 +69,14 @@ public class ManageDeterminateTable extends GridPane {
     private Button btnCreateDeterminateTable;
     @FXML
     private TextField txtNameNewDeterminateTable;
+    @FXML
+    private RadioButton jaKnoop;
+    @FXML
+    private RadioButton neeKnoop;
+    @FXML
+    private Button btnAddClause;
+    @FXML
+    private ComboBox<ClauseComponent> comboChooseParent;
     private ObservableList<TreeItem<MyNode>> obsTreeItems;
     private List<TreeItem<MyNode>> treeItems;
     private DomeinController dc;
@@ -78,13 +88,18 @@ public class ManageDeterminateTable extends GridPane {
     private ObservableList<String> graden;
     private ObservableList<String> graden2;
     private ObservableList<String> comboListDeterminateTables;
+    private ObservableList<ClauseComponent> comboClauseComponentsParents;
     private FXMLLoader loader;
+    @FXML
+    private ToggleGroup typeRadioButtonGroup;
+
+
 
     public ManageDeterminateTable() throws IOException {
         dc = new DomeinController();
         rc = new RepositoryController();
         treeItems = new ArrayList<>();
-
+        
         loader = new FXMLLoader(getClass().getResource("ManageDeterminateTable.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -94,7 +109,7 @@ public class ManageDeterminateTable extends GridPane {
         
         loader.load();
         initialize();
-
+        
         btnDeleteDeterminateTable.setDisable(true);
 
     }
@@ -118,9 +133,12 @@ public class ManageDeterminateTable extends GridPane {
             detTableComboList.add(d.getDeterminateTableId() + " " + d.getName());
         }
 
+        
+        
         graden = FXCollections.observableArrayList(discLijst);
         graden2 = FXCollections.observableArrayList(discLijst2);
         comboListDeterminateTables = FXCollections.observableArrayList(detTableComboList);
+        
 
         if(graden.isEmpty())
         {
@@ -152,6 +170,12 @@ public class ManageDeterminateTable extends GridPane {
         else{
             createDeterminateTableCombo.setDisable(true);
         }
+        
+        List<ClauseComponent> clauseComponentsList = rc.findClausesByDeterminateTableId(rc.findGradeById(Integer.parseInt(gradeCombo.getSelectionModel().getSelectedItem().split(" ")[1])).getDeterminateTableId().getDeterminateTableId());
+        comboClauseComponentsParents = FXCollections.observableArrayList(clauseComponentsList);
+        comboChooseParent.setItems(comboClauseComponentsParents);
+        
+        //Grade gr = rc.findGradeById(Integer.parseInt(gradeCombo.getSelectionModel().getSelectedItem().split(" ")[1]));
         
         
     }
@@ -350,4 +374,9 @@ public class ManageDeterminateTable extends GridPane {
         initialize();
     }
 
+    @FXML
+    private void addClause(){
+        //comboChooseParent
+        viewDeterminateTable();
+    }
 }

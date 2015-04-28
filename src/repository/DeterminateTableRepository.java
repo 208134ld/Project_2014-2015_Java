@@ -84,4 +84,9 @@ public class DeterminateTableRepository {
         return t;
     }
     
+    public void insertClause(ClauseComponent clause){
+        em.getTransaction().begin();
+        em.persist(clause);
+        em.getTransaction().commit();
+    }
 }

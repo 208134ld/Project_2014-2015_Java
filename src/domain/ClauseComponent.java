@@ -131,4 +131,9 @@ public class ClauseComponent implements Serializable
         this.Operator = Operator;
     }
     
+    @Override
+    public String toString(){
+        return Name;
+    }
+    
 }
