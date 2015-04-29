@@ -6,8 +6,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity(name="ClauseComponents")
@@ -24,19 +28,58 @@ public class ClauseComponent implements Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ClauseComponentId;
-    private int determinateTableId;
+    @ManyToOne
+    @JoinColumn(name = "DeterminateTableId")
+    private DeterminateTable determinateTableId;
     private String discriminator;
     private String Name;
-    private int YesClause_ClauseComponentId;
-    private int NoClause_ClauseComponentId;
+    @OneToOne
+    @JoinColumn(name = "YesClause_ClauseComponentId")
+    private ClauseComponent YesClause_ClauseComponentId;
+    @OneToOne
+    @JoinColumn(name = "NoClause_ClauseComponentId")
+    private ClauseComponent NoClause_ClauseComponentId;
     private String Climatefeature;
     private int Waarde;
     private String Operator;
-    private int Par1_ParameterId;
+    
+    @ManyToOne
+    @JoinColumn(name = "Par1_ParameterId")
+    private Parameter Par1_ParameterId;
+    @ManyToOne
+    @JoinColumn(name = "Par2_ParameterId")
+    private Parameter Par2_ParameterId;
+
+    
     private String Vegetationfeature;
+    
     public ClauseComponent()
     {
 
+    }
+    
+    public ClauseComponent(String name, String discriminator, String operator, Parameter parameter1Id, Parameter parameter2Id, DeterminateTable determinateTable)
+    {
+        this.Name = name;
+        this.discriminator = discriminator;
+        this.Operator = operator;
+        this.Par1_ParameterId = parameter1Id;
+        this.Par2_ParameterId = parameter2Id;
+        this.determinateTableId = determinateTable;
+        this.NoClause_ClauseComponentId = null;
+        this.YesClause_ClauseComponentId = null;
+    }
+    
+    public ClauseComponent(String name, String discriminator, int waarde, String operator, Parameter parameter1Id, DeterminateTable determinateTable)
+    {
+        this.Name = name;
+        this.discriminator = discriminator;
+        this.Waarde = waarde;
+        this.Operator = operator;
+        this.Par1_ParameterId = parameter1Id;
+        this.determinateTableId = determinateTable;
+        this.NoClause_ClauseComponentId = null;
+        this.YesClause_ClauseComponentId = null;
     }
 
     public String getVegetationfeature() {
@@ -47,20 +90,28 @@ public class ClauseComponent implements Serializable
         this.Vegetationfeature = Vegetationfeature;
     }
 
-    public int getPar1_ParameterId() {
+    public Parameter getPar1_ParameterId() {
         return Par1_ParameterId;
     }
 
-    public void setPar1_ParameterId(int Par1_ParameterId) {
+    public void setPar1_ParameterId(Parameter Par1_ParameterId) {
         this.Par1_ParameterId = Par1_ParameterId;
     }
+
+    public Parameter getPar2_ParameterId() {
+        return Par2_ParameterId;
+    }
+
+    public void setPar2_ParameterId(Parameter Par2_ParameterId) {
+        this.Par2_ParameterId = Par2_ParameterId;
+    }
     
-    public int getDeterminateTableId() {
+    public DeterminateTable getDeterminateTable() {
         return determinateTableId;
     }
 
-    public void setDeterminateTableId(int determinateTableId) {
-        this.determinateTableId = determinateTableId;
+    public void setDeterminateTableId(DeterminateTable determinateTable) {
+        this.determinateTableId = determinateTable;
     }
 
     public String getDiscriminator() {
@@ -75,19 +126,19 @@ public class ClauseComponent implements Serializable
         this.discriminator = discriminator;
     }
 
-    public int getYesClause_ClauseComponentId() {
+    public ClauseComponent getYesClause() {
         return YesClause_ClauseComponentId;
     }
 
-    public void setYesClause_ClauseComponentId(int YesClause_ClauseComponentId) {
+    public void setYesClause(ClauseComponent YesClause_ClauseComponentId) {
         this.YesClause_ClauseComponentId = YesClause_ClauseComponentId;
     }
 
-    public int getNoClause_ClauseComponentId() {
+    public ClauseComponent getNoClause() {
         return NoClause_ClauseComponentId;
     }
 
-    public void setNoClause_ClauseComponentId(int NoClause_ClauseComponentId) {
+    public void setNoClause(ClauseComponent NoClause_ClauseComponentId) {
         this.NoClause_ClauseComponentId = NoClause_ClauseComponentId;
     }
 
@@ -105,14 +156,6 @@ public class ClauseComponent implements Serializable
     
     public String getName() {
         return Name;
-    }
-    
-    public int getYesClause() {
-        return YesClause_ClauseComponentId;
-    }
-
-    public int getNoClause() {
-        return NoClause_ClauseComponentId;
     }
 
     public int getWaarde() {

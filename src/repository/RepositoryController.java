@@ -100,7 +100,7 @@ public class RepositoryController {
         return determinateRepo.getAllClauseComponentsOfDeterminateTable(id);
     }
 
-    public List<ClauseComponent> findClausesByDeterminateTableId(int id) {
+    public List<ClauseComponent> findClausesByDeterminateTableId(DeterminateTable id) {
         return determinateRepo.getAllClausesOfDeterminateTable(id);
     }
 
@@ -144,5 +144,9 @@ public class RepositoryController {
     
     public DeterminateTable findDeterminateTableById(int id){
         return determinateRepo.findDeterminateTableById(id);
+    }
+    
+    public void insertClause(ClauseComponent clause){
+        determinateRepo.insertClause(clause);
     }
 }

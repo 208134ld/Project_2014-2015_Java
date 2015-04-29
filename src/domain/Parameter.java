@@ -47,4 +47,9 @@ public class Parameter {
     public void setBeschrijving(String Beschrijving) {
         this.Beschrijving = Beschrijving;
     }
+    
+    @Override
+    public String toString(){
+        return Discriminator;
+    }
 }
