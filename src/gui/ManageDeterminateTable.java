@@ -6,35 +6,33 @@ import domain.DomeinController;
 import domain.Grade;
 import domain.Parameter;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
-import javafx.util.Callback;
 import javax.persistence.NoResultException;
 import repository.RepositoryController;
 import util.MyNode;
-import util.TextFieldTreeCellImpl;
 import util.TreeIterator;
 
 public class ManageDeterminateTable extends GridPane {
@@ -128,6 +126,18 @@ public class ManageDeterminateTable extends GridPane {
         btnDeleteDeterminateTable.setDisable(true);
         disableAddClause(true);
 
+        txtValueOfClause.addEventFilter(KeyEvent.KEY_TYPED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent t) {
+                char ar[] = t.getCharacter().toCharArray();
+                char ch = ar[t.getCharacter().toCharArray().length - 1];
+                int codeBackSpace = ch;
+                if (!(ch >= '0' && ch <= '9') && codeBackSpace!=8) {
+                    showError("Foutmet ingegeven waarde.", "U kan alleen cijfers invullen.");
+                    t.consume();
+                }
+            }
+        });
     }
 
     private void initialize() {
@@ -187,7 +197,7 @@ public class ManageDeterminateTable extends GridPane {
         } else {
             createDeterminateTableCombo.setDisable(true);
         }
-        System.out.println(rc.findGradeById(Integer.parseInt(gradeCombo.getSelectionModel().getSelectedItem().split(" ")[1])).getDeterminateTableId());
+
         List<ClauseComponent> clauseComponentsList = rc.findClausesByDeterminateTableId(rc.findGradeById(Integer.parseInt(gradeCombo.getSelectionModel().getSelectedItem().split(" ")[1])).getDeterminateTableId());
         comboClauseComponentsParents = FXCollections.observableArrayList(clauseComponentsList);
         comboChooseParent.setItems(comboClauseComponentsParents);
@@ -204,7 +214,6 @@ public class ManageDeterminateTable extends GridPane {
         comboOperatorList = FXCollections.observableArrayList(operatorList);
         comboOperator.setItems(comboOperatorList);
         comboOperator.setValue(comboOperatorList.get(0));
-
     }
 
     @FXML
@@ -254,19 +263,6 @@ public class ManageDeterminateTable extends GridPane {
             root.getChildren().addAll(obsTreeItems);
             root.setExpanded(true);
             treeViewDeterminateTable.setRoot(root);
-//            treeViewDeterminateTable.setEditable(true);
-//            treeViewDeterminateTable.setCellFactory(new Callback<TreeView<MyNode>, TreeCell<MyNode>>() {
-//                @Override
-//                public TreeCell<MyNode> call(TreeView<MyNode> p) {
-//                    try {
-//                        return new TextFieldTreeCellImpl(root, treeItems, rc);
-//                    } catch (SQLException ex) {
-//                        Logger.getLogger(MainPanel.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
-//                    return null;
-//                }
-//
-//            });
         } catch (NullPointerException ex) {
 
         }
@@ -328,23 +324,21 @@ public class ManageDeterminateTable extends GridPane {
             ClauseComponent clause = null;
             String type;
             if (typeClause) {
-                try{
+                try {
                     clause = rc.findClauseById(parentClause.getYesClause().getClauseComponentId());
-                }
-                catch(NoResultException ex){
-                    
+                } catch (NoResultException ex) {
+
                 }
                 type = "(Ja Knoop)";
             } else {
-                try{
+                try {
                     clause = rc.findClauseById(parentClause.getNoClause().getClauseComponentId());
-                }
-                catch(NoResultException ex){
-                    
+                } catch (NoResultException ex) {
+
                 }
                 type = "(Nee Knoop)";
             }
-            if(clause !=null){
+            if (clause != null) {
                 if (clause.getName() != null) {
                     TreeItem<MyNode> newNode = new TreeItem<>(new MyNode(clause.getName() + " " + type, "Clause", clause.getClauseComponentId()));
                     recursiveClause(newNode, clause, true);
@@ -445,50 +439,63 @@ public class ManageDeterminateTable extends GridPane {
         String name = txtNameNewClause.getText();
         Parameter par1 = comboParameter1.getSelectionModel().getSelectedItem();
         Parameter par2 = comboParameter2.getSelectionModel().getSelectedItem();
-        int waarde = 0;
+        Integer waarde = null;
 
         RadioButton rb = (RadioButton) typeRadioButtonGroup.getSelectedToggle();
-        System.out.println(rb.getText());
 
         try {
             waarde = Integer.parseInt(txtValueOfClause.getText());
         } catch (NumberFormatException ex) {
-            
+
         }
         String operator = comboOperator.getSelectionModel().getSelectedItem();
         ClauseComponent newClause;
-        if (waarde != 0) {
+        if (waarde != null) {
             if (comboChooseParent.isDisabled()) {
                 rc.insertClause(new ClauseComponent(name, "Clause", waarde, operator, par1, rc.findDeterminateTableById(currentDetTableId)));
             } else {
                 if (rb.getText().equals("Ja knoop")) {
-                    newClause = new ClauseComponent(name, "Clause", waarde, operator, par1, rc.findDeterminateTableById(currentDetTableId));
-                    rc.insertClause(newClause);
-                    comboChooseParent.getSelectionModel().getSelectedItem().setYesClause(newClause);
-                    rc.updateRepo();
-                }
-                else{
-                    newClause = new ClauseComponent(name, "Clause", waarde, operator, par1, rc.findDeterminateTableById(currentDetTableId));
-                    rc.insertClause(newClause);
-                    comboChooseParent.getSelectionModel().getSelectedItem().setNoClause(newClause);
-                    rc.updateRepo();
+                    if (comboChooseParent.getSelectionModel().getSelectedItem().getYesClause() == null) {
+                        newClause = new ClauseComponent(name, "Clause", waarde, operator, par1, rc.findDeterminateTableById(currentDetTableId));
+                        rc.insertClause(newClause);
+                        comboChooseParent.getSelectionModel().getSelectedItem().setYesClause(newClause);
+                        rc.updateRepo();
+                    } else {
+                        showError("Fout met de bovenliggende knoop.", "Er bestaat al een Ja knoop onder de bovenliggende knoop.");
+                    }
+                } else {
+                    if (comboChooseParent.getSelectionModel().getSelectedItem().getNoClause() == null) {
+                        newClause = new ClauseComponent(name, "Clause", waarde, operator, par1, rc.findDeterminateTableById(currentDetTableId));
+                        rc.insertClause(newClause);
+                        comboChooseParent.getSelectionModel().getSelectedItem().setNoClause(newClause);
+                        rc.updateRepo();
+                    } else {
+                        showError("Fout met de bovenliggende knoop.", "Er bestaat al een Nee knoop onder de bovenliggende knoop.");
+                    }
                 }
             }
-        }else{
+        } else {
             if (comboChooseParent.isDisabled()) {
                 rc.insertClause(new ClauseComponent(name, "Clause", operator, par1, par2, rc.findDeterminateTableById(currentDetTableId)));
             } else {
                 if (rb.getText().equals("Ja knoop")) {
-                    newClause = new ClauseComponent(name, "Clause", operator, par1, par2, rc.findDeterminateTableById(currentDetTableId));
-                    rc.insertClause(newClause);
-                    comboChooseParent.getSelectionModel().getSelectedItem().setYesClause(newClause);
-                    rc.updateRepo();
-                }
-                else{
-                    newClause = new ClauseComponent(name, "Clause", operator, par1, par2, rc.findDeterminateTableById(currentDetTableId));
-                    rc.insertClause(newClause);
-                    comboChooseParent.getSelectionModel().getSelectedItem().setNoClause(newClause);
-                    rc.updateRepo();
+                    if (comboChooseParent.getSelectionModel().getSelectedItem().getYesClause() == null) {
+                        newClause = new ClauseComponent(name, "Clause", operator, par1, par2, rc.findDeterminateTableById(currentDetTableId));
+                        rc.insertClause(newClause);
+                        comboChooseParent.getSelectionModel().getSelectedItem().setYesClause(newClause);
+                        rc.updateRepo();
+                    } else {
+                        showError("Fout met de bovenliggende knoop.", "Er bestaat al een Ja knoop onder de bovenliggende knoop.");
+                    }
+                } else {
+                    if (comboChooseParent.getSelectionModel().getSelectedItem().getNoClause() == null) {
+                        newClause = new ClauseComponent(name, "Clause", operator, par1, par2, rc.findDeterminateTableById(currentDetTableId));
+                        rc.insertClause(newClause);
+                        comboChooseParent.getSelectionModel().getSelectedItem().setNoClause(newClause);
+                        rc.updateRepo();
+                    } else {
+                        showError("Fout met de bovenliggende knoop.", "Er bestaat al een Nee knoop onder de bovenliggende knoop.");
+                    }
                 }
             }
         }
@@ -505,5 +512,13 @@ public class ManageDeterminateTable extends GridPane {
         jaKnoop.setDisable(bool);
         neeKnoop.setDisable(bool);
         btnAddClause.setDisable(bool);
+    }
+
+    private void showError(String headerText, String contextText) {
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.setTitle("Fout");
+        alert.setHeaderText(headerText);
+        alert.setContentText(contextText);
+        alert.showAndWait();
     }
 }
