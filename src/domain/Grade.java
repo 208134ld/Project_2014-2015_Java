@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -27,7 +29,9 @@ import javax.persistence.Table;
     @NamedQuery(name="Grade.AllGrades",
                 query="SELECT g FROM Grades g"),
     @NamedQuery(name="SelectedGrade",
-                query="SELECT g FROM Grades g where g.grade = :graad")
+                query="SELECT g FROM Grades g where g.grade = :graad"),
+    @NamedQuery(name="Grade.findByDeterminateTableId",
+                query="SELECT g FROM Grades g where g.DeterminateTableId = :determinateTableId")
 }) 
 public class Grade implements Serializable {
     
@@ -39,7 +43,9 @@ public class Grade implements Serializable {
     @OneToMany(mappedBy = "grade")
     private List<SchoolYear> schoolYears;
     
-    private int DeterminateTableId;
+    @ManyToOne
+    @JoinColumn(name = "DeterminateTableId")
+    private DeterminateTable DeterminateTableId;
 
     //CTOR
     public Grade() {
@@ -48,6 +54,11 @@ public class Grade implements Serializable {
     public Grade(int grade) {
         this.grade = grade;
     }
+    
+//    public Grade(int gradeId, int determinateTableId){
+//        this.grade = gradeId;
+//        this.DeterminateTableId = determinateTableId;
+//    }
     
     //GET SET
     public int getGrade() {
@@ -62,11 +73,11 @@ public class Grade implements Serializable {
         return schoolYears;
     }
     
-    public int getDeterminateTableId() {
+    public DeterminateTable getDeterminateTableId() {
         return DeterminateTableId;
     }
     
-    public void setDeterminateTableId(int DeterminateTableId) {
+    public void setDeterminateTableId(DeterminateTable DeterminateTableId) {
         this.DeterminateTableId = DeterminateTableId;
     }
 

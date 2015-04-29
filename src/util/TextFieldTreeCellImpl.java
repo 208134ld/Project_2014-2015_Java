@@ -1,5 +1,6 @@
 package util;
 
+import domain.ClauseComponent;
 import domain.Continent;
 import domain.Country;
 import gui.LocationWizardController;
@@ -240,9 +241,7 @@ newStage.show();
             @Override
             public void handle(KeyEvent t) {
                 if (t.getCode() == KeyCode.ENTER) {
-
-                    em.getTransaction().begin();
-                    
+                   
                     if (getItem().isCountry()) {
                         rc.findCountryById(getItemId()).setName(textField.getText());
                     }
@@ -254,10 +253,12 @@ newStage.show();
                     }
                     
                     if(getItem().isClause()){
-                        rc.findClauseById(getItemId()).setName(textField.getText());
+                        ClauseComponent c =rc.findClauseById(getItemId());
+                        c.setName(textField.getText());
+                        rc.updateRepo();
+//                        rc.findClauseById(getItemId()).setName(textField.getText());
                     }
                     
-                    em.getTransaction().commit();
 
                     commitEdit(new MyNode(textField.getText(), getType(), getItemId()));
                 } else if (t.getCode() == KeyCode.ESCAPE) {

@@ -58,6 +58,10 @@ public class ClassListController {
         return clm.getGradeWithName(naam);
     }
     
+    public SchoolYear giveSchoolYearWithName(String naam){
+        return clm.getSchoolYearWithName(naam);
+    }
+    
     
     public String giveGradeInfo(ClassGroup cg){
         StringBuilder sb = new StringBuilder();

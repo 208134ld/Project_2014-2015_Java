@@ -1,8 +1,10 @@
 
+import gui.ClassListControllerPanel;
 import gui.GlobalFrame;
 import gui.LocationViewPanel;
 import gui.MainPanel;
 import gui.ManageDeterminateTable;
+import java.io.IOException;
 import java.sql.SQLException;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
