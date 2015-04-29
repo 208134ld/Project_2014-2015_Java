@@ -111,7 +111,7 @@ public class ClassListManagement {
         em.getTransaction().commit();
     }
 
-    void removeStudent(Student s) {
+    public void removeStudent(Student s) {
         em.getTransaction().begin();
         em.remove(s);
         em.getTransaction().commit();
@@ -123,7 +123,7 @@ public class ClassListManagement {
         em.getTransaction().commit();
     }
 
-    void removeClassGroup(ClassGroup cg) {
+    public void removeClassGroup(ClassGroup cg) {
         em.getTransaction().begin();
         em.remove(cg);
         em.getTransaction().commit();

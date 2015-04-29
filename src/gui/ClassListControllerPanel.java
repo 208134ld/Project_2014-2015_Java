@@ -7,12 +7,9 @@ package gui;
 
 import domain.ClassGroup;
 import domain.ClassListController;
-import domain.Grade;
 import domain.SchoolYear;
 import domain.Student;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -24,7 +21,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 
@@ -92,7 +88,7 @@ public class ClassListControllerPanel extends Accordion {
             throw new RuntimeException(ex);
         }
 
-        //Klas deel
+        //Klas deel comboBox
         setExpandedPane(tpKlas);
 
         gradeList = FXCollections.observableList(controller.giveAllGrades()
@@ -108,7 +104,7 @@ public class ClassListControllerPanel extends Accordion {
             }
         });
 
-        //Leerling deel
+        //Leerling deel comboBox
         dbLeerlingGraad.setItems(gradeList);
         dbLeerlingGraad.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
@@ -134,11 +130,23 @@ public class ClassListControllerPanel extends Accordion {
 
     @FXML
     private void addKlas(ActionEvent event) {
-        Grade g = new Grade(Integer.parseInt(dbKlasGraad.getSelectionModel().getSelectedItem()));
-        SchoolYear sy = new SchoolYear(Integer.parseInt(dbKlasLeerjaar.getSelectionModel().getSelectedItem()), g);
-        controller.addClassGroup(new ClassGroup(txtKlasName.getText(), sy));
-        txtKlasName.clear();
+
+        //Grade g = controller.giveGradeWithName(dbKlasGraad.getSelectionModel().getSelectedItem());//new Grade(Integer.parseInt(dbKlasGraad.getSelectionModel().getSelectedItem()));
+        SchoolYear sy = controller.giveSchoolYearWithName(dbKlasLeerjaar.getSelectionModel().getSelectedItem());//new SchoolYear(Integer.parseInt(dbKlasLeerjaar.getSelectionModel().getSelectedItem()), g);
+        //if (canAddClass(txtKlasName.getText(), sy)) {
+            controller.addClassGroup(new ClassGroup(txtKlasName.getText(), sy));
+            txtKlasName.clear();
+        /*} else {
+            System.out.println("Deze klas bestaat al");
+        }*/
     }
+
+    /*private boolean canAddClass(String className, SchoolYear sy) {
+        List<ClassGroup> listCg = controller.giveClassGroupOfSchoolYear(sy);
+        for(ClassGroup cg : listCg){
+            
+        }
+    }*/
 
     @FXML
     private void removeKlas(ActionEvent event) {
@@ -152,9 +160,9 @@ public class ClassListControllerPanel extends Accordion {
 
     @FXML
     private void addLeerling(ActionEvent event) {
-        Grade g = new Grade(Integer.parseInt(dbLeerlingGraad.getSelectionModel().getSelectedItem()));
-        SchoolYear sy = new SchoolYear(Integer.parseInt(dbLeerlingLeerjaar.getSelectionModel().getSelectedItem()), g);
-        ClassGroup cg = new ClassGroup(dbLeerlingKlas.getSelectionModel().getSelectedItem(), sy);
+//        Grade g = new Grade(Integer.parseInt(dbLeerlingGraad.getSelectionModel().getSelectedItem()));
+//        SchoolYear sy = new SchoolYear(Integer.parseInt(dbLeerlingLeerjaar.getSelectionModel().getSelectedItem()), g);
+        ClassGroup cg = controller.giveClassGroupWithName(dbLeerlingKlas.getSelectionModel().getSelectedItem());//new ClassGroup(dbLeerlingKlas.getSelectionModel().getSelectedItem(), sy);
         controller.addStudent(new Student(txtNaam.getText(), txtVoornaam.getText(), cg));
         txtNaam.clear();
         txtVoornaam.clear();
