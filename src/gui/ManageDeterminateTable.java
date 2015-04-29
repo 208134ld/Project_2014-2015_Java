@@ -133,7 +133,7 @@ public class ManageDeterminateTable extends GridPane {
                 char ch = ar[t.getCharacter().toCharArray().length - 1];
                 int codeBackSpace = ch;
                 if (!(ch >= '0' && ch <= '9') && codeBackSpace!=8) {
-                    showError("Foutmet ingegeven waarde.", "U kan alleen cijfers invullen.");
+                    showError("Fout met ingegeven waarde.", "U kan alleen cijfers invullen.");
                     t.consume();
                 }
             }
