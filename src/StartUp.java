@@ -17,9 +17,9 @@ import repository.RepositoryController;
 public class StartUp extends Application {
 
     @Override
-    public void start(Stage stage) throws SQLException {
-//        Scene scene = new Scene(new ManageDeterminateTable());
-        Scene scene = new Scene(new GlobalFrame());
+    public void start(Stage stage) throws SQLException, IOException {
+        Scene scene = new Scene(new ManageDeterminateTable());
+//        Scene scene = new Scene(new GlobalFrame());
         
         stage.setTitle("Aardrijkskunde");
         stage.setScene(scene);
