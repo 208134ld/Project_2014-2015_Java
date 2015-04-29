@@ -20,7 +20,9 @@ import javax.persistence.Table;
     @NamedQuery(name = "Country.findCountriesByContinent",
             query = "SELECT c FROM Countries c WHERE c.continent.continentId = :continentID"),
     @NamedQuery(name = "Country.findById",
-            query = "SELECT c FROM Countries c WHERE c.countryId = :countryID")
+            query = "SELECT c FROM Countries c WHERE c.countryId = :countryID"),
+    @NamedQuery(name = "Country.findByName",
+        query = "SELECT c FROM Countries c WHERE c.name = :countryName")
 })
 public class Country implements Serializable {
 

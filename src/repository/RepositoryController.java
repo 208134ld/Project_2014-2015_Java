@@ -43,6 +43,10 @@ public class RepositoryController {
     public Continent findContinentById(int id) {
         return continentRepo.findContinentById(id);
     }
+    
+    public Country findCountryByName(String name) {
+        return countryRepo.findCountryByName(name);
+    }
 
     public List<Country> getAllCountries() {
         return countryRepo.getAllCountries();

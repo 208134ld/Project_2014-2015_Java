@@ -97,10 +97,11 @@ public class ClimateChart implements Serializable {
 //        months = new ArrayList<Months>();
 ////        this.countryId = countryId;
 //    }
-//    public ClimateChart(String location, int id) {
-//        setLocation(location);
-//        this.climateChartId = id;
-//    }
+    public ClimateChart(String location, int id) {
+        setLocation(location);
+        this.climateChartId = id;
+    }
+    
     public void setCountry(Country c) {
         this.country = c;
     }

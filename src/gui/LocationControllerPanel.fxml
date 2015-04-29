@@ -22,8 +22,7 @@
                   <TextField fx:id="txtContinentName" />
                   <GridPane>
                      <children>
-                        <Button fx:id="btnAddContinent" mnemonicParsing="false" onAction="#addContinent" text="Toevoegen" GridPane.halignment="CENTER" />
-                        <Button fx:id="btnRemoveContinent" mnemonicParsing="false" onAction="#removeContinent" text="Verwijderen" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                        <Button fx:id="btnAddContinent" mnemonicParsing="false" onMouseClicked="#addContinent" text="Toevoegen" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                      </children>
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -58,8 +57,7 @@
                   <TextField fx:id="txtCountryName" />
                   <GridPane>
                      <children>
-                        <Button fx:id="btnAddCountry" mnemonicParsing="false" onAction="#addCountry" text="Toevoegen" GridPane.halignment="CENTER" />
-                        <Button fx:id="btnRemoveCountry" mnemonicParsing="false" onAction="#removeCountry" text="Verwijderen" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                        <Button fx:id="btnAddCountry" mnemonicParsing="false" onMouseClicked="#addCountry" text="Toevoegen" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                      </children>
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -142,14 +140,13 @@
                         <ComboBox fx:id="cbMonth" layoutY="7.0" prefHeight="25.0" prefWidth="135.0" promptText="Maand" />
                         <TextField fx:id="txtTemp" layoutX="135.0" layoutY="7.0" prefHeight="25.0" prefWidth="136.0" promptText="Temperatuur" />
                         <TextField fx:id="txtSed" layoutX="272.0" layoutY="7.0" prefHeight="25.0" prefWidth="121.0" promptText="Neerslag" />
-                        <Button fx:id="btnAddRow" layoutX="401.0" layoutY="7.0" mnemonicParsing="false" onAction="#addRow" prefHeight="25.0" prefWidth="85.0" text="Voeg rij toe" />
+                        <Button fx:id="btnAddRow" layoutX="401.0" layoutY="7.0" mnemonicParsing="false" onAction="#addRow" onMouseClicked="#addRow" prefHeight="25.0" prefWidth="85.0" text="Voeg rij toe" />
                      </children>
                   </AnchorPane>
                   <Label fx:id="errorBar" prefHeight="17.0" prefWidth="628.0" textFill="RED" VBox.vgrow="ALWAYS" />
                   <GridPane>
                      <children>
-                        <Button fx:id="btnAddClimateChart" mnemonicParsing="false" onAction="#addClimateChart" text="Toevoegen" GridPane.halignment="CENTER" />
-                        <Button fx:id="btnRemoveClimateChart" mnemonicParsing="false" onAction="#removeClimateChart" text="Verwijderen" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                        <Button fx:id="btnAddClimateChart" mnemonicParsing="false" onMouseClicked="#addClimateChart" text="Toevoegen" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                      </children>
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

@@ -1,6 +1,7 @@
 
 package repository;
 
+import domain.Continent;
 import domain.Country;
 import java.sql.SQLException;
 import java.util.List;
@@ -36,5 +37,10 @@ public class CountryRepository {
     public Country findCountryById(int id){
         TypedQuery<Country> query = em.createNamedQuery("Country.findById", Country.class);
         return query.setParameter("countryID", id).getSingleResult();
+    }
+    
+    public Country findCountryByName(String name) {
+        TypedQuery<Country> query = em.createNamedQuery("Country.findByName", Country.class);
+        return query.setParameter("countryName", name).getSingleResult();
     }
 }

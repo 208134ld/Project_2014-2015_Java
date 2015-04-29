@@ -107,7 +107,39 @@ public class LocationViewPanel extends GridPane {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+    
+        initMonthTable();
+        updateSelectionTreeViewPanel();
+    }
 
+    public void updateLocationDetailPanel(ClimateChart c) {
+
+        locationLable.setText(c.getLocation());
+        errorBar.setText("");
+        
+        // GRADEN VAN LENGTE EN BREEDTE
+        txtBGrades.setText(c.getBCord().split("°")[0].trim());
+        txtBMinutes.setText(c.getBCord().split("°")[1].split("'")[0].trim());
+        String waarde = c.getBCord().split("°")[1].split("'")[1].trim();
+        txtBSeconds.setText(waarde.substring(0,waarde.length()-4).trim());
+        txtBreedteParameter.setText(waarde.substring(waarde.length()-2,waarde.length()).trim());
+        txtLGrades.setText(c.getLCord().split("°")[0].trim());
+        txtLMinutes.setText(c.getLCord().split("°")[1].split("'")[0].trim());
+        waarde = c.getLCord().split("°")[1].split("'")[1].trim();
+        txtLSeconds.setText(waarde.substring(0,waarde.length()-4).trim());
+        txtLengteParameter.setText(waarde.substring(waarde.length()-2,waarde.length()));
+        
+        txtBeginPeriod.setText(c.getBeginperiod()+"");
+        txtEndPeriod.setText(c.getEndperiod()+"");
+        lbTemperatureYear.setText(Double.toString(Math.round(c.calcAverageYearTemp().getAsDouble()*10.0)/10.0)+ " °C");
+        lbSedimentYear.setText(Integer.toString(c.calcSedimentYear())+ " mm");
+        
+        // TABLE
+        monthsList = FXCollections.observableArrayList(c.getMonths());
+        monthTable.setItems(monthsList);
+    }
+    
+    public void updateSelectionTreeViewPanel() {
         final TreeItem<MyNode> root = new TreeItem<>(new MyNode("Aardrijkskunde database", "Root", 1));
 
         for (Continent c : rc.getAllContinents()) {
@@ -147,8 +179,6 @@ public class LocationViewPanel extends GridPane {
         root.getChildren().addAll(obsTreeItems);
 
         root.setExpanded(true);
-        initMonthTable();
-
         selectionTreeView.setRoot(root);
         //selectionTreeView.setShowRoot(false);
 
@@ -165,36 +195,8 @@ public class LocationViewPanel extends GridPane {
 
             }
         });
-
     }
-
-    public void updateLocationDetailPanel(ClimateChart c) {
-
-        locationLable.setText(c.getLocation());
-        errorBar.setText("");
-        
-        // GRADEN VAN LENGTE EN BREEDTE
-        txtBGrades.setText(c.getBCord().split("°")[0].trim());
-        txtBMinutes.setText(c.getBCord().split("°")[1].split("'")[0].trim());
-        String waarde = c.getBCord().split("°")[1].split("'")[1].trim();
-        txtBSeconds.setText(waarde.substring(0,waarde.length()-4).trim());
-        txtBreedteParameter.setText(waarde.substring(waarde.length()-2,waarde.length()).trim());
-        txtLGrades.setText(c.getLCord().split("°")[0].trim());
-        txtLMinutes.setText(c.getLCord().split("°")[1].split("'")[0].trim());
-        waarde = c.getLCord().split("°")[1].split("'")[1].trim();
-        txtLSeconds.setText(waarde.substring(0,waarde.length()-4).trim());
-        txtLengteParameter.setText(waarde.substring(waarde.length()-2,waarde.length()));
-        
-        txtBeginPeriod.setText(c.getBeginperiod()+"");
-        txtEndPeriod.setText(c.getEndperiod()+"");
-        lbTemperatureYear.setText(Double.toString(Math.round(c.calcAverageYearTemp().getAsDouble()*10.0)/10.0)+ " °C");
-        lbSedimentYear.setText(Integer.toString(c.calcSedimentYear())+ " mm");
-        
-        // TABLE
-        monthsList = FXCollections.observableArrayList(c.getMonths());
-        monthTable.setItems(monthsList);
-    }
-
+    
     public void initMonthTable() {
 //        monthCol.setCellValueFactory(cellData -> cellData.getValue().monthProperty());
         sedCol.setCellValueFactory(cellData -> cellData.getValue().sedimentProperty());
