@@ -26,6 +26,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -38,6 +39,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.web.WebView;
 import javafx.util.Callback;
 import repository.RepositoryController;
 
@@ -91,6 +93,10 @@ public class LocationWizardController extends AnchorPane {
     private Button addLocationButton;
     @FXML
     private Label errorBar;
+        @FXML
+    private WebView siteView;
+    @FXML
+    private ProgressBar webProgress;
     private ObservableList<Months> monthList;
     private int counter;
     private int countryID; 
