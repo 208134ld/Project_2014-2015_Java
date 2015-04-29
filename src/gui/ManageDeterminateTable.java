@@ -91,6 +91,8 @@ public class ManageDeterminateTable extends GridPane {
     private TextField txtValueOfClause;
     @FXML
     private Button btnConnectDeterminateTable;
+    @FXML
+    private ToggleGroup par2OrValueRadioButtonGroup;
 
     private ObservableList<TreeItem<MyNode>> obsTreeItems;
     private List<TreeItem<MyNode>> treeItems;
@@ -138,6 +140,8 @@ public class ManageDeterminateTable extends GridPane {
                 }
             }
         });
+        
+        //par2OrValueRadioButtonGroup.s
     }
 
     private void initialize() {
