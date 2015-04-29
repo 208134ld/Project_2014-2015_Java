@@ -94,7 +94,7 @@ public class LocationControllerPanel extends Accordion{
     @FXML
     private TableView<Months> monthTable;
     @FXML
-    private TableColumn<Months, String> monthcol;
+    private TableColumn<Months, String> maandcol;
     @FXML
     private TableColumn<Months, Number> tempCol;
     @FXML
@@ -120,6 +120,7 @@ public class LocationControllerPanel extends Accordion{
     private ObservableList<String> countryList;
     private List<Months> monthList;
     private ObservableList<Months> tableMonthList;
+    private MonthOfTheYear[] months;
     private int counter = 0;
 //    private int countryID; 
 //    private DomeinController dc;
@@ -151,8 +152,9 @@ public class LocationControllerPanel extends Accordion{
 //
     @FXML
     private void addRow(MouseEvent event) {
-        try{
-            if(monthList.stream().map(mo -> mo.getMonth()).collect(Collectors.toList())
+//        try{
+            if(monthList !=null){
+                if(monthList.stream().map(mo -> mo.getMonth()).collect(Collectors.toList())
                      .contains(cbMonth.getSelectionModel().getSelectedItem())){
                  errorBar.setText("Deze maand is al reeds in gebruik");
              }
@@ -160,12 +162,20 @@ public class LocationControllerPanel extends Accordion{
                 double temp= Double.parseDouble(txtTemp.getText());
                 int n=Integer.parseInt(txtSed.getText());
                 MonthOfTheYear m = cbMonth.getSelectionModel().getSelectedItem();
-                monthList.add(new Months(n, temp, m));
-                initMonthTable();
-
+                System.out.println(m);
+                tableMonthList.add(new Months(n, temp, m));
+               
+                for(int i = 0; i<MonthOfTheYear.values().length;i++)
+                {
+                    if(months[i] == m && i!=11)
+                    {
+                        cbMonth.setValue(months[i+1]);
+                    }
+                }
                 txtTemp.clear();
                 txtSed.clear();
-
+                
+               
                 if(counter==12)
                 {
                     cbMonth.setDisable(true);
@@ -175,19 +185,21 @@ public class LocationControllerPanel extends Accordion{
                     errorBar.setText("*Pas individuele cellen aan door te dubbelklikken");
                 }
             }
+            }
+            
           counter++;
-        }
-        catch(NumberFormatException numb){
-            errorBar.setText("Gelieve getallen in te voeren in de tekstvakken");
-        }
-        catch(NullPointerException ex)
-        {
-            errorBar.setText("Elk tekstvakje moet ingevuld worden.");
-        }
-        catch(Exception e)
-        {
-            errorBar.setText("Er is een fout opgetreden. probeer het opnieuw.");
-        }
+//        }
+//        catch(NumberFormatException numb){
+//            errorBar.setText("Gelieve getallen in te voeren in de tekstvakken");
+//        }
+//        catch(NullPointerException ex)
+//        {
+//            errorBar.setText("Elk tekstvakje moet ingevuld worden.");
+//        }
+//        catch(Exception e)
+//        {
+//            errorBar.setText("Er is een fout opgetreden. probeer het opnieuw.");
+//        }
            
         
     }
@@ -199,6 +211,8 @@ public class LocationControllerPanel extends Accordion{
         cbContinentClimateChart = new ComboBox<>();
         cbCountryClimateChart = new ComboBox<>();
         cbMonth = new ComboBox<>();
+         System.out.println("HIERZOOOO");
+       
         
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("LocationControllerPanel.fxml"));
@@ -216,7 +230,12 @@ public class LocationControllerPanel extends Accordion{
         monthOfTheYearList = FXCollections.observableList(repositoryController.getMonthsOfTheYear());
         cbMonth.setItems(monthOfTheYearList);
         cbMonth.setVisibleRowCount(3);
-        
+        initMonthTable();
+        monthList = new ArrayList<>();
+        tableMonthList = FXCollections.observableList(monthList);
+        monthTable.setItems(tableMonthList);
+        monthTable.setEditable(true);
+        months = MonthOfTheYear.values();
     }
     
     public void updateComboBoxes(){
@@ -322,10 +341,8 @@ public class LocationControllerPanel extends Accordion{
     }
 
      public void initMonthTable() {
-        tableMonthList = FXCollections.observableList(monthList);
-        monthTable.setItems(tableMonthList);
-        monthTable.setEditable(true);
-        monthcol.setCellValueFactory(cellData -> cellData.getValue().monthProperty());
+        counter=1;
+        maandcol.setCellValueFactory(cellData -> cellData.getValue().monthProperty());
         tempCol.setCellValueFactory(cellData -> cellData.getValue().temperatureProperty());
         sedCol.setCellValueFactory(cellData -> cellData.getValue().sedimentProperty());
     }

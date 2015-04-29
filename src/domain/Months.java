@@ -106,10 +106,8 @@ public class Months implements Serializable {
     }
     
     public ObservableValue<String> monthProperty() { 
-        System.out.println("HIIEEERZOOO");
+        
         this.monthProp = new SimpleStringProperty(month.name());
-       
-        System.out.println(monthProp.get());
         return monthProp;
     }
 
