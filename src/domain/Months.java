@@ -50,7 +50,7 @@ public class Months implements Serializable {
     @Transient
     private SimpleDoubleProperty tempProp;
     @Transient
-    private SimpleObjectProperty<MonthOfTheYear> monthProp;
+    private SimpleStringProperty monthProp;
 
     @JoinColumn(name = "ClimateChartID")
     private ClimateChart climateChart;
@@ -105,8 +105,11 @@ public class Months implements Serializable {
         this.sed = sediment;
     }
     
-    public ObservableValue<MonthOfTheYear> monthProperty() {
-        this.monthProp = new SimpleObjectProperty<MonthOfTheYear>(month);
+    public ObservableValue<String> monthProperty() { 
+        System.out.println("HIIEEERZOOO");
+        this.monthProp = new SimpleStringProperty(month.name());
+       
+        System.out.println(monthProp.get());
         return monthProp;
     }
 

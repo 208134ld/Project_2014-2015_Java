@@ -94,7 +94,7 @@ public class LocationControllerPanel extends Accordion{
     @FXML
     private TableView<Months> monthTable;
     @FXML
-    private TableColumn<Months, MonthOfTheYear> monthcol;
+    private TableColumn<Months, String> monthcol;
     @FXML
     private TableColumn<Months, Number> tempCol;
     @FXML

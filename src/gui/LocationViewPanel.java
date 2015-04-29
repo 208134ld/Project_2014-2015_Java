@@ -78,7 +78,7 @@ public class LocationViewPanel extends GridPane {
     @FXML
     private TableView<Months> monthTable;
     @FXML
-    private TableColumn<Months, MonthOfTheYear> monthCol;
+    private TableColumn<Months, String> monthcol;
     @FXML
     private TableColumn<Months, Number> tempCol;
     @FXML
@@ -198,7 +198,7 @@ public class LocationViewPanel extends GridPane {
     }
     
     public void initMonthTable() {
-//        monthCol.setCellValueFactory(cellData -> cellData.getValue().monthProperty());
+        monthcol.setCellValueFactory(cellData -> cellData.getValue().monthProperty());
         sedCol.setCellValueFactory(cellData -> cellData.getValue().sedimentProperty());
         tempCol.setCellValueFactory(cellData -> cellData.getValue().temperatureProperty());
     }
