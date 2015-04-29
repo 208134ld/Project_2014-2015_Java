@@ -3,6 +3,9 @@ package domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -298,5 +301,14 @@ public class ClimateChart implements Serializable {
         }
         return Math.round(val * 1000000.0) / 1000000.0;
     }
-
+    
+    public OptionalDouble calcAverageYearTemp()
+    {
+        return months.stream().mapToDouble(m -> m.getAverTemp()).average();       
+    }
+    
+    public int calcSedimentYear()
+    {
+        return months.stream().mapToInt(m -> m.getSediment()).sum();       
+    }
 }
