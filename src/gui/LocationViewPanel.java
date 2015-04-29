@@ -143,7 +143,10 @@ public class LocationViewPanel extends GridPane implements Observer{
     
     public void updateSelectionTreeViewPanel() {
         final TreeItem<MyNode> root = new TreeItem<>(new MyNode("Aardrijkskunde database", "Root", 1));
-
+        treeItems.clear();
+        countryItems.clear();
+        continentItems.clear();
+        
         for (Continent c : rc.getAllContinents()) {
 
             TreeItem<MyNode> itemChild = new TreeItem<>(new MyNode(c.toString(), "Continent", c.getId()));

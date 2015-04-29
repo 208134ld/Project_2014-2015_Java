@@ -170,7 +170,7 @@ public class RepositoryController extends Observable{
     public void addObserver(Observer observer)
     {
         super.addObserver(observer);
-        observer.update(this, null);
+        observer.update(this, this);
     }
     
 }
