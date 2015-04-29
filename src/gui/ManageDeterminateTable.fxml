@@ -49,12 +49,12 @@
                            </rowConstraints>
                            <children>
                               <Label alignment="CENTER_RIGHT" layoutX="45.0" layoutY="50.0" text="Waarde (indien nodig):" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
-                              <TextField layoutX="112.0" layoutY="46.0" promptText="Bijv: 10" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                              <TextField layoutX="112.0" layoutY="16.0" promptText="Bijv: tw &lt;= 10" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="txtValueOfClause" layoutX="112.0" layoutY="46.0" promptText="Bijv: 10" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <TextField fx:id="txtNameNewClause" layoutX="112.0" layoutY="16.0" promptText="Bijv: tw &lt;= 10" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <Button fx:id="btnAddClause" layoutX="287.0" layoutY="58.0" mnemonicParsing="false" onAction="#addClause" prefHeight="25.0" prefWidth="150.0" text="Voeg knoop toe" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                               <Label alignment="CENTER_RIGHT" layoutX="34.0" layoutY="83.0" prefHeight="17.0" prefWidth="55.0" text="Operator:" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
                               <Label alignment="CENTER_RIGHT" layoutX="54.0" layoutY="20.0" prefHeight="17.0" prefWidth="36.0" text="Naam:" textAlignment="RIGHT" textOverrun="CLIP" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-                              <ComboBox prefHeight="25.0" prefWidth="125.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <ComboBox fx:id="comboOperator" prefHeight="25.0" prefWidth="125.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                               <ComboBox fx:id="comboChooseParent" prefWidth="150.0" GridPane.columnIndex="1" />
                               <Label text="Bovenliggende knoop:" GridPane.halignment="RIGHT" />
                               <RadioButton fx:id="jaKnoop" mnemonicParsing="false" selected="true" text="Ja knoop" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="6" GridPane.valignment="CENTER">
@@ -72,9 +72,9 @@
                               </RadioButton>
                               <Label text="Type:" GridPane.halignment="RIGHT" GridPane.rowIndex="6" />
                               <Label alignment="CENTER_RIGHT" text="Parameter 2:" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-                              <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <ComboBox fx:id="comboParameter2" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                               <Label alignment="CENTER_RIGHT" text="Parameter 1:" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-                              <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <ComboBox fx:id="comboParameter1" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                            </children>
                         </GridPane>
                      </content>
@@ -93,7 +93,7 @@
                               <TextField fx:id="waardeParameter" layoutX="205.0" layoutY="70.0" prefHeight="25.0" prefWidth="84.0" promptText="waarde" />
                               <TextField fx:id="beschrijving" layoutX="110.0" layoutY="115.0" prefHeight="25.0" prefWidth="181.0" promptText="beschrijving" />
                               <Label layoutX="10.0" layoutY="119.0" text="Beschrijving:" />
-                              <Button fx:id="saveItem" layoutX="322.0" layoutY="392.0" mnemonicParsing="false" onMouseClicked="#saveDetItem" prefHeight="34.0" prefWidth="62.0" text="Opslaan" />
+                              <Button fx:id="saveItem" layoutX="103.0" layoutY="219.0" mnemonicParsing="false" onMouseClicked="#saveDetItem" prefHeight="34.0" prefWidth="62.0" text="Opslaan" />
                               <Label layoutX="10.0" layoutY="168.0" text="Vegetatiekenmerk:" />
                               <TextField fx:id="vegetatie" layoutX="110.0" layoutY="164.0" prefHeight="25.0" prefWidth="181.0" promptText="(alleen mogelijk bij resultaat)" />
                               <Text fx:id="foutmelding" fill="#901d1d" layoutX="7.0" layoutY="431.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="275.13671875" />
@@ -142,7 +142,7 @@
                         <Insets bottom="18.0" />
                      </GridPane.margin>
                   </Label>
-                  <Button fx:id="btnCreateDeterminateTable1" mnemonicParsing="false" onAction="#connectDeterminateTableToGrade" prefHeight="25.0" prefWidth="377.0" text="Koppel geselecteerde graad met geselecteerde determinatietabel" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+                  <Button fx:id="btnConnectDeterminateTable" mnemonicParsing="false" onAction="#connectDeterminateTableToGrade" prefHeight="25.0" prefWidth="377.0" text="Koppel geselecteerde graad met geselecteerde determinatietabel" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                      <GridPane.margin>
                         <Insets bottom="15.0" />
                      </GridPane.margin>
@@ -163,7 +163,7 @@
                </rowConstraints>
                <children>
                   <ComboBox fx:id="gradeCombo" prefWidth="150.0" GridPane.columnIndex="1" />
-                  <Button fx:id="btnDeleteDeterminateTable" mnemonicParsing="false" onAction="#deleteDeterminateTable" prefHeight="25.0" prefWidth="165.0" text="Verwijder determinatietabel" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+                  <Button fx:id="btnDeleteDeterminateTable" mnemonicParsing="false" onAction="#deleteDeterminateTable" prefHeight="25.0" prefWidth="177.0" text="Ontkoppel determinatietabel" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
                   <Button fx:id="btnViewDeterminateTable" mnemonicParsing="false" onAction="#viewDeterminateTable" prefHeight="25.0" prefWidth="153.0" text="Bekijk determinatietabel!" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <GridPane.margin>
                         <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />

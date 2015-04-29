@@ -8,6 +8,7 @@ import domain.Parameter;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,6 +31,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+import javax.persistence.NoResultException;
 import repository.RepositoryController;
 import util.MyNode;
 import util.TextFieldTreeCellImpl;
@@ -77,6 +79,21 @@ public class ManageDeterminateTable extends GridPane {
     private Button btnAddClause;
     @FXML
     private ComboBox<ClauseComponent> comboChooseParent;
+    @FXML
+    private TextField txtNameNewClause;
+    @FXML
+    private ComboBox<Parameter> comboParameter1;
+    @FXML
+    private ComboBox<Parameter> comboParameter2;
+    @FXML
+    private ToggleGroup typeRadioButtonGroup;
+    @FXML
+    private ComboBox<String> comboOperator;
+    @FXML
+    private TextField txtValueOfClause;
+    @FXML
+    private Button btnConnectDeterminateTable;
+
     private ObservableList<TreeItem<MyNode>> obsTreeItems;
     private List<TreeItem<MyNode>> treeItems;
     private DomeinController dc;
@@ -89,28 +106,27 @@ public class ManageDeterminateTable extends GridPane {
     private ObservableList<String> graden2;
     private ObservableList<String> comboListDeterminateTables;
     private ObservableList<ClauseComponent> comboClauseComponentsParents;
+    private ObservableList<Parameter> parameterList;
+    private ObservableList<String> comboOperatorList;
     private FXMLLoader loader;
-    @FXML
-    private ToggleGroup typeRadioButtonGroup;
-
-
+    private int currentDetTableId;
 
     public ManageDeterminateTable() throws IOException {
         dc = new DomeinController();
         rc = new RepositoryController();
         treeItems = new ArrayList<>();
-        
+
         loader = new FXMLLoader(getClass().getResource("ManageDeterminateTable.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         operatoren = FXCollections.observableArrayList("=", ">", ">=", "<", "<=", "!=");
         paraLijst = rc.findAllParamaters();
-        
-        
+
         loader.load();
         initialize();
-        
+
         btnDeleteDeterminateTable.setDisable(true);
+        disableAddClause(true);
 
     }
 
@@ -120,6 +136,7 @@ public class ManageDeterminateTable extends GridPane {
         List<Grade> gradeList = rc.getAllGrades();
         List<DeterminateTable> detTableList = rc.getAllDeterminateTables();
         List<String> detTableComboList = new ArrayList<>();
+        List<String> operatorList = Arrays.asList(new String[]{"<", ">", "=", "<=", ">="});
 
         for (Grade g : gradeList) {
             if (g.getDeterminateTableId() == null) {
@@ -128,56 +145,66 @@ public class ManageDeterminateTable extends GridPane {
                 discLijst.add("Graad " + g.getGrade());
             }
         }
-        
-        for(DeterminateTable d : detTableList){
+
+        for (DeterminateTable d : detTableList) {
             detTableComboList.add(d.getDeterminateTableId() + " " + d.getName());
         }
 
-        
-        
         graden = FXCollections.observableArrayList(discLijst);
         graden2 = FXCollections.observableArrayList(discLijst2);
         comboListDeterminateTables = FXCollections.observableArrayList(detTableComboList);
-        
 
-        if(graden.isEmpty())
-        {
+        if (graden.isEmpty()) {
             gradeCombo.setDisable(true);
             btnViewDeterminateTable.setDisable(true);
-        }
-        else{
+        } else {
             gradeCombo.setItems(graden);
             gradeCombo.setValue(graden.get(0));
             gradeCombo.setDisable(false);
             btnViewDeterminateTable.setDisable(false);
         }
-            
+
         if (graden2.isEmpty()) {
             createGradeCombo.setDisable(true);
+
+            btnConnectDeterminateTable.setDisable(true);
+            txtNameNewDeterminateTable.setDisable(true);
             btnCreateDeterminateTable.setDisable(true);
         } else {
             createGradeCombo.setDisable(false);
             btnCreateDeterminateTable.setDisable(false);
+            createDeterminateTableCombo.setDisable(false);
+            txtNameNewDeterminateTable.setDisable(false);
+            btnConnectDeterminateTable.setDisable(false);
             createGradeCombo.setItems(graden2);
             createGradeCombo.setValue(graden2.get(0));
         }
-        
-        if(!comboListDeterminateTables.isEmpty()){
+
+        if (!comboListDeterminateTables.isEmpty() && !graden2.isEmpty()) {
             createDeterminateTableCombo.setItems(comboListDeterminateTables);
             createDeterminateTableCombo.setValue(comboListDeterminateTables.get(0));
             createDeterminateTableCombo.setDisable(false);
-        }
-        else{
+        } else {
             createDeterminateTableCombo.setDisable(true);
         }
-        
-        List<ClauseComponent> clauseComponentsList = rc.findClausesByDeterminateTableId(rc.findGradeById(Integer.parseInt(gradeCombo.getSelectionModel().getSelectedItem().split(" ")[1])).getDeterminateTableId().getDeterminateTableId());
+        System.out.println(rc.findGradeById(Integer.parseInt(gradeCombo.getSelectionModel().getSelectedItem().split(" ")[1])).getDeterminateTableId());
+        List<ClauseComponent> clauseComponentsList = rc.findClausesByDeterminateTableId(rc.findGradeById(Integer.parseInt(gradeCombo.getSelectionModel().getSelectedItem().split(" ")[1])).getDeterminateTableId());
         comboClauseComponentsParents = FXCollections.observableArrayList(clauseComponentsList);
         comboChooseParent.setItems(comboClauseComponentsParents);
-        
-        //Grade gr = rc.findGradeById(Integer.parseInt(gradeCombo.getSelectionModel().getSelectedItem().split(" ")[1]));
-        
-        
+        comboChooseParent.setValue(comboClauseComponentsParents.get(0));
+
+        List<Parameter> comboParameterList = rc.findAllParamaters();
+        parameterList = FXCollections.observableArrayList(comboParameterList);
+
+        comboParameter1.setItems(parameterList);
+        comboParameter1.setValue(parameterList.get(0));
+        comboParameter2.setItems(parameterList);
+        comboParameter2.setValue(parameterList.get(0));
+
+        comboOperatorList = FXCollections.observableArrayList(operatorList);
+        comboOperator.setItems(comboOperatorList);
+        comboOperator.setValue(comboOperatorList.get(0));
+
     }
 
     @FXML
@@ -187,7 +214,9 @@ public class ManageDeterminateTable extends GridPane {
         paraLijst.stream().forEach(s -> discLijst.add(s.getDiscriminator()));
         parDropd.setItems(FXCollections.observableArrayList(discLijst));
         int graad = Integer.parseInt(gradeCombo.getSelectionModel().getSelectedItem().split(" ")[1]);
-        List<ClauseComponent> clauses = rc.findClausesByDeterminateTableId(rc.findGradeById(graad).getDeterminateTableId().getDeterminateTableId());
+        List<ClauseComponent> clauses = rc.findClausesByDeterminateTableId(rc.findGradeById(graad).getDeterminateTableId());
+        currentDetTableId = rc.findGradeById(graad).getDeterminateTableId().getDeterminateTableId();
+
         List<Integer> ids = new ArrayList<>();
         parDropd.setDisable(true);
         operatorDropd.setDisable(true);
@@ -200,10 +229,12 @@ public class ManageDeterminateTable extends GridPane {
                 rc.findGradeById(graad).getDeterminateTableId().getDeterminateTableId(), graad));
 
         clauses.stream().map((c) -> {
-            ids.add(c.getYesClause());
+            if (c.getYesClause() != null) {
+                ids.add(c.getYesClause().getClauseComponentId());
+            }
             return c;
-        }).forEach((c) -> {
-            ids.add(c.getNoClause());
+        }).filter((c) -> (c.getNoClause() != null)).forEach((c) -> {
+            ids.add(c.getNoClause().getClauseComponentId());
         });
 
         ClauseComponent rootClause = null;
@@ -223,19 +254,19 @@ public class ManageDeterminateTable extends GridPane {
             root.getChildren().addAll(obsTreeItems);
             root.setExpanded(true);
             treeViewDeterminateTable.setRoot(root);
-            treeViewDeterminateTable.setEditable(true);
-            treeViewDeterminateTable.setCellFactory(new Callback<TreeView<MyNode>, TreeCell<MyNode>>() {
-                @Override
-                public TreeCell<MyNode> call(TreeView<MyNode> p) {
-                    try {
-                        return new TextFieldTreeCellImpl(root, treeItems, rc);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(MainPanel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    return null;
-                }
-
-            });
+//            treeViewDeterminateTable.setEditable(true);
+//            treeViewDeterminateTable.setCellFactory(new Callback<TreeView<MyNode>, TreeCell<MyNode>>() {
+//                @Override
+//                public TreeCell<MyNode> call(TreeView<MyNode> p) {
+//                    try {
+//                        return new TextFieldTreeCellImpl(root, treeItems, rc);
+//                    } catch (SQLException ex) {
+//                        Logger.getLogger(MainPanel.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//                    return null;
+//                }
+//
+//            });
         } catch (NullPointerException ex) {
 
         }
@@ -254,7 +285,7 @@ public class ManageDeterminateTable extends GridPane {
                         vegetatie.setDisable(true);
                         operatorDropd.setValue(selectedClauseComponent.getOperator());
 
-                        parDropd.setValue(rc.findParameterById(selectedClauseComponent.getPar1_ParameterId()).getDiscriminator());
+                        parDropd.setValue(rc.findParameterById(selectedClauseComponent.getPar1_ParameterId().getParameterId()).getDiscriminator());
                         waardeParameter.setText(selectedClauseComponent.getWaarde() + "");
                         beschrijving.setText(selectedClauseComponent.getName());
 
@@ -270,28 +301,59 @@ public class ManageDeterminateTable extends GridPane {
                 } catch (Exception e) {
                     foutmelding.setText("Fout met het weergeven van de eigenschappen");
                 }
-
-//            
             }
         });
+
+        disableAddClause(false);
+
+        if (clauses.isEmpty()) {
+            initialize();
+            treeViewDeterminateTable.setRoot(null);
+            gradeCombo.setValue("Graad " + graad);
+            comboChooseParent.setItems(null);
+            comboChooseParent.setValue(null);
+            comboChooseParent.setDisable(true);
+            jaKnoop.setDisable(true);
+            neeKnoop.setDisable(true);
+        } else {
+            List<ClauseComponent> clauseComponentsList = rc.findClausesByDeterminateTableId(rc.findGradeById(Integer.parseInt(gradeCombo.getSelectionModel().getSelectedItem().split(" ")[1])).getDeterminateTableId());
+            comboClauseComponentsParents = FXCollections.observableArrayList(clauseComponentsList);
+            comboChooseParent.setItems(comboClauseComponentsParents);
+            comboChooseParent.setValue(comboClauseComponentsParents.get(0));
+        }
     }
 
     public void recursiveClause(TreeItem<MyNode> node, ClauseComponent parentClause, Boolean typeClause) {
         try {
-            ClauseComponent clause;
+            ClauseComponent clause = null;
+            String type;
             if (typeClause) {
-                clause = rc.findClauseById(parentClause.getYesClause());
+                try{
+                    clause = rc.findClauseById(parentClause.getYesClause().getClauseComponentId());
+                }
+                catch(NoResultException ex){
+                    
+                }
+                type = "(Ja Knoop)";
             } else {
-                clause = rc.findClauseById(parentClause.getNoClause());
+                try{
+                    clause = rc.findClauseById(parentClause.getNoClause().getClauseComponentId());
+                }
+                catch(NoResultException ex){
+                    
+                }
+                type = "(Nee Knoop)";
             }
-            if (clause.getName() != null) {
-                TreeItem<MyNode> newNode = new TreeItem<>(new MyNode(clause.getName(), "Clause", clause.getClauseComponentId()));
-                recursiveClause(newNode, clause, true);
-                recursiveClause(newNode, clause, false);
-                node.getChildren().add(newNode);
-            } else {
-                TreeItem<MyNode> newNode = new TreeItem<>(new MyNode(clause.getClimatefeature(), "Result", clause.getClauseComponentId()));
-                node.getChildren().add(newNode);
+            if(clause !=null){
+                if (clause.getName() != null) {
+                    TreeItem<MyNode> newNode = new TreeItem<>(new MyNode(clause.getName() + " " + type, "Clause", clause.getClauseComponentId()));
+                    recursiveClause(newNode, clause, true);
+                    recursiveClause(newNode, clause, false);
+                    node.getChildren().add(newNode);
+                } else {
+                    TreeItem<MyNode> newNode = new TreeItem<>(new MyNode(clause.getClimatefeature() + " " + type, "Result", clause.getClauseComponentId()));
+                    node.getChildren().add(newNode);
+                }
             }
         } catch (NullPointerException ex) {
 
@@ -307,7 +369,7 @@ public class ManageDeterminateTable extends GridPane {
                         selectedClauseComponent.setOperator(operatorDropd.getSelectionModel().getSelectedItem());
                     }
                     if (parDropd.getSelectionModel().getSelectedItem() != null) {
-                        selectedClauseComponent.setPar1_ParameterId(rc.findParameterByName(parDropd.getSelectionModel().getSelectedItem()).getParameterId());
+                        selectedClauseComponent.setPar1_ParameterId(rc.findParameterByName(parDropd.getSelectionModel().getSelectedItem()));
                     }
                     selectedClauseComponent.setWaarde(Integer.parseInt(waardeParameter.getText()));
                     selectedClauseComponent.setName(beschrijving.getText());
@@ -347,23 +409,26 @@ public class ManageDeterminateTable extends GridPane {
         lblActiveDeterminateTable.setText("De determineertabel is succesvol ontkoppeld van de geselecteerde graad.");
         treeViewDeterminateTable.setRoot(null);
         initialize();
+        disableAddClause(true);
     }
 
     @FXML
     private void createDeterminateTable() {
         int graad = Integer.parseInt(createGradeCombo.getSelectionModel().getSelectedItem().split(" ")[1]);
-        String name ="";
-        if(txtNameNewDeterminateTable.getText().length()==0)
+        String name = "";
+        if (txtNameNewDeterminateTable.getText().length() == 0) {
             name = "Nieuwe determineertabel";
-        else
+        } else {
             name = txtNameNewDeterminateTable.getText();
+        }
         rc.createDeterminateTable(graad, name);
         rc.updateRepo();
         initialize();
+        disableAddClause(true);
     }
-    
+
     @FXML
-    private void connectDeterminateTableToGrade(){
+    private void connectDeterminateTableToGrade() {
         int detTableId = Integer.parseInt(createDeterminateTableCombo.getSelectionModel().getSelectedItem().split(" ")[0]);
         int graad = Integer.parseInt(createGradeCombo.getSelectionModel().getSelectedItem().split(" ")[1]);
         Grade g = rc.findGradeById(graad);
@@ -372,11 +437,73 @@ public class ManageDeterminateTable extends GridPane {
         rc.updateRepo();
         lblActiveDeterminateTable.setText("Succesvol gekoppeld.");
         initialize();
+        disableAddClause(true);
     }
 
     @FXML
-    private void addClause(){
-        //comboChooseParent
+    private void addClause() {
+        String name = txtNameNewClause.getText();
+        Parameter par1 = comboParameter1.getSelectionModel().getSelectedItem();
+        Parameter par2 = comboParameter2.getSelectionModel().getSelectedItem();
+        int waarde = 0;
+
+        RadioButton rb = (RadioButton) typeRadioButtonGroup.getSelectedToggle();
+        System.out.println(rb.getText());
+
+        try {
+            waarde = Integer.parseInt(txtValueOfClause.getText());
+        } catch (NumberFormatException ex) {
+            
+        }
+        String operator = comboOperator.getSelectionModel().getSelectedItem();
+        ClauseComponent newClause;
+        if (waarde != 0) {
+            if (comboChooseParent.isDisabled()) {
+                rc.insertClause(new ClauseComponent(name, "Clause", waarde, operator, par1, rc.findDeterminateTableById(currentDetTableId)));
+            } else {
+                if (rb.getText().equals("Ja knoop")) {
+                    newClause = new ClauseComponent(name, "Clause", waarde, operator, par1, rc.findDeterminateTableById(currentDetTableId));
+                    rc.insertClause(newClause);
+                    comboChooseParent.getSelectionModel().getSelectedItem().setYesClause(newClause);
+                    rc.updateRepo();
+                }
+                else{
+                    newClause = new ClauseComponent(name, "Clause", waarde, operator, par1, rc.findDeterminateTableById(currentDetTableId));
+                    rc.insertClause(newClause);
+                    comboChooseParent.getSelectionModel().getSelectedItem().setNoClause(newClause);
+                    rc.updateRepo();
+                }
+            }
+        }else{
+            if (comboChooseParent.isDisabled()) {
+                rc.insertClause(new ClauseComponent(name, "Clause", operator, par1, par2, rc.findDeterminateTableById(currentDetTableId)));
+            } else {
+                if (rb.getText().equals("Ja knoop")) {
+                    newClause = new ClauseComponent(name, "Clause", operator, par1, par2, rc.findDeterminateTableById(currentDetTableId));
+                    rc.insertClause(newClause);
+                    comboChooseParent.getSelectionModel().getSelectedItem().setYesClause(newClause);
+                    rc.updateRepo();
+                }
+                else{
+                    newClause = new ClauseComponent(name, "Clause", operator, par1, par2, rc.findDeterminateTableById(currentDetTableId));
+                    rc.insertClause(newClause);
+                    comboChooseParent.getSelectionModel().getSelectedItem().setNoClause(newClause);
+                    rc.updateRepo();
+                }
+            }
+        }
         viewDeterminateTable();
+    }
+
+    private void disableAddClause(boolean bool) {
+        comboChooseParent.setDisable(bool);
+        txtNameNewClause.setDisable(bool);
+        comboParameter1.setDisable(bool);
+        comboParameter2.setDisable(bool);
+        txtValueOfClause.setDisable(bool);
+        comboOperator.setDisable(bool);
+        jaKnoop.setDisable(bool);
+        neeKnoop.setDisable(bool);
+        btnAddClause.setDisable(bool);
     }
 }
