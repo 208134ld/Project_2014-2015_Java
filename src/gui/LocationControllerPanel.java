@@ -240,6 +240,8 @@ public class LocationControllerPanel extends Accordion{
         repositoryController.insertContinent(new Continent(txtContinentName.getText().trim()));
         txtContinentName.clear();
         updateComboBoxes();
+        
+        
     }
     
     @FXML
@@ -265,6 +267,7 @@ public class LocationControllerPanel extends Accordion{
             int m2 = Integer.parseInt(LMinutes.getText().trim());
             int s1 = Integer.parseInt(BSeconds.getText().trim());
             int s2 = Integer.parseInt(LSeconds.getText().trim());
+            
              
             Country country = repositoryController.findCountryByName(
                cbCountryClimateChart.getSelectionModel().getSelectedItem());
@@ -277,8 +280,8 @@ public class LocationControllerPanel extends Accordion{
                throw new IllegalArgumentException("Er moeten 12 maanden zijn.");
            
            ClimateChart c = new ClimateChart();
-           String Bcord = c.giveCords(g1, m1, s1);
-           String Lcord = c.giveCords(g2, m2, s2);
+           String Bcord = c.giveCords(g1, m1, s1) + " " +BreedteParameter.getText().trim();
+           String Lcord = c.giveCords(g2, m2, s2) + " " +LengteParameter.getText().trim();
            double lat = c.calcDecimals(g1, m1, s1, BreedteParameter.getText().trim());
            double longi = c.calcDecimals(g2, m2, s2, LengteParameter.getText().trim());
            c.setLocation(loc);
@@ -292,8 +295,8 @@ public class LocationControllerPanel extends Accordion{
            List<Months> maanden = new ArrayList<>();
            monthList.stream().forEach(p->maanden.add(p));
            c.setMonths(maanden);
-           System.out.println(c.getLocation()+"   "+c.getLCord());
-           c.getMonths().stream().forEach(m->System.out.println(m.getSediment()));
+//           System.out.println(c.getLocation()+"   "+c.getLCord());
+//           c.getMonths().stream().forEach(m->System.out.println(m.getSediment()));
            repositoryController.InsertClimatechart(c);
            txtLocation.clear();
            startPeriod.clear();

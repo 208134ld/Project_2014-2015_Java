@@ -13,8 +13,11 @@ import domain.Parameter;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+import javafx.beans.InvalidationListener;
 
-public class RepositoryController {
+public class RepositoryController extends Observable{
 
     private ContinentRepository continentRepo;
     private CountryRepository countryRepo;
@@ -38,6 +41,9 @@ public class RepositoryController {
 
     public void insertContinent(Continent c) {
         continentRepo.insertContinent(c);
+        
+        setChanged();
+        notifyObservers();
     }
 
     public Continent findContinentById(int id) {
@@ -70,6 +76,9 @@ public class RepositoryController {
 
     public void insertCountry(Country c) {
         countryRepo.insertCountry(c);
+        
+        setChanged();
+        notifyObservers();
     }
 
     public Country findCountryById(int id) {
@@ -86,6 +95,9 @@ public class RepositoryController {
 
     public void InsertClimatechart(ClimateChart c) {
         chartRepo.insertClimateChart(c);
+        
+        setChanged();
+        notifyObservers();
     }
 
     public List<MonthOfTheYear> getMonthsOfTheYear() {
@@ -153,4 +165,12 @@ public class RepositoryController {
     public void insertClause(ClauseComponent clause){
         determinateRepo.insertClause(clause);
     }
+    
+    @Override
+    public void addObserver(Observer observer)
+    {
+        super.addObserver(observer);
+        observer.update(this, null);
+    }
+    
 }

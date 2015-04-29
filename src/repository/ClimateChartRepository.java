@@ -53,4 +53,5 @@ public class ClimateChartRepository {
         em.persist(c);
         em.getTransaction().commit();
     }
+    
 }

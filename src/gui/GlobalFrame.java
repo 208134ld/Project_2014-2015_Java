@@ -55,7 +55,7 @@ public class GlobalFrame extends VBox {
         locationViewPanel = new LocationViewPanel(repositoryController);
         classListControllerPanel = new ClassListControllerPanel();
         classListViewPanel = new ClassListViewPanel();
-        //repositoryController.addObserver(mainPanel);
+        repositoryController.addObserver(locationViewPanel);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("GlobalFrame.fxml"));
         loader.setRoot(this);

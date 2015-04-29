@@ -9,6 +9,8 @@ import domain.Months;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.stream.Collectors;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -41,7 +43,7 @@ import util.MyNode;
  *
  * @author Logan Dupont
  */
-public class LocationViewPanel extends GridPane {
+public class LocationViewPanel extends GridPane implements Observer{
 
     @FXML
     private TreeView selectionTreeView;
@@ -267,6 +269,11 @@ public class LocationViewPanel extends GridPane {
         }
         
         updateLocationDetailPanel(selectedClimatechart);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        updateSelectionTreeViewPanel();
     }
 
 }
