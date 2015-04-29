@@ -77,7 +77,7 @@
                               <Label alignment="CENTER_RIGHT" text="Parameter 1:" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
                               <ComboBox fx:id="comboParameter1" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                               <Label alignment="CENTER_RIGHT" text="Wat wilt u gebruiken?" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-                              <RadioButton fx:id="neeKnoop1" mnemonicParsing="false" text="2de parameter" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                              <RadioButton fx:id="par2RadioButton" mnemonicParsing="false" onAction="#unblockPar2" text="2de parameter" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                  <toggleGroup>
                                     <ToggleGroup fx:id="par2OrValueRadioButtonGroup" />
                                  </toggleGroup>
@@ -85,7 +85,7 @@
                                     <Insets left="20.0" />
                                  </GridPane.margin>
                               </RadioButton>
-                              <RadioButton fx:id="jaKnoop1" mnemonicParsing="false" selected="true" text="waarde" toggleGroup="$par2OrValueRadioButtonGroup" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                              <RadioButton fx:id="valueRadioButton" mnemonicParsing="false" onAction="#unblockValue" selected="true" text="waarde" toggleGroup="$par2OrValueRadioButtonGroup" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
                                  <GridPane.margin>
                                     <Insets right="25.0" />
                                  </GridPane.margin>

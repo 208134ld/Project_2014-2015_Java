@@ -23,6 +23,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -93,6 +94,10 @@ public class ManageDeterminateTable extends GridPane {
     private Button btnConnectDeterminateTable;
     @FXML
     private ToggleGroup par2OrValueRadioButtonGroup;
+    @FXML
+    private RadioButton par2RadioButton;
+    @FXML
+    private RadioButton valueRadioButton;
 
     private ObservableList<TreeItem<MyNode>> obsTreeItems;
     private List<TreeItem<MyNode>> treeItems;
@@ -134,14 +139,24 @@ public class ManageDeterminateTable extends GridPane {
                 char ar[] = t.getCharacter().toCharArray();
                 char ch = ar[t.getCharacter().toCharArray().length - 1];
                 int codeBackSpace = ch;
-                if (!(ch >= '0' && ch <= '9') && codeBackSpace!=8) {
+                if (!(ch >= '0' && ch <= '9') && codeBackSpace != 8) {
                     showError("Fout met ingegeven waarde.", "U kan alleen cijfers invullen.");
                     t.consume();
                 }
             }
         });
+
+//        par2OrValueRadioButtonGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+//            @Override
+//            public void changed(ObservableValue<? extends Toggle> ov,
+//                    Toggle old_toggle, Toggle new_toggle) {
+//                if (par2OrValueRadioButtonGroup.getSelectedToggle() != null) {
+//                    System.out.println(par2OrValueRadioButtonGroup.getSelectedToggle().getUserData().toString());
+//                }
+//            }
+//        });
         
-        //par2OrValueRadioButtonGroup.s
+        
     }
 
     private void initialize() {
@@ -321,6 +336,13 @@ public class ManageDeterminateTable extends GridPane {
             comboChooseParent.setItems(comboClauseComponentsParents);
             comboChooseParent.setValue(comboClauseComponentsParents.get(0));
         }
+        
+        RadioButton rb = (RadioButton) par2OrValueRadioButtonGroup.getSelectedToggle();
+
+        if (rb.getText().equals("waarde"))
+            unblockValue();
+        else
+            unblockPar2();
     }
 
     public void recursiveClause(TreeItem<MyNode> node, ClauseComponent parentClause, Boolean typeClause) {
@@ -524,5 +546,17 @@ public class ManageDeterminateTable extends GridPane {
         alert.setHeaderText(headerText);
         alert.setContentText(contextText);
         alert.showAndWait();
+    }
+    
+    @FXML
+    private void unblockValue(){
+        txtValueOfClause.setDisable(false);
+        comboParameter2.setDisable(true);
+    }
+    
+    @FXML
+    private void unblockPar2(){
+        txtValueOfClause.setDisable(true);
+        comboParameter2.setDisable(false);
     }
 }
