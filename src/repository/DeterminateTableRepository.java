@@ -29,7 +29,7 @@ public class DeterminateTableRepository {
         return query.setParameter("determinateTableId", determinateTableId).getResultList();
     }
     
-    public List<ClauseComponent> getAllClausesOfDeterminateTable(int determinateTableId){
+    public List<ClauseComponent> getAllClausesOfDeterminateTable(DeterminateTable determinateTableId){
         TypedQuery<ClauseComponent> query = em.createNamedQuery("Clause.findClausesByDeterminateTableId", ClauseComponent.class);
         return query.setParameter("determinateTableId", determinateTableId).setParameter("discriminator", "Clause").getResultList();
     }
