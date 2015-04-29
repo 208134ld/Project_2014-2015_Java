@@ -7,6 +7,9 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
@@ -35,19 +38,19 @@ public class Months implements Serializable {
     @Column(name = "MonthID")
     private int monthId;
     @Column(name="MonthProp")
-    private MonthOfTheYear monthProp;
+    private MonthOfTheYear month;
     @Column(name="AverTemp")
-    private double averTemp;
+    private double temp;
     @Column(name="Sediment")
-    private int sediment;
+    private int sed;
     
 
     @Transient
-    private final SimpleIntegerProperty sed = new SimpleIntegerProperty();
+    private SimpleIntegerProperty sedProp;
     @Transient
-    private final SimpleDoubleProperty temp = new SimpleDoubleProperty();
+    private SimpleDoubleProperty tempProp;
     @Transient
-    private final ObjectProperty<MonthOfTheYear> month = new SimpleObjectProperty<>();
+    private SimpleObjectProperty<MonthOfTheYear> monthProp;
 
     @JoinColumn(name = "ClimateChartID")
     private ClimateChart climateChart;
@@ -58,7 +61,7 @@ public class Months implements Serializable {
     public Months(int sed, double temp, MonthOfTheYear month) {
         setSediment(sed);
         setAverTemp(temp);
-        setMonthProp(month);
+        setMonth(month);
         
     }
 
@@ -66,7 +69,7 @@ public class Months implements Serializable {
         setMonthId(id);
         setSediment(sed);
         setAverTemp(temp);
-        setMonthProp(month);
+        setMonth(month);
     }
 
     public int getMonthId() {
@@ -78,75 +81,42 @@ public class Months implements Serializable {
     }
     
     
-    public MonthOfTheYear getMonthProp() {
-        return monthProp;
-    }
-
-    public void setMonthProp(MonthOfTheYear monthProp) {
-        this.monthProp = monthProp;
-    }
-    
-    public double getAverTemp() {
-        return averTemp;
-    }
-
-    public void setAverTemp(double averTemp) {
-        this.averTemp = averTemp;
-    }
-
-    public int getSediment() {
-        return sediment;
-    }
-
-    public void setSediment(int sediment) {
-        this.sediment = sediment;
-    }
-    
-    public ClimateChart getClimateChart() {
-        return climateChart;
-    }
-
-    public void setClimateChart(ClimateChart climateChart) {
-        this.climateChart = climateChart;
-    }
-
-    @Access(AccessType.PROPERTY)
-    public int getSed() {
-        return sed.get();
-    }
-    
-    public void setSed(){
-        sed.set(sediment);
-    }
-
-    public IntegerProperty sedProperty() {
-        return sed;
-    }
-
-    @Access(AccessType.PROPERTY)
-    public double getTemp() {
-        return temp.get();
-    }
-    
-    public void setTemp(){
-        temp.set(averTemp);
-    }
-
-    public DoubleProperty tempProperty() {
-        return temp;
-    }
-
-    @Access(AccessType.PROPERTY)
     public MonthOfTheYear getMonth() {
-        return month.get();
-    }
-    
-    public void setMonth(){
-        month.set(monthProp);
-    }
-
-    public ObjectProperty monthProperty() {
         return month;
     }
 
+    public void setMonth(MonthOfTheYear month) {
+        this.month = month;
+    }
+    
+    public double getAverTemp() {
+        return temp;
+    }
+
+    public void setAverTemp(double temp) {
+        this.temp = temp;
+    }
+
+    public int getSediment() {
+        return sed;
+    }
+
+    public void setSediment(int sediment) {
+        this.sed = sediment;
+    }
+    
+    public ObservableValue<MonthOfTheYear> monthProperty() {
+        this.monthProp = new SimpleObjectProperty<MonthOfTheYear>(month);
+        return monthProp;
+    }
+
+    public ObservableValue<Number> temperatureProperty() {
+        this.tempProp = new SimpleDoubleProperty(temp);
+        return tempProp;
+    }
+    
+    public ObservableValue<Number> sedimentProperty() {
+        this.sedProp = new SimpleIntegerProperty(sed);
+        return sedProp;
+    }
 }

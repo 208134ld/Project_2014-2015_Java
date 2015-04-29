@@ -180,7 +180,7 @@ public class MainPanel extends GridPane {
                 if (selectedItem.getValue().getType().equalsIgnoreCase("ClimateChart")) {
                     
                     selectedClimatechart = rc.getClimateChartByClimateChartID(selectedItem.getValue().getId());
-                    System.out.println(selectedClimatechart.getMonths().get(0).getSed());
+//                    System.out.println(selectedClimatechart.getMonths().get(0).getSed());
 //                     selectedClimatechart = new ClimateChart(1,"Gent",1950,1970,true,23.34534,44.34523,"30° 45' 10\" NB ","51° 3' 15\" OL ",1);
                     updateLocationDetailPanel(selectedClimatechart);
                 }
@@ -199,8 +199,8 @@ public class MainPanel extends GridPane {
         eindPeriode.setText(c.getEndperiod()+"");
         LatitudeLabel.setText(c.getLatitude()+"");
         LongitudeLabel.setText(c.getLongitude()+"");
-        // GRADEN VAN LENGTE EN BREEDTE
         
+        // GRADEN VAN LENGTE EN BREEDTE
         BGraden.setText(c.getBCord().split("°")[0].trim());
         BMinuten.setText(c.getBCord().split("°")[1].split("'")[0].trim());
         String waarde = c.getBCord().split("°")[1].split("'")[1].trim();
