@@ -50,6 +50,8 @@ public class ManageDeterminateTable extends GridPane {
     @FXML
     private ComboBox<String> gradeCombo;
     @FXML
+    private ComboBox<String> parDropd2;
+    @FXML
     private ComboBox<String> createGradeCombo;
     @FXML
     private ComboBox<String> createDeterminateTableCombo;
@@ -225,12 +227,15 @@ public class ManageDeterminateTable extends GridPane {
         operatorDropd.setItems(operatoren);
         List<String> discLijst = new ArrayList<>();
         paraLijst.stream().forEach(s -> discLijst.add(s.getDiscriminator()));
+        discLijst.add(" ");
+        parDropd2.setItems(FXCollections.observableArrayList(discLijst));
         parDropd.setItems(FXCollections.observableArrayList(discLijst));
         int graad = Integer.parseInt(gradeCombo.getSelectionModel().getSelectedItem().split(" ")[1]);
         List<ClauseComponent> clauses = rc.findClausesByDeterminateTableId(rc.findGradeById(graad).getDeterminateTableId());
         currentDetTableId = rc.findGradeById(graad).getDeterminateTableId().getDeterminateTableId();
 
         List<Integer> ids = new ArrayList<>();
+         parDropd2.setDisable(true);
         parDropd.setDisable(true);
         operatorDropd.setDisable(true);
         waardeParameter.setDisable(true);
@@ -279,18 +284,24 @@ public class ManageDeterminateTable extends GridPane {
                     selectedClauseComponent = rc.findClauseById(newValue.getValue().getId());
                     if (newValue.getValue().getType().equals("Clause")) {
                         beschrijving.setDisable(false);
+                        parDropd2.setDisable(false);
                         parDropd.setDisable(false);
                         operatorDropd.setDisable(false);
                         waardeParameter.setDisable(false);
                         vegetatie.setDisable(true);
                         operatorDropd.setValue(selectedClauseComponent.getOperator());
-
+                        if(selectedClauseComponent.getPar2_ParameterId()!=null)
+                        {
+                            parDropd2.setValue(rc.findParameterById(selectedClauseComponent.getPar2_ParameterId().getParameterId()).getDiscriminator());
+                        }else
+                            parDropd2.setValue(" ");
                         parDropd.setValue(rc.findParameterById(selectedClauseComponent.getPar1_ParameterId().getParameterId()).getDiscriminator());
                         waardeParameter.setText(selectedClauseComponent.getWaarde() + "");
                         beschrijving.setText(selectedClauseComponent.getName());
 
                     } else {
                         beschrijving.setDisable(false);
+                         parDropd2.setDisable(true);
                         vegetatie.setDisable(false);
                         vegetatie.setText(selectedClauseComponent.getVegetationfeature());
                         beschrijving.setText(selectedClauseComponent.getClimatefeature());
@@ -368,6 +379,19 @@ public class ManageDeterminateTable extends GridPane {
                     }
                     if (parDropd.getSelectionModel().getSelectedItem() != null) {
                         selectedClauseComponent.setPar1_ParameterId(rc.findParameterByName(parDropd.getSelectionModel().getSelectedItem()));
+                    }
+                    if(parDropd2.getSelectionModel().getSelectedItem()!=null)
+                    {
+                        if(parDropd2.getSelectionModel().getSelectedItem().equals(" "))
+                        {
+                            System.out.println("HIER HIER HIER");
+                            selectedClauseComponent.setPar2_ParameterId(null);
+                        }
+                        else
+                        {
+                               selectedClauseComponent.setPar2_ParameterId(rc.findParameterByName(parDropd2.getSelectionModel().getSelectedItem()));
+                        }
+                     
                     }
                     selectedClauseComponent.setWaarde(Integer.parseInt(waardeParameter.getText()));
                     selectedClauseComponent.setName(beschrijving.getText());
