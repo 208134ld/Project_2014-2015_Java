@@ -282,6 +282,7 @@ public class ManageDeterminateTable extends GridPane {
         recursiveClause(root, rootClause, true);
         recursiveClause(root, rootClause, false);
 
+        
         obsTreeItems = FXCollections.observableArrayList(treeItems);
         try {
             root.getChildren().addAll(obsTreeItems);
@@ -354,6 +355,8 @@ public class ManageDeterminateTable extends GridPane {
             unblockValue();
         else
             unblockPar2();
+        
+        
     }
 
     public void recursiveClause(TreeItem<MyNode> node, ClauseComponent parentClause, Boolean typeClause) {
@@ -389,6 +392,7 @@ public class ManageDeterminateTable extends GridPane {
         } catch (NullPointerException ex) {
 
         }
+        node.setExpanded(true);
     }
 
     @FXML
@@ -562,6 +566,8 @@ public class ManageDeterminateTable extends GridPane {
         jaKnoop.setDisable(bool);
         neeKnoop.setDisable(bool);
         btnAddClause.setDisable(bool);
+        par2RadioButton.setDisable(bool);
+        valueRadioButton.setDisable(bool);
     }
 
     private void showError(String headerText, String contextText) {
