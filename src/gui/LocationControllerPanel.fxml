@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.web.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
@@ -162,6 +163,14 @@
                </children>
             </VBox>
          </content>
+      </TitledPane>
+      <TitledPane onMousePressed="#refreshSite" prefHeight="200.0" prefWidth="200.0">
+         <content>
+            <WebView fx:id="siteView" prefHeight="264.0" prefWidth="1036.0" />
+         </content>
+         <graphic>
+            <ProgressBar fx:id="webProgress" prefHeight="19.0" prefWidth="569.0" progress="0.0" />
+         </graphic>
       </TitledPane>
    </panes>
 </fx:root>

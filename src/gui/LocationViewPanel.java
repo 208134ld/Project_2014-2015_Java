@@ -87,7 +87,7 @@ public class LocationViewPanel extends GridPane implements Observer{
     private TableColumn<Months, Number> sedCol;
 
     private RepositoryController rc;
-    private ClimateChart selectedClimatechart;
+    public static ClimateChart selectedClimatechart;
     private ObservableList<TreeItem<MyNode>> obsTreeItems;
     private List<TreeItem<MyNode>> treeItems;
     private List<TreeItem<MyNode>> continentItems;

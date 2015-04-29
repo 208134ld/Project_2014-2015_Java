@@ -18,6 +18,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,11 +26,14 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import repository.RepositoryController;
 
 /**
@@ -113,7 +117,11 @@ public class LocationControllerPanel extends Accordion{
     private Button btnAddClimateChart;
     @FXML
     private Button btnRemoveClimateChart;
-    
+      @FXML
+    private WebView siteView;
+    @FXML
+    private ProgressBar webProgress;
+    private final String WEBSITE="http://climatechart.azurewebsites.net/";
     private RepositoryController repositoryController;
     private ObservableList<MonthOfTheYear> monthOfTheYearList;
     private ObservableList<String> continentList;
@@ -349,6 +357,32 @@ public class LocationControllerPanel extends Accordion{
         tempCol.setCellValueFactory(cellData -> cellData.getValue().temperatureProperty());
         sedCol.setCellValueFactory(cellData -> cellData.getValue().sedimentProperty());
     }
-    
+      @FXML
+    private void refreshSite(MouseEvent event) {
+      try{
+            ClimateChart selectedClimatechart = LocationViewPanel.selectedClimatechart;
+        if(selectedClimatechart==null)
+            throw new NullPointerException();
+        
+        WebEngine eng = siteView.getEngine();
+        //nog het continent getten
+            eng.load(WEBSITE+"ClimateChart/ShowExercises?selectedYear=3&continentId="+1+"&countryId="+"1"+"&climateId="+selectedClimatechart.getId());
+         webProgress.progressProperty().bind(eng.getLoadWorker().progressProperty());
+
+    eng.getLoadWorker().stateProperty().addListener(
+            new ChangeListener<Worker.State>() {
+                @Override
+                public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
+                    if (newState == Worker.State.SUCCEEDED) {
+                         // hide progress bar then page is ready
+                         webProgress.setVisible(false);
+                    }
+                }
+            });
+        }catch(Exception e)
+        {
+            
+        }
+    }
     
 }
