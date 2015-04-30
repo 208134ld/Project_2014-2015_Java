@@ -1,5 +1,6 @@
 package gui;
 
+import domain.ClassListController;
 import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -42,6 +43,7 @@ public class GlobalFrame extends VBox {
     private GridPane workPanel;
 
     private RepositoryController repositoryController;
+    private ClassListController classListController;
 
     private final LocationControllerPanel locationControllerPanel;
     private final LocationViewPanel locationViewPanel;
@@ -51,11 +53,13 @@ public class GlobalFrame extends VBox {
     public GlobalFrame() {
 
         this.repositoryController = new RepositoryController();
+        this.classListController = new ClassListController();
         locationControllerPanel = new LocationControllerPanel(repositoryController);
         locationViewPanel = new LocationViewPanel(repositoryController);
-        classListControllerPanel = new ClassListControllerPanel();
-        classListViewPanel = new ClassListViewPanel();
+        classListControllerPanel = new ClassListControllerPanel(classListController);
+        classListViewPanel = new ClassListViewPanel(classListController);
         repositoryController.addObserver(locationViewPanel);
+        
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("GlobalFrame.fxml"));
         loader.setRoot(this);
@@ -76,6 +80,7 @@ public class GlobalFrame extends VBox {
                 workPanel.getChildren().clear();
                 workPanel.add(classListControllerPanel, 0, 0);
                 workPanel.add(classListViewPanel, 1, 0);
+                classListController.addObserver(classListViewPanel);
             }
         });
 

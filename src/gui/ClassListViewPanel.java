@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.stream.Collectors;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -28,7 +30,7 @@ import javafx.scene.layout.GridPane;
  *
  * @author SAMUEL
  */
-public class ClassListViewPanel extends GridPane {
+public class ClassListViewPanel extends GridPane implements Observer {
 
     @FXML
     private TableView<Student> studentInfoTable;
@@ -58,10 +60,11 @@ public class ClassListViewPanel extends GridPane {
     private List<TreeItem<String>> gradeItems;
     private List<TreeItem<String>> treeItems;
 
-    public ClassListViewPanel() {
+    public ClassListViewPanel(ClassListController clc) {
 
         //Controllers
-        controller = new ClassListController();
+        controller = clc;
+
         treeItems = new ArrayList<>();
         gradeItems = new ArrayList<>();
 
@@ -74,7 +77,14 @@ public class ClassListViewPanel extends GridPane {
             throw new RuntimeException(ex);
         }
 
+        updateClassListViewPanel();
+
+    }
+
+    public void updateClassListViewPanel() {
         TreeItem<String> rootItem = new TreeItem<>("Klassen Lijst");
+        treeItems.clear();
+        gradeItems.clear();
 
         for (Grade g : controller.giveAllGrades()) {
             TreeItem<String> grade = new TreeItem<>("Graad " + g.getGradeString());
@@ -112,17 +122,22 @@ public class ClassListViewPanel extends GridPane {
 
         //itemChild.setExpanded(false);
         classTreeView.setRoot(rootItem);
+        
+        selectedClassGroup = null;
 
         classTreeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<String>>() {
             @Override
             public void changed(ObservableValue<? extends TreeItem<String>> observable, TreeItem<String> oldValue, TreeItem<String> newValue) {
                 TreeItem<String> selectedItem = newValue;
-                if (selectedItem.getValue().contains("Klas")) {
-                    selectedClassGroup = controller.giveClassGroupWithName(selectedItem.getValue().substring(5));
-                    System.out.println(selectedClassGroup.getGroupName());
+                if (selectedItem != null) {
+                    if (selectedItem.getValue().contains("Klas")) {
+                        selectedClassGroup = controller.giveClassGroupWithName(selectedItem.getValue().substring(5));
+                        System.out.println(selectedClassGroup.getGroupName());
 //                     selectedClimatechart = new ClimateChart(1,"Gent",1950,1970,true,23.34534,44.34523,"30° 45' 10\" NB ","51° 3' 15\" OL ",1);
-                    updateLocationDetailPanel(selectedClassGroup);
+                        updateLocationDetailPanel(selectedClassGroup);
+                    }
                 }
+
             }
         });
 
@@ -156,7 +171,6 @@ public class ClassListViewPanel extends GridPane {
                         }
                     }
                 });
-
     }
 
     public void updateLocationDetailPanel(ClassGroup cg) {
@@ -168,6 +182,11 @@ public class ClassListViewPanel extends GridPane {
 
         studentInfoTable.setItems(studentListObservable);
 
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        updateClassListViewPanel();
     }
 
 }

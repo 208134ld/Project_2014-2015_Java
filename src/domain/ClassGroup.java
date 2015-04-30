@@ -2,6 +2,7 @@ package domain;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,7 +40,7 @@ public class ClassGroup implements Serializable {
     @Column(name = "GroupID")
     private int groupId;
     
-    @OneToMany(mappedBy = "classGroup")
+    @OneToMany(mappedBy = "classGroup", cascade = CascadeType.REMOVE)
     private List<Student> students;
     
     
