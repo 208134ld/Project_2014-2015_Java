@@ -1,12 +1,14 @@
 package domain;
 
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  *
  * @author SAMUEL
  */
-public class ClassListController {
+public class ClassListController extends Observable{
     
     private ClassListManagement clm = new ClassListManagement();
     
@@ -32,10 +34,14 @@ public class ClassListController {
     
     public void addStudent(Student s){
         clm.insertStudent(s);
+        setChanged();
+        notifyObservers();
     }
     
     public void removeStudent(Student s){
         clm.removeStudent(s);
+        setChanged();
+        notifyObservers();
     }
     
     public List<SchoolYear> giveSchoolYearsOfGrade(Grade g){
@@ -78,10 +84,21 @@ public class ClassListController {
     
     public void addClassGroup(ClassGroup cg){
         clm.insertClassGroup(cg);
+        setChanged();
+        notifyObservers();
     }
     
     public void removeClassGroup(ClassGroup cg){
         clm.removeClassGroup(cg);
+        setChanged();
+        notifyObservers();
+    }
+    
+    @Override
+    public void addObserver(Observer observer)
+    {
+        super.addObserver(observer);
+        observer.update(this, this);
     }
     
 }

@@ -70,9 +70,9 @@ public class ClassListControllerPanel extends Accordion {
     private ObservableList<String> schoolyearList;
     private ObservableList<String> classGroupList;
 
-    public ClassListControllerPanel() {
+    public ClassListControllerPanel(ClassListController clc) {
 
-        controller = new ClassListController();
+        controller = clc;
         dbKlasGraad = new ComboBox<>();
         dbKlasLeerjaar = new ComboBox<>();
         dbLeerlingGraad = new ComboBox<>();
@@ -136,6 +136,7 @@ public class ClassListControllerPanel extends Accordion {
         //if (canAddClass(txtKlasName.getText(), sy)) {
             controller.addClassGroup(new ClassGroup(txtKlasName.getText(), sy));
             txtKlasName.clear();
+            
         /*} else {
             System.out.println("Deze klas bestaat al");
         }*/
