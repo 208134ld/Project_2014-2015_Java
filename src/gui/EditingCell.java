@@ -1,6 +1,7 @@
 package gui;
 
 import domain.Months;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TableCell;
@@ -12,8 +13,9 @@ import javax.swing.JOptionPane;
 class EditingCell extends TableCell<Months, Number> {
 
     private TextField textField;
-
-    public EditingCell() {
+    private Boolean isInteger;
+    public EditingCell(Boolean isInteger) {
+        this.isInteger = isInteger;
     }
 
     @Override
@@ -60,18 +62,25 @@ class EditingCell extends TableCell<Months, Number> {
     }
 
     private void createTextField() {
-        textField = new TextField(getString());
+        textField = new TextField();
         textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
         textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
             @Override
             public void handle(KeyEvent t) {
-                if (t.getCode() == KeyCode.ENTER) {
+                if (t.getCode() == KeyCode.ENTER || t.getCode() == KeyCode.TAB) {
                     try {
-
-                        commitEdit(Double.parseDouble(textField.getText()));
+                        if(isInteger)
+                        {
+                            Double d = Double.parseDouble(textField.getText());
+                            commitEdit(Math.floor(d));
+                        }else
+                        {
+                             commitEdit(Double.parseDouble(textField.getText()));
+                        }
+                       
                     } catch (Exception e) {
-                        JOptionPane.showMessageDialog(null, "Heeft u per ongeluk tekst ingegeven? een komma wordt door een . weergegeven.", "Er is een fout opgetreden", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Heeft u tekst ingegeven? een komma wordt door een . weergegeven.", "Er is een fout opgetreden", JOptionPane.ERROR_MESSAGE);
                     }
 
                 } else if (t.getCode() == KeyCode.ESCAPE) {

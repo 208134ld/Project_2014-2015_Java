@@ -12,6 +12,7 @@ import domain.MonthOfTheYear;
 import domain.Months;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javafx.beans.value.ChangeListener;
@@ -27,6 +28,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -34,6 +36,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.util.Callback;
 import repository.RepositoryController;
 
 /**
@@ -70,11 +73,13 @@ public class LocationControllerPanel extends Accordion{
     
     //ClimateChart-Part
     @FXML
+    private ComboBox<String>lengteChoice;
+    @FXML
+    private ComboBox<String>breedteChoice;
+    @FXML
     private ComboBox<String> cbContinentClimateChart;
     @FXML
     private ComboBox<String> cbCountryClimateChart;
-    @FXML
-    private TextField txtLocation;
     @FXML
     private TextField BGrades;
     @FXML
@@ -170,7 +175,6 @@ public class LocationControllerPanel extends Accordion{
                 double temp= Double.parseDouble(txtTemp.getText());
                 int n=Integer.parseInt(txtSed.getText());
                 MonthOfTheYear m = cbMonth.getSelectionModel().getSelectedItem();
-                System.out.println(m);
                 tableMonthList.add(new Months(n, temp, m));
                
                 for(int i = 0; i<MonthOfTheYear.values().length;i++)
@@ -214,15 +218,7 @@ public class LocationControllerPanel extends Accordion{
 
      
     public LocationControllerPanel(RepositoryController repositoryController){
-        this.repositoryController = repositoryController;
-        cbContinentCountry = new ComboBox<>();
-        cbContinentClimateChart = new ComboBox<>();
-        cbCountryClimateChart = new ComboBox<>();
-        cbMonth = new ComboBox<>();
-         System.out.println("HIERZOOOO");
-       
-        
-
+        this.repositoryController = repositoryController;     
         FXMLLoader loader = new FXMLLoader(getClass().getResource("LocationControllerPanel.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -234,12 +230,15 @@ public class LocationControllerPanel extends Accordion{
         
         setExpandedPane(tpContinent);
         
-        updateComboBoxes();  
+        updateComboBoxes(); 
+        breedteChoice.setItems(FXCollections.observableArrayList(new String[]{"NB","ZB"}));
+        breedteChoice.setValue("NB");
+        lengteChoice.setItems(FXCollections.observableArrayList(new String[]{"OL","WL"}));  
+        lengteChoice.setValue("OL");
         monthOfTheYearList = FXCollections.observableList(repositoryController.getMonthsOfTheYear());
-        cbMonth.setItems(monthOfTheYearList);
-        cbMonth.setVisibleRowCount(3);
         initMonthTable();
         monthList = new ArrayList<>();
+        Arrays.asList(MonthOfTheYear.values()).stream().forEach(month->monthList.add(new Months(0,0,month)));
         tableMonthList = FXCollections.observableList(monthList);
         monthTable.setItems(tableMonthList);
         monthTable.setEditable(true);
@@ -258,6 +257,7 @@ public class LocationControllerPanel extends Accordion{
                 cbContinentClimateChart.getSelectionModel().getSelectedIndex()+1)
                 .stream().map(c -> c.getName()).collect(Collectors.toList()));
                 cbCountryClimateChart.setItems(countryList);
+                System.out.println(cbContinentClimateChart.getSelectionModel().getSelectedIndex()+"<-----");
             }
         });
     }
@@ -285,7 +285,7 @@ public class LocationControllerPanel extends Accordion{
        
        
         try{
-            String loc = txtLocation.getText().trim();
+//            String loc = txtLocation.getText().trim();
             int begin = Integer.parseInt(startPeriod.getText().trim());
             int end = Integer.parseInt(endPeriod.getText().trim());
             int g1 = Integer.parseInt(BGrades.getText().trim());
@@ -298,20 +298,15 @@ public class LocationControllerPanel extends Accordion{
              
             Country country = repositoryController.findCountryByName(
                cbCountryClimateChart.getSelectionModel().getSelectedItem());
-            
-           if(!(LengteParameter.getText().trim().equalsIgnoreCase("ol")||LengteParameter.getText().trim().equalsIgnoreCase("wl")))
-               throw new IllegalArgumentException("Lengteparameter kan alleen OL of WL zijn");
-           if(!(BreedteParameter.getText().equalsIgnoreCase("nb")||BreedteParameter.getText().equalsIgnoreCase("zb")))
-               throw new IllegalArgumentException("Breedteparameter kan alleen NB of ZB zijn");
            if(monthList.size()!=12)
                throw new IllegalArgumentException("Er moeten 12 maanden zijn.");
            
            ClimateChart c = new ClimateChart();
-           String Bcord = c.giveCords(g1, m1, s1) + " " +BreedteParameter.getText().trim();
-           String Lcord = c.giveCords(g2, m2, s2) + " " +LengteParameter.getText().trim();
-           double lat = c.calcDecimals(g1, m1, s1, BreedteParameter.getText().trim());
-           double longi = c.calcDecimals(g2, m2, s2, LengteParameter.getText().trim());
-           c.setLocation(loc);
+           String Bcord = c.giveCords(g1, m1, s1) + " " +breedteChoice.getValue();
+           String Lcord = c.giveCords(g2, m2, s2) + " " +lengteChoice.getValue();
+           double lat = c.calcDecimals(g1, m1, s1, breedteChoice.getValue());
+           double longi = c.calcDecimals(g2, m2, s2, lengteChoice.getValue());
+//           c.setLocation(loc);
            c.setBeginperiod(begin);
            c.setEndperiod(end);
            c.setBCord(Bcord);
@@ -321,22 +316,21 @@ public class LocationControllerPanel extends Accordion{
            c.setCountry(country);
            List<Months> maanden = new ArrayList<>();
            monthList.stream().forEach(p->maanden.add(p));
-           c.setMonths(maanden);
-//           System.out.println(c.getLocation()+"   "+c.getLCord());
-//           c.getMonths().stream().forEach(m->System.out.println(m.getSediment()));
+           maanden.stream().forEach(mont->mont.setClimateChart(c));
+             c.setMonths(maanden);
            repositoryController.InsertClimatechart(c);
-           txtLocation.clear();
+//           txtLocation.clear();
            startPeriod.clear();
-           endPeriod.clear();
+           endPeriod.clear(); 
            BGrades.clear();
            BMinutes.clear();
            BSeconds.clear();
-           BreedteParameter.clear();
            LGrades.clear();
            LMinutes.clear();
            LSeconds.clear();
-           LengteParameter.clear();
            errorBar.setText("");
+           tableMonthList.removeAll(tableMonthList);
+           Arrays.asList(MonthOfTheYear.values()).stream().forEach(month->monthList.add(new Months(0,0,month)));
            
         } catch(NumberFormatException numb){
             errorBar.setText("Gelieve het juiste type gegevens in te voeren in de tekstvakken");
@@ -356,6 +350,24 @@ public class LocationControllerPanel extends Accordion{
         maandcol.setCellValueFactory(cellData -> cellData.getValue().monthProperty());
         tempCol.setCellValueFactory(cellData -> cellData.getValue().temperatureProperty());
         sedCol.setCellValueFactory(cellData -> cellData.getValue().sedimentProperty());
+                Callback<TableColumn<Months, Number>, TableCell<Months, Number>> cellFactory =
+                new Callback<TableColumn<Months,Number>, TableCell<Months,Number>>() {
+                     
+                    @Override
+                    public TableCell call(TableColumn p) {
+                        return new EditingCell(false);
+                    }
+                };
+                Callback<TableColumn<Months, Number>, TableCell<Months, Number>> cellFactory2 =
+                new Callback<TableColumn<Months,Number>, TableCell<Months,Number>>() {
+                     
+                    @Override
+                    public TableCell call(TableColumn p) {
+                        return new EditingCell(true);
+                    }
+                };
+        tempCol.setCellFactory(cellFactory);
+        sedCol.setCellFactory(cellFactory2);
     }
       @FXML
     private void refreshSite(MouseEvent event) {
@@ -384,5 +396,18 @@ public class LocationControllerPanel extends Accordion{
             
         }
     }
-    
+    @FXML 
+    private void updateTempCol(TableColumn.CellEditEvent<Months,Double> event) {
+        errorBar.setText(" ");
+        int id = monthTable.getSelectionModel().getSelectedCells().get(0).getRow();
+        
+        if(monthTable.getSelectionModel().getSelectedCells().get(0).getColumn()==1)
+        {
+            tableMonthList.get(id).setAverTemp(event.getNewValue());
+        }
+        if(monthTable.getSelectionModel().getSelectedCells().get(0).getColumn()==2)
+        {
+               tableMonthList.get(id).setSediment( event.getNewValue().intValue());       
+        }
+    }
 }

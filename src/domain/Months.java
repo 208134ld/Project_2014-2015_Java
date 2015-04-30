@@ -43,7 +43,6 @@ public class Months implements Serializable {
     private double temp;
     @Column(name="Sediment")
     private int sed;
-    
 
     @Transient
     private SimpleIntegerProperty sedProp;
@@ -70,6 +69,14 @@ public class Months implements Serializable {
         setSediment(sed);
         setAverTemp(temp);
         setMonth(month);
+    }
+
+    public ClimateChart getClimateChart() {
+        return climateChart;
+    }
+
+    public void setClimateChart(ClimateChart climateChart) {
+        this.climateChart = climateChart;
     }
 
     public int getMonthId() {

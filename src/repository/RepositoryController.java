@@ -40,10 +40,15 @@ public class RepositoryController extends Observable{
     }
 
     public void insertContinent(Continent c) {
-        continentRepo.insertContinent(c);
-        
+        try{
+                    continentRepo.insertContinent(c);
         setChanged();
         notifyObservers();
+        }catch(Exception e)
+        {
+            
+        }
+
     }
 
     public Continent findContinentById(int id) {
@@ -75,10 +80,12 @@ public class RepositoryController extends Observable{
     }
 
     public void insertCountry(Country c) {
-        countryRepo.insertCountry(c);
-        
+       
+       countryRepo.insertCountry(c);
         setChanged();
         notifyObservers();
+
+
     }
 
     public Country findCountryById(int id) {
@@ -94,10 +101,12 @@ public class RepositoryController extends Observable{
     }
 
     public void InsertClimatechart(ClimateChart c) {
-        chartRepo.insertClimateChart(c);
-        
+       
+       chartRepo.insertClimateChart(c);
         setChanged();
         notifyObservers();
+        
+ 
     }
 
     public List<MonthOfTheYear> getMonthsOfTheYear() {
@@ -165,7 +174,10 @@ public class RepositoryController extends Observable{
     public void insertClause(ClauseComponent clause){
         determinateRepo.insertClause(clause);
     }
-    
+    public void deleteCountry(int countryId)
+    {
+        countryRepo.deleteCountry(countryId);
+    }
     @Override
     public void addObserver(Observer observer)
     {

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.stream.Collectors;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -52,7 +53,7 @@ public class ClimateChart implements Serializable {
     private String BCord;
     @Column(name = "AboveEquator")
     private boolean aboveEquator;
-    @OneToMany(mappedBy = "climateChart")
+    @OneToMany(mappedBy = "climateChart",cascade = CascadeType.PERSIST)
     private List<Months> months;
     @ManyToOne
     @JoinColumn(name = "CountryID")
@@ -296,7 +297,6 @@ public class ClimateChart implements Serializable {
         f = sec;
         f = f / 3600;
         val = val + f;
-        System.out.println(val);
         if (par.equalsIgnoreCase("zb") || par.equalsIgnoreCase("wl")) {
             val *= -1;
         }

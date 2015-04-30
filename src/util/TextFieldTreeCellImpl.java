@@ -3,8 +3,6 @@ package util;
 import domain.ClauseComponent;
 import domain.Continent;
 import domain.Country;
-import gui.LocationWizardController;
-import gui.MainPanel;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +59,7 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
         setText((String) getItem().getValue());
         setGraphic(getTreeItem().getGraphic());
     }
-
+    
     @Override
     public void updateItem(MyNode item, boolean empty) {
 
@@ -84,128 +82,16 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
         }
 
         cm.getItems().clear();
-        
-        if (getType().equalsIgnoreCase("Continent")) {
-            MenuItem cmItem1 = new MenuItem("Voeg land toe");
-            MenuItem cmItem2 = new MenuItem("Verwijder werelddeel");
-            cmItem1.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent e) {
-                    String tekst = "";
-                    TextInputDialog dialog1 = new TextInputDialog();
-                    dialog1.setTitle("Voeg land toe");
-                    dialog1.setHeaderText("Voeg land toe");
-                    dialog1.setContentText("Geef naam in:");
-                    dialog1.showAndWait()
-                            .ifPresent(response -> {
-                                if (!response.isEmpty()) {
-                                    Country c = new Country(response, rc.findContinentById(item.getId()));
-                                    
-                                    TreeItem<MyNode> ti = new TreeItem<>();
-                                    
-                                    rc.insertCountry(c);
-                                    
-                                    for (TreeItem<MyNode> t : treeItems) {
-                                        if (t.getValue().getType().equalsIgnoreCase(item.getType()) && t.getValue().getValue().equalsIgnoreCase(item.getValue())) {
-                                            ti = t;
-                                        }
-                                    }
-                                    TreeItem<MyNode> node = new TreeItem(new MyNode(response, "Country", c.getId()));
-                                    //node.
-                                    treeItems.add(node);
-                                    
-                                    
-
-                                    ti.getChildren().add(node);
-                                }
-                            });
-
-                    //out.println(item);
-                }
-            });
-            cmItem2.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent e) {
-                    em.getTransaction().begin();
-                    em.remove(rc.findContinentById(item.getId()));
-                    em.getTransaction().commit();
-                    treeItems.remove(getTreeItem());
-                    List<TreeItem<MyNode>> continentItems = new ArrayList<>();
-                                    
-                    for (TreeItem<MyNode> t : treeItems) {
-                        if (t.getValue().getType().equalsIgnoreCase("Continent")) {
-                            continentItems.add(t);
-                        }
-                    }
-                    
-                    
-                    //System.out.println(continentItems);
-                    ObservableList obsTreeItems = FXCollections.observableArrayList(continentItems);
-                    
-                    root.getChildren().clear();
-                    root.getChildren().addAll(obsTreeItems);
-                }
-            });
-            cm.getItems().add(cmItem1);
-            cm.getItems().add(cmItem2);
-            setContextMenu(cm);
-        }
-
-        if (getType().equalsIgnoreCase("Root")) {
-            MenuItem cmItem1 = new MenuItem("Voeg werelddeel toe");
-
-            cmItem1.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent e) {
-                    TextInputDialog dialog = new TextInputDialog();
-                    dialog.setTitle("Voeg werelddeel toe");
-                    dialog.setHeaderText("Voeg werelddeel toe");
-                    dialog.setContentText("Geef naam in:");
-                    dialog.showAndWait()
-                            .ifPresent(response -> {
-                                if (!response.isEmpty()) {
-                                    Continent c = new Continent(response);
-                                    rc.insertContinent(c);
-                                    TreeItem<MyNode> node = new TreeItem(new MyNode(response, "Continent", c.getId()));
-                                    
-                                    treeItems.add(node);
-                                    List<TreeItem<MyNode>> continentItems = new ArrayList<>();
-                                    
-                                    for (TreeItem<MyNode> t : treeItems) {
-                                        if (t.getValue().getType().equalsIgnoreCase("Continent")) {
-                                            continentItems.add(t);
-                                        }
-                                    }
-                                    
-                                    ObservableList obsTreeItems = FXCollections.observableArrayList(continentItems);
-
-                                    root.getChildren().clear();
-                                    root.getChildren().addAll(obsTreeItems);
-                                }
-                            });
-                }
-            });
-            cm.getItems().add(cmItem1);
-            setContextMenu(cm);
-        }
-
+//       if(getType()=="ClimateChart")
+//           System.out.println("CLIMATECHARTTT" +getString());
         if (getType().equalsIgnoreCase("Country")) {
-            MenuItem cmItem1 = new MenuItem("Voeg klimatogram toe");
             MenuItem cmItem2 = new MenuItem("Verwijder land");
-            cmItem1.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent e) {
-                    showStage(getItemId());
-                    System.out.println("Nog niet geïmplementeerd.");
-                }
-            });
+           
             cmItem2.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
-                    em.getTransaction().begin();
-                    em.remove(rc.findCountryById(item.getId()));
-                    em.getTransaction().commit();
-                    
+                    System.out.println("VERWIJDER LAND");
+                    rc.deleteCountry(item.getId());
                     treeItems.remove(getTreeItem());
                     
                     TreeItem<MyNode> ti = getTreeItem();
@@ -222,18 +108,11 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
                     p.addAll(obsTreeItems);
                 }
             });
-            cm.getItems().add(cmItem1);
             cm.getItems().add(cmItem2);
             setContextMenu(cm);
         }
 
     }
-public static void showStage(int c){
-Stage newStage = new Stage();
-Scene stageScene = new Scene(new LocationWizardController(c));
-newStage.setScene(stageScene);
-newStage.show();
-}
     private void createTextField() {
         textField = new TextField(getString());
         textField.setOnKeyReleased(new EventHandler<KeyEvent>() {
