@@ -83,6 +83,16 @@ public class GlobalFrame extends VBox {
                 classListController.addObserver(classListViewPanel);
             }
         });
+        
+        miClimateChart.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                workPanel.getChildren().clear();
+                workPanel.add(locationControllerPanel, 0, 0);
+                workPanel.add(locationViewPanel, 1, 0);
+                repositoryController.addObserver(locationViewPanel);
+            }
+        });
 
     }
 

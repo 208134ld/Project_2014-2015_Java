@@ -302,8 +302,8 @@ public class LocationControllerPanel extends Accordion{
                throw new IllegalArgumentException("Er moeten 12 maanden zijn.");
            
            ClimateChart c = new ClimateChart();
-           String Bcord = c.giveCords(g1, m1, s1) + " " +breedteChoice.getValue();
-           String Lcord = c.giveCords(g2, m2, s2) + " " +lengteChoice.getValue();
+           String Bcord = c.giveCords(g1, m1, s1) + " " + breedteChoice.getValue();
+           String Lcord = c.giveCords(g2, m2, s2) + " " + lengteChoice.getValue();
            double lat = c.calcDecimals(g1, m1, s1, breedteChoice.getValue());
            double longi = c.calcDecimals(g2, m2, s2, lengteChoice.getValue());
 //           c.setLocation(loc);
