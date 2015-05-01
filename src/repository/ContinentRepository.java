@@ -31,5 +31,15 @@ public class ContinentRepository {
         TypedQuery<Continent> query = em.createNamedQuery("Continent.findById", Continent.class);
         return query.setParameter("continentID", id).getSingleResult();
     }
-    
+    public void deleteContinent(int id)
+    {
+        em.getTransaction().begin();
+        em.remove(this.findContinentById(id));
+        em.getTransaction().commit();
+    }
+    public Continent findByName(String name)
+    {
+        TypedQuery<Continent> query = em.createNamedQuery("Continent.findByName",Continent.class);
+        return query.setParameter("name",name).getSingleResult();
+    }
 }

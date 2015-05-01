@@ -17,7 +17,7 @@
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
   </rowConstraints>
    <children>
-      <TreeView fx:id="selectionTreeView" prefHeight="200.0" prefWidth="200.0" />
+      <TreeView fx:id="selectionTreeView" editable="true" prefHeight="200.0" prefWidth="200.0" />
       <GridPane GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
         <columnConstraints>
           <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
@@ -29,9 +29,9 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TableView fx:id="monthTable" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS">
+            <TableView fx:id="monthTable" editable="true" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS">
                <columns>
-                  <TableColumn fx:id="monthcol" editable="false" prefWidth="129.0" text="Maand" />
+                  <TableColumn fx:id="monthcol" prefWidth="129.0" text="Maand" />
                   <TableColumn fx:id="tempCol" onEditCommit="#updateCol" prefWidth="150.0" text="Temperatuur (C°)" />
                   <TableColumn fx:id="sedCol" minWidth="0.0" onEditCommit="#updateCol" prefWidth="-1.0" text="Neerslag (mmN)" />
                </columns>

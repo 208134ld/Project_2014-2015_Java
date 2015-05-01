@@ -221,6 +221,24 @@ selectionTreeView.setCellFactory(new Callback<TreeView<MyNode>, TreeCell<MyNode>
         monthcol.setCellValueFactory(cellData -> cellData.getValue().monthProperty());
         sedCol.setCellValueFactory(cellData -> cellData.getValue().sedimentProperty());
         tempCol.setCellValueFactory(cellData -> cellData.getValue().temperatureProperty());
+          Callback<TableColumn<Months, Number>, TableCell<Months, Number>> cellFactory =
+                new Callback<TableColumn<Months,Number>, TableCell<Months,Number>>() {
+                     
+                    @Override
+                    public TableCell call(TableColumn p) {
+                        return new EditingCell(false);
+                    }
+                };
+                Callback<TableColumn<Months, Number>, TableCell<Months, Number>> cellFactory2 =
+                new Callback<TableColumn<Months,Number>, TableCell<Months,Number>>() {
+                     
+                    @Override
+                    public TableCell call(TableColumn p) {
+                        return new EditingCell(true);
+                    }
+                };
+        tempCol.setCellFactory(cellFactory);
+        sedCol.setCellFactory(cellFactory2);
     }
 
     @FXML
@@ -270,7 +288,7 @@ selectionTreeView.setCellFactory(new Callback<TreeView<MyNode>, TreeCell<MyNode>
     @FXML
     private void updateCol(TableColumn.CellEditEvent<Months, Double> event) {
         int id = monthTable.getSelectionModel().getSelectedCells().get(0).getRow();
-
+        System.out.println("updateKol");
         if (monthTable.getSelectionModel().getSelectedCells().get(0).getColumn() == 1) {
 
             selectedClimatechart.getMonths().get(id).setAverTemp(event.getNewValue());

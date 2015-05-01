@@ -53,5 +53,11 @@ public class ClimateChartRepository {
         em.persist(c);
         em.getTransaction().commit();
     }
+
+    void deleteClimatechart(int climatechartId) {
+        em.getTransaction().begin();
+        em.remove(this.getClimateChartByClimateChartID(climatechartId));
+        em.getTransaction().commit();
+    }
     
 }

@@ -75,6 +75,8 @@ public class LocationControllerPanel extends Accordion{
     @FXML
     private ComboBox<String>lengteChoice;
     @FXML
+    private TextField txtLocation;
+    @FXML
     private ComboBox<String>breedteChoice;
     @FXML
     private ComboBox<String> cbContinentClimateChart;
@@ -254,7 +256,7 @@ public class LocationControllerPanel extends Accordion{
             @Override
             public void changed(ObservableValue ov, Object t, Object t1) {
                 countryList = FXCollections.observableList(repositoryController.getCountriesOfContinent(
-                cbContinentClimateChart.getSelectionModel().getSelectedIndex()+1)
+                 repositoryController.findContinentByName(cbContinentClimateChart.getSelectionModel().getSelectedItem()).getId())
                 .stream().map(c -> c.getName()).collect(Collectors.toList()));
                 cbCountryClimateChart.setItems(countryList);
                 System.out.println(cbContinentClimateChart.getSelectionModel().getSelectedIndex()+"<-----");
@@ -282,10 +284,10 @@ public class LocationControllerPanel extends Accordion{
     
     @FXML
     private void addClimateChart(MouseEvent event) { 
-       
-       
-        try{
-//            String loc = txtLocation.getText().trim();
+//       
+//       
+//        try{
+            String loc = txtLocation.getText().trim();
             int begin = Integer.parseInt(startPeriod.getText().trim());
             int end = Integer.parseInt(endPeriod.getText().trim());
             int g1 = Integer.parseInt(BGrades.getText().trim());
@@ -306,7 +308,7 @@ public class LocationControllerPanel extends Accordion{
            String Lcord = c.giveCords(g2, m2, s2) + " " + lengteChoice.getValue();
            double lat = c.calcDecimals(g1, m1, s1, breedteChoice.getValue());
            double longi = c.calcDecimals(g2, m2, s2, lengteChoice.getValue());
-//           c.setLocation(loc);
+           c.setLocation(loc);
            c.setBeginperiod(begin);
            c.setEndperiod(end);
            c.setBCord(Bcord);
@@ -319,7 +321,7 @@ public class LocationControllerPanel extends Accordion{
            maanden.stream().forEach(mont->mont.setClimateChart(c));
              c.setMonths(maanden);
            repositoryController.InsertClimatechart(c);
-//           txtLocation.clear();
+           txtLocation.clear();
            startPeriod.clear();
            endPeriod.clear(); 
            BGrades.clear();
@@ -329,20 +331,21 @@ public class LocationControllerPanel extends Accordion{
            LMinutes.clear();
            LSeconds.clear();
            errorBar.setText("");
-           tableMonthList.removeAll(tableMonthList);
-           Arrays.asList(MonthOfTheYear.values()).stream().forEach(month->monthList.add(new Months(0,0,month)));
-           
-        } catch(NumberFormatException numb){
-            errorBar.setText("Gelieve het juiste type gegevens in te voeren in de tekstvakken");
-        }
-        catch(NullPointerException ex)
-        {
-            errorBar.setText("Elk tekstvakje moet ingevuld worden.");
-        }
-        catch(Exception e)
-        {
-            errorBar.setText(e.getMessage());
-        }
+                   monthList = new ArrayList<>();
+        Arrays.asList(MonthOfTheYear.values()).stream().forEach(month->monthList.add(new Months(0,0,month)));
+        tableMonthList = FXCollections.observableList(monthList);
+        monthTable.setItems(tableMonthList);
+//        } catch(NumberFormatException numb){
+//            errorBar.setText("Gelieve het juiste type gegevens in te voeren in de tekstvakken");
+//        }
+//        catch(NullPointerException ex)
+//        {
+//            errorBar.setText("Elk tekstvakje moet ingevuld worden.");
+//        }
+//        catch(Exception e)
+//        {
+//            errorBar.setText(e.getMessage());
+//        }
     }
 
      public void initMonthTable() {

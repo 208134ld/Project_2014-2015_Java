@@ -178,6 +178,18 @@ public class RepositoryController extends Observable{
     {
         countryRepo.deleteCountry(countryId);
     }
+    public void deleteClimatechart(int climatechartId)
+    {
+        chartRepo.deleteClimatechart(climatechartId);
+    }
+    public void deleteContinent(int id)
+    {
+        continentRepo.deleteContinent(id);
+    }
+    public Continent findContinentByName(String name)
+    {
+        return continentRepo.findByName(name);
+    }
     @Override
     public void addObserver(Observer observer)
     {

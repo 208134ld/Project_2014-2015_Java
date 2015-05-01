@@ -62,6 +62,7 @@ class EditingCell extends TableCell<Months, Number> {
     }
 
     private void createTextField() {
+        System.out.println("Creating textfield");
         textField = new TextField();
         textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
         textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -79,9 +80,13 @@ class EditingCell extends TableCell<Months, Number> {
                              commitEdit(Double.parseDouble(textField.getText()));
                         }
                        
-                    } catch (Exception e) {
+                    } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(null, "Heeft u tekst ingegeven? een komma wordt door een . weergegeven.", "Er is een fout opgetreden", JOptionPane.ERROR_MESSAGE);
+                        textField.setText("0");
+                    }catch(Exception e){
+                        JOptionPane.showMessageDialog(null, "er is iets onverwacht gebeurt"+e.getCause().getMessage());
                     }
+                    
 
                 } else if (t.getCode() == KeyCode.ESCAPE) {
                     cancelEdit();

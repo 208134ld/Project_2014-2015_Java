@@ -44,10 +44,10 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
     @Override
     public void startEdit() {
         super.startEdit();
-
-        //if (textField == null) {
+        System.out.println("START EDIT" +getType() + getItemId());
+//        if (textField == null) {
             createTextField();
-        //}
+//        }
         setText(null);
         setGraphic(textField);
         textField.selectAll();
@@ -93,19 +93,33 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
                     System.out.println("VERWIJDER LAND");
                     rc.deleteCountry(item.getId());
                     treeItems.remove(getTreeItem());
-                    
-                    TreeItem<MyNode> ti = getTreeItem();
-                    List<TreeItem<MyNode>> countryItems = new ArrayList<>();
-                    
-                    for (TreeItem<MyNode> t : treeItems) {
-                        if ((!t.getValue().getValue().equalsIgnoreCase(ti.getValue().getValue())&&(t.getParent().getValue().getId()==ti.getParent().getValue().getId()))){
-                            countryItems.add(t);
-                        }
-                    }
-                    ObservableList obsTreeItems = FXCollections.observableArrayList(countryItems);
-                    ObservableList p = ti.getParent().getChildren();
-                    p.clear();
-                    p.addAll(obsTreeItems);
+                    getTreeItem().getParent().getChildren().remove(getTreeItem());
+                }
+            });
+            cm.getItems().add(cmItem2);
+            setContextMenu(cm);
+        }
+        if(getType().equalsIgnoreCase("climatechart")){
+            MenuItem cmItem2 = new MenuItem("Verwijder klimatogram");
+            cmItem2.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    rc.deleteClimatechart(item.getId());
+                    treeItems.remove(getTreeItem());
+                    getTreeItem().getParent().getChildren().remove(getTreeItem());
+                }
+            });
+            cm.getItems().add(cmItem2);
+            setContextMenu(cm);
+        }
+        if(getType().equalsIgnoreCase("continent")){
+            MenuItem cmItem2 = new MenuItem("Verwijder continent");
+            cmItem2.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    rc.deleteContinent(item.getId());
+                    treeItems.remove(getTreeItem());
+                    getTreeItem().getParent().getChildren().remove(getTreeItem());
                 }
             });
             cm.getItems().add(cmItem2);
@@ -123,12 +137,15 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
                    
                     if (getItem().isCountry()) {
                         rc.findCountryById(getItemId()).setName(textField.getText());
+                        rc.updateRepo();
                     }
                     else if (getItem().isClimateChart()) {
                         rc.getClimateChartByClimateChartID(getItemId()).setLocation(textField.getText());
+                        rc.updateRepo();
                     }
                     else if (getItem().isContinent()){
                         rc.findContinentById(getItemId()).setName(textField.getText());
+                        rc.updateRepo();
                     }
                     
                     if(getItem().isClause()){
