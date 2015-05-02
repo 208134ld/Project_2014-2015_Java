@@ -24,14 +24,17 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <TableView fx:id="studentInfoTable" GridPane.columnIndex="1" VBox.vgrow="ALWAYS">
+            <TableView fx:id="studentInfoTable" editable="true" GridPane.columnIndex="1" VBox.vgrow="ALWAYS">
               <columns>
-                <TableColumn fx:id="lastNameCol" prefWidth="194.0" text="Naam" />
+                <TableColumn fx:id="lastNameCol" onEditCommit="#updateCell" prefWidth="194.0" text="Naam" />
                 <TableColumn fx:id="firstNameCol" prefWidth="203.0" text="Voornaam" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </TableView>
          </children>
       </VBox>

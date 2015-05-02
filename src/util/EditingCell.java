@@ -1,4 +1,4 @@
-package gui;
+package util;
 
 import domain.Months;
 import javafx.collections.ObservableList;
@@ -10,7 +10,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javax.swing.JOptionPane;
 
-class EditingCell extends TableCell<Months, Number> {
+public class EditingCell extends TableCell<Months, Number> {
 
     private TextField textField;
     private Boolean isInteger;

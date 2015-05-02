@@ -125,6 +125,7 @@ public class ClassListControllerPanel extends Accordion {
                 });
             }
         });
+        
 
     }
 

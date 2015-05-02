@@ -128,5 +128,10 @@ public class ClassListManagement {
         em.remove(cg);
         em.getTransaction().commit();
     }
+    public ClassGroup findById(int id)
+    {
+        TypedQuery<ClassGroup> query = em.createNamedQuery("ClassGroup.findById", ClassGroup.class).setParameter("id", id);
+        return query.getSingleResult();
+    }
 
 }

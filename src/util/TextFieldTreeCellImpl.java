@@ -44,10 +44,11 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
     @Override
     public void startEdit() {
         super.startEdit();
-        System.out.println("START EDIT" +getType() + getItemId());
-//        if (textField == null) {
+        System.out.println("KIJK HIER");
+        System.out.println();
+        if(!(getType().contains("Graad")||getType().contains("Leerjaar"))){
             createTextField();
-//        }
+        }
         setText(null);
         setGraphic(textField);
         textField.selectAll();
@@ -84,6 +85,10 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
         cm.getItems().clear();
 //       if(getType()=="ClimateChart")
 //           System.out.println("CLIMATECHARTTT" +getString());
+        if (getType().equalsIgnoreCase("classgroup"))
+        {
+            System.out.println("class");
+        }
         if (getType().equalsIgnoreCase("Country")) {
             MenuItem cmItem2 = new MenuItem("Verwijder land");
            
@@ -125,6 +130,20 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
             cm.getItems().add(cmItem2);
             setContextMenu(cm);
         }
+     
+        if(getType().equalsIgnoreCase("classgroup")){
+            MenuItem cmItem2 = new MenuItem("Verwijder klasgroep");
+            cmItem2.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    rc.deleteClassgroup(item.getId());
+                    treeItems.remove(getTreeItem());
+                    getTreeItem().getParent().getChildren().remove(getTreeItem());
+                }
+            });
+            cm.getItems().add(cmItem2);
+            setContextMenu(cm);
+        }
 
     }
     private void createTextField() {
@@ -154,7 +173,11 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
                         rc.updateRepo();
 //                        rc.findClauseById(getItemId()).setName(textField.getText());
                     }
-                    
+                    if(getItem().isClassgroup())
+                    {
+                        rc.findClassGroupById(getItemId()).setGroupName(textField.getText());
+                        rc.updateRepo();
+                    }
 
                     commitEdit(new MyNode(textField.getText(), getType(), getItemId()));
                 } else if (t.getCode() == KeyCode.ESCAPE) {

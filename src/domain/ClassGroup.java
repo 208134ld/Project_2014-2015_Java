@@ -27,7 +27,8 @@ import javax.persistence.Table;
     @NamedQuery(name = "ClassGroupsOfSchoolYear", 
             query = "SELECT cg FROM ClassGroups cg WHERE cg.schoolYear = :sy "), 
     @NamedQuery(name = "ClassGroupWithName", 
-            query = "SELECT cg FROM ClassGroups cg WHERE cg.groupName = :name ")
+            query = "SELECT cg FROM ClassGroups cg WHERE cg.groupName = :name "),
+    @NamedQuery(name="ClassGroup.findById",query="SELECT cg FROM ClassGroups cg WHERE cg.groupId = :id")
     
 }) 
 public class ClassGroup implements Serializable {
@@ -85,4 +86,13 @@ public class ClassGroup implements Serializable {
     public void setSchoolYear(SchoolYear schoolYear) {
         this.schoolYear = schoolYear;
     }
+
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
+    
 }

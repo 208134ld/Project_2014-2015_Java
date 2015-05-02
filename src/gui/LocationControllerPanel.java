@@ -5,6 +5,7 @@
  */
 package gui;
 
+import util.EditingCell;
 import domain.ClimateChart;
 import domain.Continent;
 import domain.Country;
@@ -137,87 +138,6 @@ public class LocationControllerPanel extends Accordion{
     private ObservableList<Months> tableMonthList;
     private MonthOfTheYear[] months;
     private int counter = 0;
-//    private int countryID; 
-//    private DomeinController dc;
-
-    /**
-     * Initializes the controller class.
-     */
-//public LocationWizardController(int countryId){
-//    dc = new DomeinController();
-//    rc = new RepositoryController();
-//    this.countryID = countryId;
-//    FXMLLoader loader = new FXMLLoader(getClass().getResource("LocationWizard.fxml"));
-//    loader.setRoot(this);
-//    loader.setController(this);
-//        try {
-//            loader.load();
-////            initMonthTable();
-//        } catch (IOException ex) {
-//            System.out.println(ex.getMessage());
-//            throw new RuntimeException(ex);
-//        }
-//
-//        initMonthTable();
-//}  
-//
-//    @FXML
-//    private void updateCol(TableColumn.CellEditEvent<Months,Double> event) {
-//    }
-//
-    @FXML
-    private void addRow(MouseEvent event) {
-//        try{
-            if(monthList !=null){
-                if(monthList.stream().map(mo -> mo.getMonth()).collect(Collectors.toList())
-                     .contains(cbMonth.getSelectionModel().getSelectedItem())){
-                 errorBar.setText("Deze maand is al reeds in gebruik");
-             }
-            else{                
-                double temp= Double.parseDouble(txtTemp.getText());
-                int n=Integer.parseInt(txtSed.getText());
-                MonthOfTheYear m = cbMonth.getSelectionModel().getSelectedItem();
-                tableMonthList.add(new Months(n, temp, m));
-               
-                for(int i = 0; i<MonthOfTheYear.values().length;i++)
-                {
-                    if(months[i] == m && i!=11)
-                    {
-                        cbMonth.setValue(months[i+1]);
-                    }
-                }
-                txtTemp.clear();
-                txtSed.clear();
-                
-               
-                if(counter==12)
-                {
-                    cbMonth.setDisable(true);
-                    txtTemp.setDisable(true);
-                    txtSed.setDisable(true);
-                    btnAddRow.setDisable(true);
-                    errorBar.setText("*Pas individuele cellen aan door te dubbelklikken");
-                }
-            }
-            }
-            
-          counter++;
-//        }
-//        catch(NumberFormatException numb){
-//            errorBar.setText("Gelieve getallen in te voeren in de tekstvakken");
-//        }
-//        catch(NullPointerException ex)
-//        {
-//            errorBar.setText("Elk tekstvakje moet ingevuld worden.");
-//        }
-//        catch(Exception e)
-//        {
-//            errorBar.setText("Er is een fout opgetreden. probeer het opnieuw.");
-//        }
-           
-        
-    }
-
      
     public LocationControllerPanel(RepositoryController repositoryController){
         this.repositoryController = repositoryController;     

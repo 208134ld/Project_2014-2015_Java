@@ -1,5 +1,6 @@
 package gui;
 
+import util.EditingCell;
 import com.sun.deploy.uitoolkit.impl.fx.DeployPerfLogger;
 import domain.ClimateChart;
 import domain.Continent;
@@ -152,18 +153,6 @@ public class LocationViewPanel extends GridPane implements Observer {
         for (Continent c : rc.getAllContinents()) {
 
             TreeItem<MyNode> itemChild = new TreeItem<>(new MyNode(c.toString(), "Continent", c.getId()));
-//            itemChild.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-//                @Override
-//                public void handle(MouseEvent e) {
-//                    if (e.getButton() == MouseButton.SECONDARY) {
-//                        ContextMenu cm = new ContextMenu();
-//                        MenuItem cmItem1 = new MenuItem("Verwijder werelddeel");
-//                        cm.getItems().add(cmItem1);
-//                    }
-//                    
-//                }
-//            });
-
             for (Country co : rc.getCountriesOfContinent(c.getId())) {
                 TreeItem<MyNode> countryChild = new TreeItem<>(new MyNode(co.getName(), "Country", co.getId()));
 

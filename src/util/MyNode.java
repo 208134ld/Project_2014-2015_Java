@@ -48,6 +48,10 @@ public class MyNode {
     public boolean isClause(){
         return type.equalsIgnoreCase("Clause");
     }
+    public boolean isClassgroup()
+    {
+        return type.equalsIgnoreCase("classgroup");
+    }
 
     @Override
     public String toString() {

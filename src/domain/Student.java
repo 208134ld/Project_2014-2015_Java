@@ -62,6 +62,14 @@ public class Student implements Serializable {
         this.classGroup = classGroup;
     }
 
+    public int getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(int studentId) {
+        this.studentId = studentId;
+    }
+
     public String getLastName() {
         return lastName;
     }
@@ -112,12 +120,12 @@ public class Student implements Serializable {
     @Transient
     private SimpleStringProperty firstNameProp;
 
-    public ObservableValue<String> firstNameProperty() {
+    public ObservableValue<String> lastNameProperty() {
         this.lastNameProp = new SimpleStringProperty(lastName);
         return lastNameProp;
     }
 
-    public ObservableValue<String> lastNameProperty() {
+    public ObservableValue<String> firstNameProperty() {
         this.firstNameProp = new SimpleStringProperty(firtsName);
         return firstNameProp;
     }

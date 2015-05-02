@@ -1,5 +1,7 @@
 package repository;
 
+import domain.ClassGroup;
+import domain.ClassListManagement;
 import domain.Clause;
 import domain.ClauseComponent;
 import domain.ClimateChart;
@@ -25,7 +27,7 @@ public class RepositoryController extends Observable{
     private MonthRepository monthRepo;
     private DeterminateTableRepository determinateRepo;
     private GradeRepository gradeRepo;
-
+private ClassListManagement clm ;
     public RepositoryController() {
         this.continentRepo = new ContinentRepository();
         this.countryRepo = new CountryRepository();
@@ -33,6 +35,7 @@ public class RepositoryController extends Observable{
         this.monthRepo = new MonthRepository();
         this.determinateRepo = new DeterminateTableRepository();
         this.gradeRepo = new GradeRepository();
+        clm = new ClassListManagement();
     }
 
     public List<Continent> getAllContinents() {
@@ -190,11 +193,19 @@ public class RepositoryController extends Observable{
     {
         return continentRepo.findByName(name);
     }
+    public ClassGroup findClassGroupById(int id){
+        return clm.findById(id);
+    }
+    public void deleteClassgroup(int id)
+    {
+        clm.removeClassGroup(clm.findById(id));
+    }
     @Override
     public void addObserver(Observer observer)
     {
         super.addObserver(observer);
         observer.update(this, this);
     }
+    
     
 }
