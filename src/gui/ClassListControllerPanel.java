@@ -45,8 +45,6 @@ public class ClassListControllerPanel extends Accordion {
     private TextField txtKlasName;
     @FXML
     private Button btnKlasToevoegen;
-    @FXML
-    private Button btnKlasVerwijderen;
 
     //Leerling deel
     @FXML
@@ -61,8 +59,6 @@ public class ClassListControllerPanel extends Accordion {
     private TextField txtVoornaam;
     @FXML
     private Button btnLeerlingToevoegen;
-    @FXML
-    private Button btnLeerlingVerwijderen;
 
     private ClassListController controller;
     //lijst voor klas deel
@@ -151,16 +147,6 @@ public class ClassListControllerPanel extends Accordion {
     }*/
 
     @FXML
-    private void removeKlas(ActionEvent event) {
-        try {
-            controller.removeClassGroup(controller.giveClassGroupWithName(txtKlasName.getText()));
-            txtKlasName.clear();
-        } catch (Exception e) {
-            System.out.println("Klas niet gevonden");
-        }
-    }
-
-    @FXML
     private void addLeerling(ActionEvent event) {
 //        Grade g = new Grade(Integer.parseInt(dbLeerlingGraad.getSelectionModel().getSelectedItem()));
 //        SchoolYear sy = new SchoolYear(Integer.parseInt(dbLeerlingLeerjaar.getSelectionModel().getSelectedItem()), g);
@@ -168,11 +154,6 @@ public class ClassListControllerPanel extends Accordion {
         controller.addStudent(new Student(txtNaam.getText(), txtVoornaam.getText(), cg));
         txtNaam.clear();
         txtVoornaam.clear();
-    }
-
-    @FXML
-    private void removeLeerling(ActionEvent event) {
-        //controller.removeStudent(controller.);
     }
 
 }

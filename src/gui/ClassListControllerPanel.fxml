@@ -40,11 +40,8 @@
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
-                     <children>
-                        <Button fx:id="btnKlasToevoegen" mnemonicParsing="false" onAction="#addKlas" text="Toevoegen" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                        <Button fx:id="btnKlasVerwijderen" mnemonicParsing="false" onAction="#removeKlas" text="Verwijderen" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                     </children>
                   </GridPane>
+                  <Button fx:id="btnKlasToevoegen" mnemonicParsing="false" onAction="#addKlas" text="Toevoegen" />
                </children>
             </VBox>
          </content>
@@ -103,14 +100,11 @@
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
-                     <children>
-                        <Button fx:id="btnLeerlingToevoegen" mnemonicParsing="false" onAction="#addLeerling" text="Toevoegen" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                        <Button fx:id="btnLeerlingVerwijderen" mnemonicParsing="false" onAction="#removeLeerling" text="Verwijderen" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                     </children>
                      <padding>
                         <Insets top="10.0" />
                      </padding>
                   </GridPane>
+                  <Button fx:id="btnLeerlingToevoegen" mnemonicParsing="false" onAction="#addLeerling" text="Toevoegen" />
                </children>
             </VBox>
          </content>

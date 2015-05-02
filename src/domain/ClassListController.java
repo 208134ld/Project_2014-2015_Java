@@ -1,8 +1,12 @@
 package domain;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 
 /**
  *
@@ -100,5 +104,17 @@ public class ClassListController extends Observable{
         super.addObserver(observer);
         observer.update(this, this);
     }
+
+    public SortedList<Student> giveStudentsOfClassGroupSorted(ClassGroup cg) {
+        List<Student> li = clm.getAllStudentsOfClassGroup(cg);
+        ObservableList<Student> liObs = FXCollections.observableArrayList(li);
+        return new SortedList<>(liObs).sorted(sortOrder);
+    }
+    
+    private final Comparator<Student> byFirstName = (p1, p2) -> p1.getFirtsName().compareToIgnoreCase(p2.getFirtsName());
+
+    private final Comparator<Student> byLastName = (p1, p2) -> p1.getLastName().compareToIgnoreCase(p2.getLastName());
+    
+    private final Comparator<Student> sortOrder = byLastName.thenComparing(byFirstName);
     
 }
