@@ -105,6 +105,7 @@
                      </padding>
                   </GridPane>
                   <Button fx:id="btnLeerlingToevoegen" mnemonicParsing="false" onAction="#addLeerling" text="Toevoegen" />
+                  <Text fx:id="errorText" disable="true" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: red;" wrappingWidth="564.13671875" />
                </children>
             </VBox>
          </content>

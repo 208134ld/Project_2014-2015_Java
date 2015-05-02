@@ -43,6 +43,7 @@ import util.EditingCell;
 import util.EditingClassCell;
 import util.MyNode;
 import util.TextFieldTreeCellImpl;
+import util.TreeIterator;
 
 /**
  * FXML Controller class
@@ -130,7 +131,8 @@ public class ClassListViewPanel extends GridPane implements Observer {
         obsTreeItems = FXCollections.observableArrayList(gradeItems);
         rootItem.getChildren().addAll(obsTreeItems);
         rootItem.setExpanded(true);
-
+        
+        rootItem.getChildren().forEach(p->p.setExpanded(true));
         //Onderstaand gedeelte maakt het mogelijk om treeviewitems "on the spot" van naam te veranderen, dit werkt alleen met treeItem<String> dus moet nog aangepast worden
         classTreeView.setEditable(true);
 
@@ -257,7 +259,6 @@ public class ClassListViewPanel extends GridPane implements Observer {
     @FXML
     private void updateCell(TableColumn.CellEditEvent<Student, String> event) {
         if (studentInfoTable.getSelectionModel().getSelectedCells().get(0).getColumn() == 0) {
-            studentListObservable.get(0).setLastName(event.getNewValue());
             for(Student s : studentListObservable)
             {
                 if(event.getRowValue().getStudentId()==s.getStudentId()){
@@ -271,7 +272,6 @@ public class ClassListViewPanel extends GridPane implements Observer {
 
         }
         if (studentInfoTable.getSelectionModel().getSelectedCells().get(0).getColumn() == 1) {
-            System.out.println("update firstname");
         for(Student s : studentListObservable)
             {
                 if(event.getRowValue().getStudentId()==s.getStudentId()){

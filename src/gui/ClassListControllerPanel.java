@@ -23,6 +23,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.text.Text;
+import javax.persistence.NoResultException;
 
 /**
  * FXML Controller class
@@ -59,7 +61,8 @@ public class ClassListControllerPanel extends Accordion {
     private TextField txtVoornaam;
     @FXML
     private Button btnLeerlingToevoegen;
-
+    @FXML
+    private Text errorText;
     private ClassListController controller;
     //lijst voor klas deel
     private ObservableList<String> gradeList;
@@ -114,9 +117,18 @@ public class ClassListControllerPanel extends Accordion {
                     @Override
                     public void changed(ObservableValue ov, Object t, Object t1) {
 
-                        classGroupList = FXCollections.observableList(controller.giveClassGroupOfSchoolYear(controller.giveSchoolYearWithName(t1.toString()))
+                        try{
+                                                classGroupList = FXCollections.observableList(controller.giveClassGroupOfSchoolYear(controller.giveSchoolYearWithName(t1.toString()))
                                 .stream().map(c -> c.getGroupName()).sorted().collect(Collectors.toList()));
                         dbLeerlingKlas.setItems(classGroupList);
+                        errorText.setText("");
+                        }catch(NullPointerException nullex)
+                {
+                }catch(Exception e)
+                {
+                    errorText.setText("Er is iets misgelopen. probeer opnieuw");
+                }
+    
                     }
                 });
             }
@@ -150,10 +162,16 @@ public class ClassListControllerPanel extends Accordion {
     private void addLeerling(ActionEvent event) {
 //        Grade g = new Grade(Integer.parseInt(dbLeerlingGraad.getSelectionModel().getSelectedItem()));
 //        SchoolYear sy = new SchoolYear(Integer.parseInt(dbLeerlingLeerjaar.getSelectionModel().getSelectedItem()), g);
-        ClassGroup cg = controller.giveClassGroupWithName(dbLeerlingKlas.getSelectionModel().getSelectedItem());//new ClassGroup(dbLeerlingKlas.getSelectionModel().getSelectedItem(), sy);
+        try{
+                    ClassGroup cg = controller.giveClassGroupWithName(dbLeerlingKlas.getSelectionModel().getSelectedItem());//new ClassGroup(dbLeerlingKlas.getSelectionModel().getSelectedItem(), sy);
         controller.addStudent(new Student(txtNaam.getText(), txtVoornaam.getText(), cg));
         txtNaam.clear();
         txtVoornaam.clear();
+        errorText.setText("");
+        }catch(NoResultException invok){
+            errorText.setText("De klas is niet gevonden.");
+        }
+
     }
 
 }
