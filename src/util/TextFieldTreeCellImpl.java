@@ -47,11 +47,12 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
         System.out.println("KIJK HIER");
         System.out.println();
         if(!(getType().contains("Graad")||getType().contains("Leerjaar"))){
-            createTextField();
-        }
-        setText(null);
+            createTextField();   
+            setText(null);
         setGraphic(textField);
         textField.selectAll();
+        }
+
     }
 
     @Override
