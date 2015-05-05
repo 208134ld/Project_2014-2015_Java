@@ -47,7 +47,11 @@ public class ClimateChartRepository {
         em.createNativeQuery("UPDATE Months SET Sediment="+sed+" WHERE MonthID="+id).executeUpdate();
         em.getTransaction().commit();
     }
-
+    public List<ClimateChart> findAll()
+    {
+        TypedQuery<ClimateChart> query = em.createNamedQuery("ClimateChart.findAll",ClimateChart.class);
+        return query.getResultList();
+    }
     void insertClimateChart(ClimateChart c) {
         em.getTransaction().begin();
         em.persist(c);

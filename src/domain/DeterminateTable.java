@@ -13,7 +13,8 @@ import javax.persistence.Table;
 @Table(name = "DeterminateTable")
 @NamedQueries({
     @NamedQuery(name="DeterminateTable.findById",query= "select d from DeterminateTable d WHERE d.determinateTableId = :id"),
-    @NamedQuery(name="DeterminateTable.findAllTables",query= "select d from DeterminateTable d")
+    @NamedQuery(name="DeterminateTable.findAllTables",query= "select d from DeterminateTable d"),
+    
 }) 
 public class DeterminateTable {
     
@@ -37,5 +38,9 @@ public class DeterminateTable {
     
     public String getName() {
         return name;
+    }
+    public String toString()
+    {
+        return "DeterminatieTabel " + getDeterminateTableId();
     }
 }

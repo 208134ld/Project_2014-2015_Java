@@ -88,7 +88,10 @@ public class Grade implements Serializable {
     public String getGradeString(){
         return Integer.toString(grade);
     }
-    
+    public String toString()
+    {
+        return getGradeString();
+    }
     
     
 }

@@ -15,16 +15,17 @@ import java.util.List;
  * @author bremme windows
  */
 public class Exercise {
+    private String naam;
     private ClimateChart climateChart;
     private List<String> questions;
     private DeterminateTable detTable;
     private HashMap<String,Double> punten;
     // puntenverdeling
     private int maxScore;
-    public Exercise()
+    public Exercise(String naam)
     {
         questions  = new ArrayList<>();
-        
+        this.naam = naam;
     }
     public Exercise(ClimateChart climateChart, List<String> questions, DeterminateTable detTable, int maxScore) {
         this.climateChart = climateChart;
@@ -66,5 +67,16 @@ public class Exercise {
     {
         
     }
-    
+
+    public String getNaam() {
+        return naam;
+    }
+
+    public void setNaam(String naam) {
+        this.naam = naam;
+    }
+    public String toString()
+    {
+        return this.getNaam();
+    }
 }
