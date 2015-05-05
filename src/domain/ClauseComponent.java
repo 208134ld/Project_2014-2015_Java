@@ -51,13 +51,13 @@ public class ClauseComponent implements Serializable
     @JoinColumn(name = "Par2_ParameterId")
     private Parameter Par2_ParameterId;
 
-    private Byte[] VegetationPicture;
+    private byte[] VegetationPicture;
 
-    public Byte[] getVegetationPicture() {
+    public byte[] getVegetationPicture() {
         return VegetationPicture;
     }
 
-    public void setVegetationPicture(Byte[] VegetationPicture) {
+    public void setVegetationPicture(byte[] VegetationPicture) {
         this.VegetationPicture = VegetationPicture;
     }
     private String Vegetationfeature;
