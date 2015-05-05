@@ -30,6 +30,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 import repository.RepositoryController;
 
 /**
@@ -67,6 +68,8 @@ public class TestControllerPanel extends TitledPane{
     private Button newOef;
     @FXML
     private Button voegTestToe;
+    @FXML
+    private Text errorText;
     private RepositoryController rc;
     private FXMLLoader loader;
     private ObservableList<ClimateChart> climateCharts;
@@ -128,7 +131,24 @@ public class TestControllerPanel extends TitledPane{
   
             }
         });
+   oefening.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue ov, Object t, Object t1) {
+                try{
+               Exercise e= oefening.getSelectionModel().getSelectedItem();
+               klimatogram.setValue(e.getClimateChart());
+               determinatieTabel.setValue(e.getDetTable());
+               vragen = FXCollections.observableArrayList(e.getQuestions());
+               alleVragen.setItems(vragen);
+               alleVragen.setValue(vragen.get(0));
+                }catch(Exception e)
+                {
+                    
+                }
    
+              
+            }
+        });
    }
    
    private void setEditableGraad2(boolean waarde)
@@ -176,7 +196,7 @@ public class TestControllerPanel extends TitledPane{
             vragen.remove(alleVragen.getSelectionModel().getSelectedItem());
         }catch(NullPointerException nulexc)
         {
-            
+            errorText.setText("kon vraag niet verwijderen omdat er geen vraag geselecteerd is");
         }catch(Exception e)
         {
             
@@ -185,6 +205,41 @@ public class TestControllerPanel extends TitledPane{
     @FXML
     private void nieuweoefening(MouseEvent event)
     {
-        
+        try{
+            ClimateChart c = klimatogram.getSelectionModel().getSelectedItem();
+            DeterminateTable d = determinatieTabel.getSelectionModel().getSelectedItem();
+            List<String> vragenlijst = new ArrayList<>();
+            if(graad.getSelectionModel().getSelectedItem().getGrade()!=2){
+                vragenlijst = vragen;
+                if(vragenlijst.size()==0)
+                    throw new NullPointerException();
+               
+                oefening.getSelectionModel().getSelectedItem().setQuestions(vragenlijst);
+            }  
+            oefening.getSelectionModel().getSelectedItem().setClimateChart(c);
+            oefening.getSelectionModel().getSelectedItem().setDetTable(d);
+            if((oefeningenCounter-oefening.getSelectionModel().getSelectedIndex()) ==2){
+                System.out.println("INDEX" + oefening.getSelectionModel().getSelectedIndex()+" counter" + oefeningenCounter);
+            exercises.add(new Exercise("oefening "+this.oefeningenCounter));
+            oefening.setValue(exercises.get(oefeningenCounter-1));
+            oefeningenCounter++;
+            resetLists();
+            
+            }
+            
+        }catch(NullPointerException nule){
+            errorText.setText("Een oefening moet minstens 1 vraag hebben");
+        }catch(Exception e)
+        {
+            errorText.setText("Onbekende fout " +e.getMessage());
+        }
+    }
+    private void resetLists()
+    {
+        vraag.clear();
+        List<String> lijst = new ArrayList<>();
+        vragen = FXCollections.observableArrayList(lijst);
+        alleVragen.setItems(vragen);
+        klimatogram.setValue(climateCharts.get(0));
     }
 }

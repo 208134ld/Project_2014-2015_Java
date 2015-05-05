@@ -18,8 +18,10 @@ public class StartUp extends Application {
 
     @Override
     public void start(Stage stage) throws SQLException, IOException {
+
+        Scene scene = new Scene(new TestControllerPanel());
         //Scene scene = new Scene(new TestControllerPanel());
-        Scene scene = new Scene(new GlobalFrame());
+//        Scene scene = new Scene(new GlobalFrame());
         
         stage.setTitle("Aardrijkskunde");
         stage.setScene(scene);
