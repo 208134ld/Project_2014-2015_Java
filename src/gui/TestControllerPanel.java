@@ -288,6 +288,7 @@ public class TestControllerPanel extends TitledPane{
             List<String> vragenlijst = new ArrayList<>();
             if(graad.getSelectionModel().getSelectedItem().getGrade()!=2){
                 vragenlijst = vragen;
+                System.out.println("GRAAD 2");
                 if(vragenlijst.size()==0)
                     throw new NullPointerException();
                
