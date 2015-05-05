@@ -207,5 +207,8 @@ private ClassListManagement clm ;
         observer.update(this, this);
     }
     
+    public void removeClauseComponent(ClauseComponent clause){
+        determinateRepo.removeClauseComponent(clause);
+    }
     
 }

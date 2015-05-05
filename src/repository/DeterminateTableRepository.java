@@ -89,4 +89,10 @@ public class DeterminateTableRepository {
         em.persist(clause);
         em.getTransaction().commit();
     }
+    
+    public void removeClauseComponent(ClauseComponent clause){
+        em.getTransaction().begin();
+        em.remove(clause);
+        em.getTransaction().commit();
+    }
 }

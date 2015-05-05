@@ -2,6 +2,7 @@
 package domain;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -77,6 +78,16 @@ public class ClauseComponent implements Serializable
         this.Waarde = waarde;
         this.Operator = operator;
         this.Par1_ParameterId = parameter1Id;
+        this.determinateTableId = determinateTable;
+        this.NoClause_ClauseComponentId = null;
+        this.YesClause_ClauseComponentId = null;
+    }
+    
+    public ClauseComponent(String climateFeature, String vegetationFeature, String discriminator, DeterminateTable determinateTable)
+    {
+        this.Climatefeature = climateFeature;
+        this.discriminator = discriminator;
+        this.Vegetationfeature = vegetationFeature;
         this.determinateTableId = determinateTable;
         this.NoClause_ClauseComponentId = null;
         this.YesClause_ClauseComponentId = null;
