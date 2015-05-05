@@ -98,8 +98,8 @@ public class ManageDeterminateTable extends GridPane {
     @FXML
     private Button btnSearchImage;
 
-    private ObservableList<TreeItem<MyNode>> obsTreeItems;
-    private List<TreeItem<MyNode>> treeItems;
+    //private ObservableList<TreeItem<MyNode>> obsTreeItems;
+    //private List<TreeItem<MyNode>> treeItems;
     private RepositoryController rc;
     private TreeItem<MyNode> root;
     private ObservableList<String> operatoren;
@@ -114,7 +114,7 @@ public class ManageDeterminateTable extends GridPane {
 
     public ManageDeterminateTable(RepositoryController repositoryController) {
         rc = repositoryController;
-        treeItems = new ArrayList<>();
+        //treeItems = new ArrayList<>();
 
         loader = new FXMLLoader(getClass().getResource("ManageDeterminateTable.fxml"));
         loader.setRoot(this);
@@ -252,9 +252,10 @@ public class ManageDeterminateTable extends GridPane {
         recursiveClause(root, rootClause, true);
         recursiveClause(root, rootClause, false);
 
-        obsTreeItems = FXCollections.observableArrayList(treeItems);
+        //observablelist wel nodig??
+        //obsTreeItems = FXCollections.observableArrayList(treeItems);
         try {
-            root.getChildren().addAll(obsTreeItems);
+            //root.getChildren().addAll(obsTreeItems);
             root.setExpanded(true);
             treeViewDeterminateTable.setRoot(root);
         } catch (NullPointerException ex) {

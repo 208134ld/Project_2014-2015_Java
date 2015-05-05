@@ -15,6 +15,7 @@
               <MenuItem fx:id="miDeterminateTabel" mnemonicParsing="false" text="Determinatietabel" />
                   <MenuItem fx:id="miClassList" mnemonicParsing="false" text="Klaslijst" />
                   <MenuItem fx:id="miClimateChart" mnemonicParsing="false" text="Klimatogram" />
+                  <MenuItem fx:id="miTest" mnemonicParsing="false" text="Creëer toets" />
             </items>
           </Menu>
           <Menu fx:id="mOverview" mnemonicParsing="false" text="Overzicht">

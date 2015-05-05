@@ -42,6 +42,8 @@ public class GlobalFrame extends VBox {
 
     @FXML
     private GridPane workPanel;
+    @FXML
+    private MenuItem miTest;
 
     private RepositoryController repositoryController;
     private ClassListController classListController;
@@ -51,6 +53,8 @@ public class GlobalFrame extends VBox {
     private final ClassListControllerPanel classListControllerPanel;
     private final ClassListViewPanel classListViewPanel;
     private final ManageDeterminateTable manageDeterminateTable;
+    private final TestControllerPanel testControllerPanel;
+    private final TestViewPanel testViewPanel;
     private double minWidth;
     private double prefWidth;
     private double maxWidth;
@@ -65,9 +69,9 @@ public class GlobalFrame extends VBox {
         classListControllerPanel = new ClassListControllerPanel(classListController);
         classListViewPanel = new ClassListViewPanel(classListController);
         manageDeterminateTable = new ManageDeterminateTable(repositoryController);
+        testControllerPanel = new TestControllerPanel(repositoryController);
+        testViewPanel = new TestViewPanel(repositoryController);
         repositoryController.addObserver(locationViewPanel);
-        
-        
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("GlobalFrame.fxml"));
         loader.setRoot(this);
@@ -77,10 +81,10 @@ public class GlobalFrame extends VBox {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
-        
+
         workPanel.add(locationControllerPanel, 0, 0);
         workPanel.add(locationViewPanel, 1, 0);
-        
+
         minWidth = workPanel.getColumnConstraints().get(0).getMinWidth();
         prefWidth = workPanel.getColumnConstraints().get(0).getPrefWidth();
         maxWidth = workPanel.getColumnConstraints().get(0).getMaxWidth();
@@ -90,45 +94,27 @@ public class GlobalFrame extends VBox {
         miClassList.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                workPanel.getChildren().clear();
-                workPanel.getColumnConstraints().get(0).setMinWidth(minWidth);
-                workPanel.getColumnConstraints().get(0).setPrefWidth(prefWidth);
-                workPanel.getColumnConstraints().get(0).setMaxWidth(maxWidth);
-                workPanel.getColumnConstraints().get(0).setHgrow(priority);
-                workPanel.getColumnConstraints().get(1).setMinWidth(minWidth);
-                workPanel.getColumnConstraints().get(1).setPrefWidth(prefWidth);
-                workPanel.getColumnConstraints().get(1).setMaxWidth(maxWidth);
-                workPanel.getColumnConstraints().get(1).setHgrow(priority);
+                resetConstraints();
                 workPanel.add(classListControllerPanel, 0, 0);
                 workPanel.add(classListViewPanel, 1, 0);
                 classListController.addObserver(classListViewPanel);
             }
         });
-        
+
         miClimateChart.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                workPanel.getChildren().clear();
-                workPanel.getColumnConstraints().get(0).setMinWidth(minWidth);
-                workPanel.getColumnConstraints().get(0).setPrefWidth(prefWidth);
-                workPanel.getColumnConstraints().get(0).setMaxWidth(maxWidth);
-                workPanel.getColumnConstraints().get(0).setHgrow(priority);
-                workPanel.getColumnConstraints().get(1).setMinWidth(minWidth);
-                workPanel.getColumnConstraints().get(1).setPrefWidth(prefWidth);
-                workPanel.getColumnConstraints().get(1).setMaxWidth(maxWidth);
-                workPanel.getColumnConstraints().get(1).setHgrow(priority);
+                resetConstraints();
                 workPanel.add(locationControllerPanel, 0, 0);
                 workPanel.add(locationViewPanel, 1, 0);
                 repositoryController.addObserver(locationViewPanel);
             }
         });
-        
+
         miDeterminateTabel.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 workPanel.getChildren().clear();
-                //workPanel.add(null, 0, 0);
-                
                 workPanel.getColumnConstraints().get(0).setMinWidth(0);
                 workPanel.getColumnConstraints().get(0).setPrefWidth(0);
                 workPanel.getColumnConstraints().get(0).setMaxWidth(0);
@@ -138,20 +124,30 @@ public class GlobalFrame extends VBox {
                 workPanel.getColumnConstraints().get(1).setMaxWidth(maxWidth);
                 workPanel.getColumnConstraints().get(1).setHgrow(priority);
                 workPanel.add(manageDeterminateTable, 1, 0);
-                
-                
             }
         });
 
+        miTest.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                resetConstraints();
+                workPanel.add(testViewPanel, 0, 0);
+                workPanel.add(testControllerPanel, 1, 0);
+                testViewPanel.initialize();
+                //testControllerPanel.addObserver(testViewPanel);
+            }
+        });
     }
 
-//    @FXML
-//    private void setClimateChartPannels(ActionEvent event){
-//        try{
-//            workPanel.add(new MainPanel(), 1, 0);
-//        }
-//        catch(SQLException ex){
-//            ex.printStackTrace();
-//        }
-//    }
+    private void resetConstraints() {
+        workPanel.getChildren().clear();
+        workPanel.getColumnConstraints().get(0).setMinWidth(minWidth);
+        workPanel.getColumnConstraints().get(0).setPrefWidth(prefWidth);
+        workPanel.getColumnConstraints().get(0).setMaxWidth(maxWidth);
+        workPanel.getColumnConstraints().get(0).setHgrow(priority);
+        workPanel.getColumnConstraints().get(1).setMinWidth(minWidth);
+        workPanel.getColumnConstraints().get(1).setPrefWidth(prefWidth);
+        workPanel.getColumnConstraints().get(1).setMaxWidth(maxWidth);
+        workPanel.getColumnConstraints().get(1).setHgrow(priority);
+    }
 }

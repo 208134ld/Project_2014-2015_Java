@@ -1,7 +1,6 @@
 package repository;
 
 import domain.ClassGroup;
-import domain.ClassListManagement;
 import domain.Clause;
 import domain.ClauseComponent;
 import domain.ClimateChart;
@@ -12,6 +11,7 @@ import domain.Grade;
 import domain.MonthOfTheYear;
 import domain.Months;
 import domain.Parameter;
+import domain.SchoolYear;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +27,8 @@ public class RepositoryController extends Observable{
     private MonthRepository monthRepo;
     private DeterminateTableRepository determinateRepo;
     private GradeRepository gradeRepo;
-private ClassListManagement clm ;
+    private ClassGroupsRepository clm;
+    
     public RepositoryController() {
         this.continentRepo = new ContinentRepository();
         this.countryRepo = new CountryRepository();
@@ -35,7 +36,7 @@ private ClassListManagement clm ;
         this.monthRepo = new MonthRepository();
         this.determinateRepo = new DeterminateTableRepository();
         this.gradeRepo = new GradeRepository();
-        clm = new ClassListManagement();
+        this.clm = new ClassGroupsRepository();
     }
 
     public List<Continent> getAllContinents() {
@@ -212,6 +213,14 @@ private ClassListManagement clm ;
     
     public void removeClauseComponent(ClauseComponent clause){
         determinateRepo.removeClauseComponent(clause);
+    }
+    
+    public List<SchoolYear> getAllSchoolYears(){
+        return clm.getAllSchoolYears();
+    }
+    
+    public List<ClassGroup> getClassGroupsOfSchoolYear(SchoolYear sy){
+        return clm.getAllClassGroupsOfSchoolYear(sy);
     }
     
 }

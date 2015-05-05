@@ -1,59 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package domain;
+package repository;
 
-import java.util.ArrayList;
-import java.util.Comparator;
+import domain.ClassGroup;
+import domain.Grade;
+import domain.SchoolYear;
+import domain.Student;
 import java.util.List;
-import java.util.stream.Collectors;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import util.JPAUtil;
 
-/**
- *
- * @author SAMUEL
- */
-public class ClassListManagement {
-    //1 MANAGER KLASSE IPV 3 APARTE REPOSITORY KLASSES
+public class ClassGroupsRepository {
 
     private EntityManager em;
-    
-    //TESTING
-    //List<SchoolYear> syList;
-    //List<ClassGroup> cgList;
-    //ClassGroup cg;
-    
-    public ClassListManagement() {
+
+    public ClassGroupsRepository() {
         this.em = JPAUtil.getEntityManager();
-        /*syList = new ArrayList<>(getAllSchoolYears());
-        //TESTING
-        for (SchoolYear sy : syList) {
-            ClassGroup cg = new ClassGroup( sy.getSchoolYearString() + "A", sy);
-            insertClassGroup(cg);
-        }*/
-        /*cgList = getAllClassGroups();
-        for (ClassGroup cg : cgList){
-            removeClassGroup(cg);
-        }*/
-        /*cg = getClassGroupWithName("1A");
-        Student s1 = new Student("Arne", "De Bremme", cg);
-        Student s2 = new Student("Samuel", "Caudenberg", cg);
-        Student s3 = new Student("Logan", "Dupond", cg);
-        Student s4 = new Student("Stijn", "Aerts", cg);
-        insertStudent(s4);
-        insertStudent(s3);
-        insertStudent(s2);
-        insertStudent(s1);*/
         
     }
 
-    //NamedQuerrys
     public List<Grade> getAllGrades() {
         TypedQuery<Grade> query = em.createNamedQuery("Grade.AllGrades", Grade.class);
         return query.getResultList();

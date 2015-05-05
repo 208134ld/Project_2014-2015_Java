@@ -1,5 +1,6 @@
 package domain;
 
+import repository.ClassGroupsRepository;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Observable;
@@ -14,7 +15,7 @@ import javafx.collections.transformation.SortedList;
  */
 public class ClassListController extends Observable{
     
-    private ClassListManagement clm = new ClassListManagement();
+    private ClassGroupsRepository clm = new ClassGroupsRepository();
     
     public List<Grade> giveAllGrades(){
         return /*List<Grade> li =*/ clm.getAllGrades();

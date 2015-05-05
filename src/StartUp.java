@@ -1,9 +1,5 @@
 
-import gui.ClassListControllerPanel;
 import gui.GlobalFrame;
-import gui.LocationViewPanel;
-import gui.ManageDeterminateTable;
-import gui.TestControllerPanel;
 import java.io.IOException;
 import java.sql.SQLException;
 import javafx.application.Application;
@@ -12,16 +8,12 @@ import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import repository.RepositoryController;
 
 public class StartUp extends Application {
 
     @Override
     public void start(Stage stage) throws SQLException, IOException {
-
-        Scene scene = new Scene(new TestControllerPanel());
-        //Scene scene = new Scene(new TestControllerPanel());
-//        Scene scene = new Scene(new GlobalFrame());
+        Scene scene = new Scene(new GlobalFrame());
         
         stage.setTitle("Aardrijkskunde");
         stage.setScene(scene);
@@ -32,8 +24,6 @@ public class StartUp extends Application {
         stage.setOnShown((WindowEvent t) -> {
             stage.setMinWidth(500);
             stage.setMinHeight(730);
-            //stage.setX(70);
-            //stage.setY(0);
         });
         stage.show();
         
