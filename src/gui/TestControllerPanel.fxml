@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<TitledPane animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="586.0" prefWidth="600.0" text="Toets" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+   <content>
+      <VBox prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <Label text="Titel:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField maxHeight="-Infinity" maxWidth="-Infinity" />
+            <Label text="Beschrijving:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextArea maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="67.0" prefWidth="426.0" />
+            <Label text="Datum:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="426.0">
+               <children>
+                  <Label prefHeight="25.0" prefWidth="32.0" text="van">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <DatePicker prefHeight="25.0" prefWidth="174.0" />
+                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="45.0" text="tot">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <DatePicker prefHeight="25.0" prefWidth="174.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="42.0" prefWidth="426.0">
+               <children>
+                  <Label prefHeight="25.0" prefWidth="32.0" text="van">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <DatePicker prefHeight="25.0" prefWidth="174.0" />
+                  <Label alignment="CENTER" prefHeight="25.0" prefWidth="45.0" text="tot">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <DatePicker prefHeight="25.0" prefWidth="174.0" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </content>
+</TitledPane>

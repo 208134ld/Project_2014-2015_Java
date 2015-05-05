@@ -21,6 +21,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -42,6 +43,7 @@ import util.EditingCell;
 import util.EditingClassCell;
 import util.MyNode;
 import util.TextFieldTreeCellImpl;
+import util.TreeIterator;
 
 /**
  * FXML Controller class
@@ -66,7 +68,7 @@ public class ClassListViewPanel extends GridPane implements Observer {
     @FXML
     private TreeView classTreeView;
 
-    private List<Student> studentList;
+    private SortedList<Student> studentList;
     private ObservableList<Student> studentListObservable;
     private ClassGroup selectedClassGroup;
 
@@ -129,7 +131,8 @@ public class ClassListViewPanel extends GridPane implements Observer {
         obsTreeItems = FXCollections.observableArrayList(gradeItems);
         rootItem.getChildren().addAll(obsTreeItems);
         rootItem.setExpanded(true);
-
+        
+        rootItem.getChildren().forEach(p->p.setExpanded(true));
         //Onderstaand gedeelte maakt het mogelijk om treeviewitems "on the spot" van naam te veranderen, dit werkt alleen met treeItem<String> dus moet nog aangepast worden
         classTreeView.setEditable(true);
 
@@ -149,7 +152,7 @@ public class ClassListViewPanel extends GridPane implements Observer {
         //itemChild.setExpanded(false);
         classTreeView.setRoot(rootItem);
 
-        selectedClassGroup = null;
+        //selectedClassGroup = null;
 
         classTreeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<MyNode>>() {
             @Override
@@ -157,14 +160,18 @@ public class ClassListViewPanel extends GridPane implements Observer {
                 TreeItem<MyNode> selectedItem = newValue;
                 if (selectedItem != null) {
                     if (selectedItem.getValue().isClassgroup()) {
-                        selectedClassGroup = rc.findClassGroupById(selectedItem.getValue().getId());;
+                        selectedClassGroup = rc.findClassGroupById(selectedItem.getValue().getId());
 //                     selectedClimatechart = new ClimateChart(1,"Gent",1950,1970,true,23.34534,44.34523,"30° 45' 10\" NB ","51° 3' 15\" OL ",1);
-                        updateLocationDetailPanel(selectedClassGroup);
+                        updateStudentListDetailPanel(selectedClassGroup);
                     }
                 }
 
             }
         });
+        
+        if(selectedClassGroup != null)
+            updateStudentListDetailPanel(selectedClassGroup);
+        
         //functionaliteit in klastable steken -->leerling verwijderen en veranderen klas
         studentInfoTable.getSelectionModel().selectedItemProperty().
                 addListener((observableValue, oldValue, newValue) -> {
@@ -178,6 +185,7 @@ public class ClassListViewPanel extends GridPane implements Observer {
                                 public void handle(ActionEvent e) {
                                     controller.removeStudent(newValue);
                                     studentListObservable.remove(newValue);
+                                    updateStudentListDetailPanel(selectedClassGroup);
                                 }
                             });
                             MenuItem cmItem3 = new MenuItem("verander klasgroep");
@@ -199,6 +207,7 @@ public class ClassListViewPanel extends GridPane implements Observer {
                                         newValue.setClassGroup(c);
                                         controller.addStudent(newValue);
                                         System.out.println("Your choice: " + result.get());
+                                        updateStudentListDetailPanel(selectedClassGroup);
                                     }
                                 }
                             });
@@ -211,13 +220,13 @@ public class ClassListViewPanel extends GridPane implements Observer {
                 });
     }
 
-    public void updateLocationDetailPanel(ClassGroup cg) {
+    public void updateStudentListDetailPanel(ClassGroup cg) {
       
         
         classLbl.setText(controller.giveGradeInfo(cg)); //Van de geselectreerde grade
 
-        studentList = controller.giveStudentsOfClassGroup(cg);
-        studentList = studentList.stream().sorted(Comparator.comparing(Student::getLastName).thenComparing(Student::getFirtsName)).collect(Collectors.toList());
+        studentList = controller.giveStudentsOfClassGroupSorted(cg);
+        //studentList = studentList.stream().sorted(Comparator.comparing(Student::getLastName).thenComparing(Student::getFirtsName)).collect(Collectors.toList());
         studentListObservable = FXCollections.observableArrayList(studentList);
 
         studentInfoTable.setItems(studentListObservable);
@@ -250,7 +259,6 @@ public class ClassListViewPanel extends GridPane implements Observer {
     @FXML
     private void updateCell(TableColumn.CellEditEvent<Student, String> event) {
         if (studentInfoTable.getSelectionModel().getSelectedCells().get(0).getColumn() == 0) {
-            studentListObservable.get(0).setLastName(event.getNewValue());
             for(Student s : studentListObservable)
             {
                 if(event.getRowValue().getStudentId()==s.getStudentId()){
@@ -264,7 +272,6 @@ public class ClassListViewPanel extends GridPane implements Observer {
 
         }
         if (studentInfoTable.getSelectionModel().getSelectedCells().get(0).getColumn() == 1) {
-            System.out.println("update firstname");
         for(Student s : studentListObservable)
             {
                 if(event.getRowValue().getStudentId()==s.getStudentId()){
