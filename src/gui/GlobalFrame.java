@@ -10,6 +10,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import repository.RepositoryController;
 
@@ -101,8 +102,13 @@ public class GlobalFrame extends VBox {
             @Override
             public void handle(ActionEvent e) {
                 workPanel.getChildren().clear();
-                workPanel.add(null, 0, 0);
+                //workPanel.add(null, 0, 0);
+                workPanel.getColumnConstraints().get(0).setMinWidth(0);
+                workPanel.getColumnConstraints().get(0).setPrefWidth(0);
+                workPanel.getColumnConstraints().get(0).setMaxWidth(0);
+                workPanel.getColumnConstraints().get(0).setHgrow(Priority.NEVER);
                 workPanel.add(manageDeterminateTable, 1, 0);
+                
                 
             }
         });

@@ -28,10 +28,10 @@ public class StartUp extends Application {
         Rectangle2D bounds = screen.getVisualBounds();
 
         stage.setOnShown((WindowEvent t) -> {
-            //stage.setMinWidth(bounds.getWidth());
-            //stage.setMinHeight(bounds.getHeight());
+            stage.setMinWidth(1000);
+            stage.setMinHeight(1000);
             //stage.setX(70);
-            //stage.setY(o);
+            //stage.setY(0);
         });
         stage.show();
         
