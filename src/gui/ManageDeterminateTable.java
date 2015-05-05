@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -110,8 +112,8 @@ public class ManageDeterminateTable extends GridPane {
     private int currentDetTableId;
     private File vegetationPictureFile;
 
-    public ManageDeterminateTable() throws IOException {
-        rc = new RepositoryController();
+    public ManageDeterminateTable(RepositoryController repositoryController) {
+        rc = repositoryController;
         treeItems = new ArrayList<>();
 
         loader = new FXMLLoader(getClass().getResource("ManageDeterminateTable.fxml"));
@@ -120,7 +122,11 @@ public class ManageDeterminateTable extends GridPane {
         operatoren = FXCollections.observableArrayList("=", ">", ">=", "<", "<=", "!=");
         paraLijst = rc.findAllParamaters();
 
-        loader.load();
+        try {
+            loader.load();
+        } catch (IOException ex) {
+            Logger.getLogger(ManageDeterminateTable.class.getName()).log(Level.SEVERE, null, ex);
+        }
         initialize();
 
         btnDeleteDeterminateTable.setDisable(true);

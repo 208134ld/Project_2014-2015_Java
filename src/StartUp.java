@@ -18,9 +18,10 @@ public class StartUp extends Application {
 
     @Override
     public void start(Stage stage) throws SQLException, IOException {
+
         Scene scene = new Scene(new TestControllerPanel());
         //Scene scene = new Scene(new TestControllerPanel());
-        //Scene scene = new Scene(new GlobalFrame());
+//        Scene scene = new Scene(new GlobalFrame());
         
         stage.setTitle("Aardrijkskunde");
         stage.setScene(scene);
@@ -29,10 +30,10 @@ public class StartUp extends Application {
         Rectangle2D bounds = screen.getVisualBounds();
 
         stage.setOnShown((WindowEvent t) -> {
-            //stage.setMinWidth(bounds.getWidth());
-            //stage.setMinHeight(bounds.getHeight());
+            stage.setMinWidth(1000);
+            stage.setMinHeight(700);
             //stage.setX(70);
-            //stage.setY(o);
+            //stage.setY(0);
         });
         stage.show();
         
