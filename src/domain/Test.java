@@ -6,6 +6,8 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import org.eclipse.persistence.jpa.jpql.parser.DateTime;
 
@@ -16,16 +18,17 @@ import org.eclipse.persistence.jpa.jpql.parser.DateTime;
 public class Test {
     private String Title;
     private String description;   
-    private DateTime startDate;
-    private DateTime endDate;
+    private GregorianCalendar startDate;
+    private GregorianCalendar endDate;
     private List<Exercise> exercises;
 
-    public Test(String Title, String description, DateTime startDate, DateTime endDate, List<Exercise> exercises) {
+    public Test(String Title, String description, GregorianCalendar startDate, GregorianCalendar endDate, List<Exercise> exercises) {
         this.Title = Title;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
         this.exercises = exercises;
+        
     }
 
     public Test()
@@ -48,19 +51,19 @@ public class Test {
         this.description = description;
     }
 
-    public DateTime getStartDate() {
+    public GregorianCalendar getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(DateTime startDate) {
+    public void setStartDate(GregorianCalendar startDate) {
         this.startDate = startDate;
     }
 
-    public DateTime getEndDate() {
+    public GregorianCalendar getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(DateTime endDate) {
+    public void setEndDate(GregorianCalendar endDate) {
         this.endDate = endDate;
     }
 

@@ -60,10 +60,10 @@
                   <Label layoutX="4.0" layoutY="140.0" text="klimatogram" />
                   <ComboBox fx:id="klimatogram" layoutX="84.0" layoutY="140.0" prefWidth="150.0" />
                   <ComboBox fx:id="determinatieTabel" layoutX="84.0" layoutY="190.0" prefWidth="150.0" />
-                  <Label layoutX="4.0" layoutY="190.0" text="Dettabelm" />
+                  <Label layoutX="4.0" layoutY="190.0" text="D. Tabel" />
                   <Label layoutX="2.0" layoutY="274.0" text="Puntenverdeling" />
-                  <Button fx:id="newOef" layoutX="13.0" layoutY="335.0" mnemonicParsing="false" onMouseClicked="#nieuweoefening" prefHeight="25.0" prefWidth="152.0" text="Voeg oefening toe" />
-                  <Button fx:id="voegTestToe" layoutX="483.0" layoutY="335.0" mnemonicParsing="false" onMouseClicked="#saveOefening" text="Voeg test toe" />
+                  <Button fx:id="newOef" layoutX="13.0" layoutY="335.0" mnemonicParsing="false" onMouseClicked="#nieuweoefening" prefHeight="25.0" prefWidth="214.0" text="Voeg oefening toe en creeër nieuw" />
+                  <Button fx:id="voegTestToe" layoutX="391.0" layoutY="335.0" mnemonicParsing="false" onMouseClicked="#saveOefening" prefHeight="25.0" prefWidth="180.0" text="sla oefening en test op" />
                   <Text fx:id="errorText" fill="#e12121" layoutX="13.0" layoutY="373.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="408.13671875" />
                </children>
             </AnchorPane>

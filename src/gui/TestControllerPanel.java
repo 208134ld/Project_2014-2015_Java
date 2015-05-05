@@ -10,9 +10,12 @@ import domain.ClimateChart;
 import domain.DeterminateTable;
 import domain.Exercise;
 import domain.Grade;
+import domain.Test;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -31,6 +34,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
+import org.eclipse.persistence.jpa.jpql.parser.DateTime;
 import repository.RepositoryController;
 
 /**
@@ -149,6 +153,35 @@ public class TestControllerPanel extends TitledPane{
               
             }
         });
+   klimatogram.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue ov, Object t, Object t1) {
+                try{
+                    oefening.getSelectionModel().getSelectedItem().setClimateChart(klimatogram.getSelectionModel().getSelectedItem());
+                }catch(Exception e)
+                    
+                {
+                    
+                }
+   
+              
+            }
+        });
+   determinatieTabel.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue ov, Object t, Object t1) {
+                try{
+                    oefening.getSelectionModel().getSelectedItem().setDetTable(determinatieTabel.getSelectionModel().getSelectedItem());
+                }catch(Exception e)
+                    
+                {
+                    
+                }
+   
+              
+            }
+        });
+   
    }
    
    private void setEditableGraad2(boolean waarde)
@@ -162,6 +195,25 @@ public class TestControllerPanel extends TitledPane{
        
      @FXML
     private void saveOefening(MouseEvent event) {
+        try{
+            Test t = new Test();
+            t.setTitle(Titel.getText());
+            t.setStartDate(new GregorianCalendar(begindatum.getValue().getYear(),begindatum.getValue().getMonth().getValue(),begindatum.getValue().getDayOfMonth()));
+            t.setEndDate(new GregorianCalendar(einddatum.getValue().getYear(),einddatum.getValue().getMonth().getValue(),einddatum.getValue().getDayOfMonth()));
+            t.setDescription(Beschrijving.getText());
+            voegDataToe();
+            t.setExercises(exercises);
+            
+            //DATABASE TOEVOEGEN
+            Titel.clear();
+           
+            
+        }catch(NullPointerException nule){
+            errorText.setText("Een oefening moet minstens 1 vraag hebben");
+        }catch(Exception e)
+        {
+            errorText.setText(e.getMessage());
+        }
     }
     @FXML
     private void voegVraagToe(MouseEvent event)
@@ -176,16 +228,21 @@ public class TestControllerPanel extends TitledPane{
                 vragen = FXCollections.observableArrayList(eenVraag);
                 alleVragen.setItems(vragen);
                 alleVragen.setValue(vragen.get(0));
+                vraag.clear();
             }else
             {
                 vragen.add(vraagbox);
+                vraag.clear();
+                alleVragen.setValue(vragen.get(vragen.size()-1));
             }
             
         }catch(NullPointerException nulEx)
         {
+            errorText.setText("Geen vraag gevonden");
             //todo leeg textfield error
         }catch(Exception e)
         {
+            errorText.setText(e.getMessage());
             // todo global error
         }
     }
@@ -199,30 +256,20 @@ public class TestControllerPanel extends TitledPane{
             errorText.setText("kon vraag niet verwijderen omdat er geen vraag geselecteerd is");
         }catch(Exception e)
         {
-            
+            errorText.setText(e.getMessage());
         }
     }
     @FXML
     private void nieuweoefening(MouseEvent event)
     {
         try{
-            ClimateChart c = klimatogram.getSelectionModel().getSelectedItem();
-            DeterminateTable d = determinatieTabel.getSelectionModel().getSelectedItem();
-            List<String> vragenlijst = new ArrayList<>();
-            if(graad.getSelectionModel().getSelectedItem().getGrade()!=2){
-                vragenlijst = vragen;
-                if(vragenlijst.size()==0)
-                    throw new NullPointerException();
-               
-                oefening.getSelectionModel().getSelectedItem().setQuestions(vragenlijst);
-            }  
-            oefening.getSelectionModel().getSelectedItem().setClimateChart(c);
-            oefening.getSelectionModel().getSelectedItem().setDetTable(d);
+            voegDataToe();
             if((oefeningenCounter-oefening.getSelectionModel().getSelectedIndex()) ==2){
-                System.out.println("INDEX" + oefening.getSelectionModel().getSelectedIndex()+" counter" + oefeningenCounter);
+               
             exercises.add(new Exercise("oefening "+this.oefeningenCounter));
             oefening.setValue(exercises.get(oefeningenCounter-1));
             oefeningenCounter++;
+            graad.setDisable(true);
             resetLists();
             
             }
@@ -234,6 +281,21 @@ public class TestControllerPanel extends TitledPane{
             errorText.setText("Onbekende fout " +e.getMessage());
         }
     }
+    private void voegDataToe()
+    {
+        ClimateChart c = klimatogram.getSelectionModel().getSelectedItem();
+            DeterminateTable d = determinatieTabel.getSelectionModel().getSelectedItem();
+            List<String> vragenlijst = new ArrayList<>();
+            if(graad.getSelectionModel().getSelectedItem().getGrade()!=2){
+                vragenlijst = vragen;
+                if(vragenlijst.size()==0)
+                    throw new NullPointerException();
+               
+                oefening.getSelectionModel().getSelectedItem().setQuestions(vragenlijst);
+            }  
+            oefening.getSelectionModel().getSelectedItem().setClimateChart(c);
+            oefening.getSelectionModel().getSelectedItem().setDetTable(d);
+    }
     private void resetLists()
     {
         vraag.clear();
@@ -241,5 +303,6 @@ public class TestControllerPanel extends TitledPane{
         vragen = FXCollections.observableArrayList(lijst);
         alleVragen.setItems(vragen);
         klimatogram.setValue(climateCharts.get(0));
+        determinatieTabel.setValue(detTable.get(0));
     }
 }
