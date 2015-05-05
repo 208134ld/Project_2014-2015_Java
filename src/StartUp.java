@@ -3,6 +3,7 @@ import gui.ClassListControllerPanel;
 import gui.GlobalFrame;
 import gui.LocationViewPanel;
 import gui.ManageDeterminateTable;
+import gui.TestControllerPanel;
 import java.io.IOException;
 import java.sql.SQLException;
 import javafx.application.Application;
@@ -17,7 +18,7 @@ public class StartUp extends Application {
 
     @Override
     public void start(Stage stage) throws SQLException, IOException {
-        Scene scene = new Scene(new ManageDeterminateTable());
+        Scene scene = new Scene(new TestControllerPanel());
         //Scene scene = new Scene(new GlobalFrame());
         
         stage.setTitle("Aardrijkskunde");
