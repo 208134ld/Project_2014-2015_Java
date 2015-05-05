@@ -80,6 +80,11 @@ public class GlobalFrame extends VBox {
         
         workPanel.add(locationControllerPanel, 0, 0);
         workPanel.add(locationViewPanel, 1, 0);
+        
+        minWidth = workPanel.getColumnConstraints().get(0).getMinWidth();
+        prefWidth = workPanel.getColumnConstraints().get(0).getPrefWidth();
+        maxWidth = workPanel.getColumnConstraints().get(0).getMaxWidth();
+        priority = workPanel.getColumnConstraints().get(0).getHgrow();
 
         //KLIK OP KLASLIJST
         miClassList.setOnAction(new EventHandler<ActionEvent>() {
@@ -90,6 +95,10 @@ public class GlobalFrame extends VBox {
                 workPanel.getColumnConstraints().get(0).setPrefWidth(prefWidth);
                 workPanel.getColumnConstraints().get(0).setMaxWidth(maxWidth);
                 workPanel.getColumnConstraints().get(0).setHgrow(priority);
+                workPanel.getColumnConstraints().get(1).setMinWidth(minWidth);
+                workPanel.getColumnConstraints().get(1).setPrefWidth(prefWidth);
+                workPanel.getColumnConstraints().get(1).setMaxWidth(maxWidth);
+                workPanel.getColumnConstraints().get(1).setHgrow(priority);
                 workPanel.add(classListControllerPanel, 0, 0);
                 workPanel.add(classListViewPanel, 1, 0);
                 classListController.addObserver(classListViewPanel);
@@ -104,6 +113,10 @@ public class GlobalFrame extends VBox {
                 workPanel.getColumnConstraints().get(0).setPrefWidth(prefWidth);
                 workPanel.getColumnConstraints().get(0).setMaxWidth(maxWidth);
                 workPanel.getColumnConstraints().get(0).setHgrow(priority);
+                workPanel.getColumnConstraints().get(1).setMinWidth(minWidth);
+                workPanel.getColumnConstraints().get(1).setPrefWidth(prefWidth);
+                workPanel.getColumnConstraints().get(1).setMaxWidth(maxWidth);
+                workPanel.getColumnConstraints().get(1).setHgrow(priority);
                 workPanel.add(locationControllerPanel, 0, 0);
                 workPanel.add(locationViewPanel, 1, 0);
                 repositoryController.addObserver(locationViewPanel);
@@ -115,14 +128,15 @@ public class GlobalFrame extends VBox {
             public void handle(ActionEvent e) {
                 workPanel.getChildren().clear();
                 //workPanel.add(null, 0, 0);
-                minWidth = workPanel.getColumnConstraints().get(0).getMinWidth();
-                prefWidth = workPanel.getColumnConstraints().get(0).getPrefWidth();
-                maxWidth = workPanel.getColumnConstraints().get(0).getMaxWidth();
-                priority = workPanel.getColumnConstraints().get(0).getHgrow();
+                
                 workPanel.getColumnConstraints().get(0).setMinWidth(0);
                 workPanel.getColumnConstraints().get(0).setPrefWidth(0);
                 workPanel.getColumnConstraints().get(0).setMaxWidth(0);
                 workPanel.getColumnConstraints().get(0).setHgrow(Priority.NEVER);
+                workPanel.getColumnConstraints().get(1).setMinWidth(minWidth);
+                workPanel.getColumnConstraints().get(1).setPrefWidth(prefWidth);
+                workPanel.getColumnConstraints().get(1).setMaxWidth(maxWidth);
+                workPanel.getColumnConstraints().get(1).setHgrow(priority);
                 workPanel.add(manageDeterminateTable, 1, 0);
                 
                 
