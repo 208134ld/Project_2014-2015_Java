@@ -53,7 +53,10 @@ private ClassListManagement clm ;
         }
 
     }
-
+    public List<ClimateChart> findAllClimateCharts()
+    {
+        return chartRepo.findAll();
+    }
     public Continent findContinentById(int id) {
         return continentRepo.findContinentById(id);
     }

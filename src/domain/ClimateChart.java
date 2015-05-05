@@ -29,7 +29,8 @@ import javax.persistence.Table;
     @NamedQuery(name = "ClimateChart.findByCountry",
             query = "SELECT c FROM ClimateCharts c WHERE c.country.countryId = :countryID"),
     @NamedQuery(name = "ClimateChart.findById",
-            query = "SELECT c FROM ClimateCharts c WHERE c.climateChartId = :chartId")
+            query = "SELECT c FROM ClimateCharts c WHERE c.climateChartId = :chartId"),
+    @NamedQuery(name="ClimateChart.findAll",query="SELECT c from ClimateCharts c")
 })
 public class ClimateChart implements Serializable {
 
@@ -311,5 +312,9 @@ public class ClimateChart implements Serializable {
     public int calcSedimentYear()
     {
         return months.stream().mapToInt(m -> m.getSediment()).sum();       
+    }
+    public String toString()
+    {
+        return this.location;
     }
 }
