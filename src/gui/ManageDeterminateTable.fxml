@@ -40,10 +40,10 @@
                               <TextField fx:id="waardeParameter" layoutX="145.0" layoutY="227.0" prefHeight="25.0" prefWidth="84.0" promptText="waarde" />
                               <TextField fx:id="txtClimateFeature" layoutX="145.0" layoutY="270.0" prefHeight="25.0" prefWidth="181.0" promptText="(alleen mogelijk bij resultaat)" />
                               <Label layoutX="35.0" layoutY="274.0" text="Klimaatkenmerk:" />
-                              <Button fx:id="saveItem" layoutX="82.0" layoutY="362.0" mnemonicParsing="false" onAction="#saveDetItem" prefHeight="34.0" prefWidth="235.0" text="Opslaan en kinderknopen toevoegen" />
+                              <Button fx:id="saveItem" layoutX="82.0" layoutY="588.0" mnemonicParsing="false" onAction="#saveDetItem" prefHeight="34.0" prefWidth="235.0" text="Opslaan en kinderknopen toevoegen" />
                               <Label layoutX="21.0" layoutY="322.0" text="Vegetatiekenmerk:" />
                               <TextField fx:id="txtVegetationFeature" layoutX="145.0" layoutY="318.0" prefHeight="25.0" prefWidth="181.0" promptText="(alleen mogelijk bij resultaat)" />
-                              <Text fx:id="foutmelding" fill="#901d1d" layoutX="62.0" layoutY="462.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="275.13671875" />
+                              <Text fx:id="foutmelding" fill="#901d1d" layoutX="68.0" layoutY="696.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="275.13671875" />
                               <ComboBox fx:id="parDropd2" layoutX="143.0" layoutY="190.0" prefHeight="25.0" prefWidth="124.0" />
                               <RadioButton fx:id="par2RadioButton" layoutX="150.0" layoutY="57.0" mnemonicParsing="false" onAction="#unblockPar2" text="2de parameter">
                                  <toggleGroup>
@@ -62,9 +62,9 @@
                               <Label alignment="CENTER_RIGHT" layoutX="69.0" layoutY="157.0" text="Operator:" />
                               <Label alignment="CENTER_RIGHT" layoutX="54.0" layoutY="194.0" text="Parameter 2:" />
                               <Label alignment="CENTER_RIGHT" layoutX="73.0" layoutY="231.0" text="Waarde:" />
-                              <Button fx:id="btnDeleteItem" layoutX="82.0" layoutY="408.0" mnemonicParsing="false" onAction="#deleteItem" prefHeight="34.0" prefWidth="235.0" text="Verwijder deze knoop + kinderknopen" />
-                              <ImageView fx:id="imageVegetation" fitHeight="133.0" fitWidth="236.0" layoutX="81.0" layoutY="530.0" pickOnBounds="true" preserveRatio="true" />
-                              <Button fx:id="btnSearchImage" layoutX="82.0" layoutY="474.0" mnemonicParsing="false" onAction="#searchImage" prefHeight="34.0" prefWidth="235.0" text="Upload vegetatiefoto" />
+                              <Button fx:id="btnDeleteItem" layoutX="82.0" layoutY="640.0" mnemonicParsing="false" onAction="#deleteItem" prefHeight="34.0" prefWidth="235.0" text="Verwijder deze knoop + kinderknopen" />
+                              <ImageView fx:id="imageVegetation" fitHeight="133.0" fitWidth="236.0" layoutX="81.0" layoutY="421.0" pickOnBounds="true" preserveRatio="true" />
+                              <Button fx:id="btnSearchImage" layoutX="82.0" layoutY="372.0" mnemonicParsing="false" onAction="#searchImage" prefHeight="34.0" prefWidth="235.0" text="Upload vegetatiefoto" />
                            </children>
                         </AnchorPane>
                     </content>

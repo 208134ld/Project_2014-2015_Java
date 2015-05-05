@@ -2,15 +2,13 @@ package gui;
 
 import domain.ClauseComponent;
 import domain.DeterminateTable;
-import domain.DomeinController;
 import domain.Grade;
 import domain.Parameter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import javafx.beans.value.ChangeListener;
@@ -27,14 +25,12 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -142,16 +138,6 @@ public class ManageDeterminateTable extends GridPane {
                 }
             }
         });
-
-//        par2OrValueRadioButtonGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-//            @Override
-//            public void changed(ObservableValue<? extends Toggle> ov,
-//                    Toggle old_toggle, Toggle new_toggle) {
-//                if (par2OrValueRadioButtonGroup.getSelectedToggle() != null) {
-//                    System.out.println(par2OrValueRadioButtonGroup.getSelectedToggle().getUserData().toString());
-//                }
-//            }
-//        });
     }
 
     private void initialize() {
@@ -160,22 +146,21 @@ public class ManageDeterminateTable extends GridPane {
         List<Grade> gradeList = rc.getAllGrades();
         List<DeterminateTable> detTableList = rc.getAllDeterminateTables();
         List<String> detTableComboList = new ArrayList<>();
-        List<String> operatorList = Arrays.asList(new String[]{"<", ">", "=", "<=", ">="});
 
-        for (Grade g : gradeList) {
+        gradeList.stream().forEach((g) -> {
             if (g.getDeterminateTableId() == null) {
                 discLijst2.add("Graad " + g.getGrade());
             } else {
                 discLijst.add("Graad " + g.getGrade());
             }
-        }
+        });
 
         Collections.sort(discLijst);
         Collections.sort(discLijst2);
 
-        for (DeterminateTable d : detTableList) {
+        detTableList.stream().forEach((d) -> {
             detTableComboList.add(d.getDeterminateTableId() + " " + d.getName());
-        }
+        });
 
         graden = FXCollections.observableArrayList(discLijst);
         graden2 = FXCollections.observableArrayList(discLijst2);
@@ -214,22 +199,6 @@ public class ManageDeterminateTable extends GridPane {
         } else {
             createDeterminateTableCombo.setDisable(true);
         }
-
-//        List<ClauseComponent> clauseComponentsList = rc.findClausesByDeterminateTableId(rc.findGradeById(Integer.parseInt(gradeCombo.getSelectionModel().getSelectedItem().split(" ")[1])).getDeterminateTableId());
-//        comboClauseComponentsParents = FXCollections.observableArrayList(clauseComponentsList);
-//        comboChooseParent.setItems(comboClauseComponentsParents);
-//        comboChooseParent.setValue(comboClauseComponentsParents.get(0));
-//        List<Parameter> comboParameterList = rc.findAllParamaters();
-//        parameterList = FXCollections.observableArrayList(comboParameterList);
-//
-//        comboParameter1.setItems(parameterList);
-//        comboParameter1.setValue(parameterList.get(0));
-//        comboParameter2.setItems(parameterList);
-//        comboParameter2.setValue(parameterList.get(0));
-//
-//        comboOperatorList = FXCollections.observableArrayList(operatorList);
-//        comboOperator.setItems(comboOperatorList);
-//        comboOperator.setValue(comboOperatorList.get(0));
     }
 
     @FXML
@@ -283,17 +252,22 @@ public class ManageDeterminateTable extends GridPane {
             root.setExpanded(true);
             treeViewDeterminateTable.setRoot(root);
         } catch (NullPointerException ex) {
-
         }
 
         treeViewDeterminateTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<MyNode>>() {
             @Override
             public void changed(ObservableValue<? extends TreeItem<MyNode>> observable, TreeItem<MyNode> oldValue, TreeItem<MyNode> newValue) {
                 try {
+                    imageVegetation.setImage(null);
                     foutmelding.setText("");
                     disableAddClause(false);
                     try {
                         selectedClauseComponent = rc.findClauseById(newValue.getValue().getId());
+                        try {
+                            byte[] byteArray = selectedClauseComponent.getVegetationPicture();
+                            imageVegetation.setImage(new Image(new ByteArrayInputStream(byteArray)));
+                        } catch (NullPointerException ex) {
+                        }
                     } catch (NullPointerException ex) {
                         disableAddClause(true);
                     }
@@ -302,6 +276,7 @@ public class ManageDeterminateTable extends GridPane {
                         rbTypeClause.setSelected(true);
                         txtClimateFeature.setDisable(true);
                         txtVegetationFeature.setDisable(true);
+                        btnSearchImage.setDisable(true);
                         operatorDropd.setValue(selectedClauseComponent.getOperator().toString());
                         if (selectedClauseComponent.getPar2_ParameterId() != null) {
                             parDropd2.setValue(rc.findParameterById(selectedClauseComponent.getPar2_ParameterId().getParameterId()).getDiscriminator().toString());
@@ -343,17 +318,12 @@ public class ManageDeterminateTable extends GridPane {
                 }
 
             }
-        });
+        }
+        );
 
         if (clauses.isEmpty()) {
             initialize();
             treeViewDeterminateTable.setRoot(null);
-//            gradeCombo.setValue("Graad " + graad);
-//            comboChooseParent.setItems(null);
-//            comboChooseParent.setValue(null);
-//            comboChooseParent.setDisable(true);
-//            jaKnoop.setDisable(true);
-//            neeKnoop.setDisable(true);
         }
     }
 
@@ -372,7 +342,6 @@ public class ManageDeterminateTable extends GridPane {
                 try {
                     clause = rc.findClauseById(parentClause.getNoClause().getClauseComponentId());
                 } catch (NoResultException ex) {
-
                 }
                 type = "(Nee Knoop)";
             }
@@ -450,21 +419,24 @@ public class ManageDeterminateTable extends GridPane {
                         rc.removeClauseComponent(yesClause);
                         rc.removeClauseComponent(noClause);
 
-                        FileInputStream fis = new FileInputStream(vegetationPictureFile);
-                        //selectedClauseComponent.setVegetationPicture(IOUtils.toByteArray((InputStream) fis));
-                        //psmnt.setBinaryStream(3, (InputStream) fis, (int) mainfile.length());
-
-                        //int s = psmnt.executeUpdate();
-//                        if (s > 0) {
-//                            System.out.println("Uploaded successfully !");
-//                        } else {
-//                            System.out.println("unsucessfull to upload image.");
-//                        }
+                        byte[] bFile;
+                        try (FileInputStream fis = new FileInputStream(vegetationPictureFile)) {
+                            bFile = new byte[(int) vegetationPictureFile.length()];
+                            fis.read(bFile);
+                        }
+                        selectedClauseComponent.setVegetationPicture(bFile);
                     }
                 } else {
                     if (rbClauseOrResult.getText().equals("Resultaat")) {
                         selectedClauseComponent.setClimatefeature(txtClimateFeature.getText());
                         selectedClauseComponent.setVegetationfeature(txtVegetationFeature.getText());
+
+                        byte[] bFile;
+                        try (FileInputStream fis = new FileInputStream(vegetationPictureFile)) {
+                            bFile = new byte[(int) vegetationPictureFile.length()];
+                            fis.read(bFile);
+                        }
+                        selectedClauseComponent.setVegetationPicture(bFile);
                     } else {
                         selectedClauseComponent.setClimatefeature(null);
                         selectedClauseComponent.setVegetationfeature(null);
@@ -519,8 +491,6 @@ public class ManageDeterminateTable extends GridPane {
 
     }
 
-    //Determineertabel wordt niet verwijderd, deze wordt bij de grade gewoon op null gezet zodat er voor deze grade 
-    //een nieuwe tabel kan gemaakt worden, of gekoppeld aan een reeds bestaande determineertabel
     @FXML
     private void deleteDeterminateTable() {
         int graad = Integer.parseInt(gradeCombo.getSelectionModel().getSelectedItem().split(" ")[1]);
@@ -565,73 +535,6 @@ public class ManageDeterminateTable extends GridPane {
         disableAddClause(true);
     }
 
-//    @FXML
-//    private void addClause() {
-//        String name = txtNameNewClause.getText();
-//        Parameter par1 = comboParameter1.getSelectionModel().getSelectedItem();
-//        Parameter par2 = comboParameter2.getSelectionModel().getSelectedItem();
-//        Integer waarde = null;
-//
-//        RadioButton rb = (RadioButton) typeRadioButtonGroup.getSelectedToggle();
-//
-//        try {
-//            waarde = Integer.parseInt(txtValueOfClause.getText());
-//        } catch (NumberFormatException ex) {
-//
-//        }
-//        String operator = comboOperator.getSelectionModel().getSelectedItem();
-//        ClauseComponent newClause;
-//        if (waarde != null) {
-//            if (comboChooseParent.isDisabled()) {
-//                rc.insertClause(new ClauseComponent(name, "Clause", waarde, operator, par1, rc.findDeterminateTableById(currentDetTableId)));
-//            } else {
-//                if (rb.getText().equals("Ja knoop")) {
-//                    if (comboChooseParent.getSelectionModel().getSelectedItem().getYesClause() == null) {
-//                        newClause = new ClauseComponent(name, "Clause", waarde, operator, par1, rc.findDeterminateTableById(currentDetTableId));
-//                        rc.insertClause(newClause);
-//                        comboChooseParent.getSelectionModel().getSelectedItem().setYesClause(newClause);
-//                        rc.updateRepo();
-//                    } else {
-//                        showError("Fout met de bovenliggende knoop.", "Er bestaat al een Ja knoop onder de bovenliggende knoop.");
-//                    }
-//                } else {
-//                    if (comboChooseParent.getSelectionModel().getSelectedItem().getNoClause() == null) {
-//                        newClause = new ClauseComponent(name, "Clause", waarde, operator, par1, rc.findDeterminateTableById(currentDetTableId));
-//                        rc.insertClause(newClause);
-//                        comboChooseParent.getSelectionModel().getSelectedItem().setNoClause(newClause);
-//                        rc.updateRepo();
-//                    } else {
-//                        showError("Fout met de bovenliggende knoop.", "Er bestaat al een Nee knoop onder de bovenliggende knoop.");
-//                    }
-//                }
-//            }
-//        } else {
-//            if (comboChooseParent.isDisabled()) {
-//                rc.insertClause(new ClauseComponent(name, "Clause", operator, par1, par2, rc.findDeterminateTableById(currentDetTableId)));
-//            } else {
-//                if (rb.getText().equals("Ja knoop")) {
-//                    if (comboChooseParent.getSelectionModel().getSelectedItem().getYesClause() == null) {
-//                        newClause = new ClauseComponent(name, "Clause", operator, par1, par2, rc.findDeterminateTableById(currentDetTableId));
-//                        rc.insertClause(newClause);
-//                        comboChooseParent.getSelectionModel().getSelectedItem().setYesClause(newClause);
-//                        rc.updateRepo();
-//                    } else {
-//                        showError("Fout met de bovenliggende knoop.", "Er bestaat al een Ja knoop onder de bovenliggende knoop.");
-//                    }
-//                } else {
-//                    if (comboChooseParent.getSelectionModel().getSelectedItem().getNoClause() == null) {
-//                        newClause = new ClauseComponent(name, "Clause", operator, par1, par2, rc.findDeterminateTableById(currentDetTableId));
-//                        rc.insertClause(newClause);
-//                        comboChooseParent.getSelectionModel().getSelectedItem().setNoClause(newClause);
-//                        rc.updateRepo();
-//                    } else {
-//                        showError("Fout met de bovenliggende knoop.", "Er bestaat al een Nee knoop onder de bovenliggende knoop.");
-//                    }
-//                }
-//            }
-//        }
-//        viewDeterminateTable();
-//    }
     private void disableAddClause(boolean bool) {
         rbTypeClause.setDisable(bool);
         rbTypeResult.setDisable(bool);
@@ -643,6 +546,9 @@ public class ManageDeterminateTable extends GridPane {
         waardeParameter.setDisable(bool);
         txtClimateFeature.setDisable(bool);
         txtVegetationFeature.setDisable(bool);
+        btnSearchImage.setDisable(bool);
+        saveItem.setDisable(bool);
+        btnDeleteItem.setDisable(bool);
     }
 
     private void showError(String headerText, String contextText) {
