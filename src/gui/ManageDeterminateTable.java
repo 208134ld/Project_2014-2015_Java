@@ -5,9 +5,13 @@ import domain.DeterminateTable;
 import domain.DomeinController;
 import domain.Grade;
 import domain.Parameter;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -27,10 +31,13 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javax.persistence.NoResultException;
 import repository.RepositoryController;
 import util.MyNode;
@@ -72,9 +79,6 @@ public class ManageDeterminateTable extends GridPane {
     private Button btnCreateDeterminateTable;
     @FXML
     private TextField txtNameNewDeterminateTable;
-
-
-
     @FXML
     private Button btnConnectDeterminateTable;
     @FXML
@@ -91,6 +95,10 @@ public class ManageDeterminateTable extends GridPane {
     private RadioButton rbTypeResult;
     @FXML
     private Button btnDeleteItem;
+    @FXML
+    private ImageView imageVegetation;
+    @FXML
+    private Button btnSearchImage;
 
     private ObservableList<TreeItem<MyNode>> obsTreeItems;
     private List<TreeItem<MyNode>> treeItems;
@@ -104,6 +112,7 @@ public class ManageDeterminateTable extends GridPane {
     private ObservableList<String> comboListDeterminateTables;
     private FXMLLoader loader;
     private int currentDetTableId;
+    private File vegetationPictureFile;
 
     public ManageDeterminateTable() throws IOException {
         rc = new RepositoryController();
@@ -161,6 +170,9 @@ public class ManageDeterminateTable extends GridPane {
             }
         }
 
+        Collections.sort(discLijst);
+        Collections.sort(discLijst2);
+
         for (DeterminateTable d : detTableList) {
             detTableComboList.add(d.getDeterminateTableId() + " " + d.getName());
         }
@@ -207,7 +219,6 @@ public class ManageDeterminateTable extends GridPane {
 //        comboClauseComponentsParents = FXCollections.observableArrayList(clauseComponentsList);
 //        comboChooseParent.setItems(comboClauseComponentsParents);
 //        comboChooseParent.setValue(comboClauseComponentsParents.get(0));
-
 //        List<Parameter> comboParameterList = rc.findAllParamaters();
 //        parameterList = FXCollections.observableArrayList(comboParameterList);
 //
@@ -391,7 +402,7 @@ public class ManageDeterminateTable extends GridPane {
 
                 RadioButton rbClauseOrResult = (RadioButton) ClauseOrResult.getSelectedToggle();
                 RadioButton rbValueOrPar2 = (RadioButton) par2OrValueRadioButtonGroup.getSelectedToggle();
-                
+
                 if (selectedClauseComponent.getDiscriminator().equals("Clause")) {
                     if (rbClauseOrResult.getText().equals("Knoop")) {
                         if (operatorDropd.getSelectionModel().getSelectedItem() != null) {
@@ -401,17 +412,16 @@ public class ManageDeterminateTable extends GridPane {
                             selectedClauseComponent.setPar1_ParameterId(rc.findParameterByName(parDropd.getSelectionModel().getSelectedItem()));
                         }
 
-                        if(rbValueOrPar2.getText().equals("Waarde")){
+                        if (rbValueOrPar2.getText().equals("Waarde")) {
                             selectedClauseComponent.setWaarde(Integer.parseInt(waardeParameter.getText()));
                             selectedClauseComponent.setPar2_ParameterId(null);
                             selectedClauseComponent.setName(String.format("%s %s %s", parDropd.getSelectionModel().getSelectedItem().toString(), operatorDropd.getSelectionModel().getSelectedItem().toString(), waardeParameter.getText()));
-                        }
-                        else{
+                        } else {
                             selectedClauseComponent.setPar2_ParameterId(rc.findParameterByName(parDropd2.getSelectionModel().getSelectedItem()));
                             selectedClauseComponent.setWaarde(0);
                             selectedClauseComponent.setName(String.format("%s %s %s", parDropd.getSelectionModel().getSelectedItem().toString(), operatorDropd.getSelectionModel().getSelectedItem().toString(), parDropd2.getSelectionModel().getSelectedItem().toString()));
                         }
-                        
+
                         if (selectedClauseComponent.getYesClause() == null) {
                             ClauseComponent newClause = new ClauseComponent("Klimaatkenmerk", "Vegetatiekenmerk", "Result", rc.findDeterminateTableById(currentDetTableId));
                             rc.insertClause(newClause);
@@ -423,7 +433,7 @@ public class ManageDeterminateTable extends GridPane {
                             selectedClauseComponent.setNoClause(newClause);
                         }
                         rc.updateRepo();
-                        
+
                     } else {
                         ClauseComponent yesClause = selectedClauseComponent.getYesClause();
                         ClauseComponent noClause = selectedClauseComponent.getNoClause();
@@ -439,6 +449,17 @@ public class ManageDeterminateTable extends GridPane {
                         selectedClauseComponent.setVegetationfeature(txtVegetationFeature.getText());
                         rc.removeClauseComponent(yesClause);
                         rc.removeClauseComponent(noClause);
+
+                        FileInputStream fis = new FileInputStream(vegetationPictureFile);
+                        //selectedClauseComponent.setVegetationPicture(IOUtils.toByteArray((InputStream) fis));
+                        //psmnt.setBinaryStream(3, (InputStream) fis, (int) mainfile.length());
+
+                        //int s = psmnt.executeUpdate();
+//                        if (s > 0) {
+//                            System.out.println("Uploaded successfully !");
+//                        } else {
+//                            System.out.println("unsucessfull to upload image.");
+//                        }
                     }
                 } else {
                     if (rbClauseOrResult.getText().equals("Resultaat")) {
@@ -454,12 +475,11 @@ public class ManageDeterminateTable extends GridPane {
                         if (parDropd.getSelectionModel().getSelectedItem() != null) {
                             selectedClauseComponent.setPar1_ParameterId(rc.findParameterByName(parDropd.getSelectionModel().getSelectedItem()));
                         }
-                        if(rbValueOrPar2.getText().equals("Waarde")){
+                        if (rbValueOrPar2.getText().equals("Waarde")) {
                             selectedClauseComponent.setWaarde(Integer.parseInt(waardeParameter.getText()));
                             selectedClauseComponent.setPar2_ParameterId(null);
                             selectedClauseComponent.setName(String.format("%s %s %s", parDropd.getSelectionModel().getSelectedItem().toString(), operatorDropd.getSelectionModel().getSelectedItem().toString(), waardeParameter.getText()));
-                        }
-                        else{
+                        } else {
                             selectedClauseComponent.setPar2_ParameterId(rc.findParameterByName(parDropd2.getSelectionModel().getSelectedItem()));
                             selectedClauseComponent.setWaarde(0);
                             selectedClauseComponent.setName(String.format("%s %s %s", parDropd.getSelectionModel().getSelectedItem().toString(), operatorDropd.getSelectionModel().getSelectedItem().toString(), parDropd2.getSelectionModel().getSelectedItem().toString()));
@@ -529,6 +549,7 @@ public class ManageDeterminateTable extends GridPane {
         rc.insertClause(new ClauseComponent("Nieuwe clause", "Clause", 0, "<", rc.findAllParamaters().get(0), rc.findGradeById(graad).getDeterminateTableId()));
         initialize();
         disableAddClause(true);
+        txtNameNewDeterminateTable.setText("");
     }
 
     @FXML
@@ -611,7 +632,6 @@ public class ManageDeterminateTable extends GridPane {
 //        }
 //        viewDeterminateTable();
 //    }
-
     private void disableAddClause(boolean bool) {
         rbTypeClause.setDisable(bool);
         rbTypeResult.setDisable(bool);
@@ -676,26 +696,26 @@ public class ManageDeterminateTable extends GridPane {
             unblockPar2();
         }
     }
-    
+
     @FXML
-    private void deleteItem(){
+    private void deleteItem() {
         recursiveDelete(selectedClauseComponent);
         viewDeterminateTable();
     }
-    
+
     @FXML
-    private void recursiveDelete(ClauseComponent selectedClauseComponent){
-        if(selectedClauseComponent.getYesClause()!=null){
+    private void recursiveDelete(ClauseComponent selectedClauseComponent) {
+        if (selectedClauseComponent.getYesClause() != null) {
             ClauseComponent toDelete = selectedClauseComponent.getYesClause();
             selectedClauseComponent.setYesClause(null);
             recursiveDelete(toDelete);
         }
-        if(selectedClauseComponent.getNoClause()!=null){
+        if (selectedClauseComponent.getNoClause() != null) {
             ClauseComponent toDelete = selectedClauseComponent.getNoClause();
             selectedClauseComponent.setNoClause(null);
             recursiveDelete(toDelete);
         }
-        
+
         selectedClauseComponent.setClimatefeature("Klimaatkenmerk");
         selectedClauseComponent.setDiscriminator("Result");
         selectedClauseComponent.setName(null);
@@ -707,7 +727,36 @@ public class ManageDeterminateTable extends GridPane {
         selectedClauseComponent.setVegetationfeature("Vegetatiekenmerk");
         selectedClauseComponent.setWaarde(0);
         rc.updateRepo();
-        
-        
+
+    }
+
+    @FXML
+    private void searchImage() {
+        FileChooser fileChooser = new FileChooser();
+
+        FileChooser.ExtensionFilter extentionFilter = new FileChooser.ExtensionFilter("Images (.png, .jpg, .bmp)", "*.jpg", "*.png", "*.bmp");
+        fileChooser.getExtensionFilters().add(extentionFilter);
+
+        String userDirectoryString = System.getProperty("user.home");
+        File userDirectory = new File(userDirectoryString);
+        if (!userDirectory.canRead()) {
+            userDirectory = new File("c:/");
+        }
+        fileChooser.setInitialDirectory(userDirectory);
+
+        File chosenFile = fileChooser.showOpenDialog(null);
+
+        String path;
+        if (chosenFile != null) {
+            path = chosenFile.getPath();
+            File file = new File(path);
+            vegetationPictureFile = file;
+
+            Image image = new Image(file.toURI().toString());
+            imageVegetation.setImage(image);
+
+        } else {
+            path = null;
+        }
     }
 }

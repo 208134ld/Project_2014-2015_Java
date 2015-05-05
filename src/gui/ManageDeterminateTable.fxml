@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
@@ -9,7 +10,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root minHeight="749.0" minWidth="800.0" prefHeight="771.0" prefWidth="800.0" type="GridPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root minWidth="800.0" prefHeight="950.0" prefWidth="800.0" type="GridPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
@@ -18,7 +19,7 @@
     <RowConstraints maxHeight="552.0" minHeight="10.0" prefHeight="527.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <GridPane prefWidth="800.0" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+      <GridPane minHeight="750.0" prefWidth="800.0" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -28,9 +29,9 @@
         </rowConstraints>
          <children>
             <TreeView fx:id="treeViewDeterminateTable" prefWidth="400.0" />
-            <Accordion GridPane.columnIndex="1">
+            <Accordion prefHeight="750.0" prefWidth="400.0" GridPane.columnIndex="1">
               <panes>
-                  <TitledPane text="Wijzig knoop en voeg kinderknopen toe">
+                  <TitledPane prefHeight="644.0" prefWidth="400.0" text="Wijzig knoop en voeg kinderknopen toe">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -42,7 +43,7 @@
                               <Button fx:id="saveItem" layoutX="82.0" layoutY="362.0" mnemonicParsing="false" onAction="#saveDetItem" prefHeight="34.0" prefWidth="235.0" text="Opslaan en kinderknopen toevoegen" />
                               <Label layoutX="21.0" layoutY="322.0" text="Vegetatiekenmerk:" />
                               <TextField fx:id="txtVegetationFeature" layoutX="145.0" layoutY="318.0" prefHeight="25.0" prefWidth="181.0" promptText="(alleen mogelijk bij resultaat)" />
-                              <Text fx:id="foutmelding" fill="#901d1d" layoutX="62.0" layoutY="479.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="275.13671875" />
+                              <Text fx:id="foutmelding" fill="#901d1d" layoutX="62.0" layoutY="462.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="275.13671875" />
                               <ComboBox fx:id="parDropd2" layoutX="143.0" layoutY="190.0" prefHeight="25.0" prefWidth="124.0" />
                               <RadioButton fx:id="par2RadioButton" layoutX="150.0" layoutY="57.0" mnemonicParsing="false" onAction="#unblockPar2" text="2de parameter">
                                  <toggleGroup>
@@ -62,6 +63,8 @@
                               <Label alignment="CENTER_RIGHT" layoutX="54.0" layoutY="194.0" text="Parameter 2:" />
                               <Label alignment="CENTER_RIGHT" layoutX="73.0" layoutY="231.0" text="Waarde:" />
                               <Button fx:id="btnDeleteItem" layoutX="82.0" layoutY="408.0" mnemonicParsing="false" onAction="#deleteItem" prefHeight="34.0" prefWidth="235.0" text="Verwijder deze knoop + kinderknopen" />
+                              <ImageView fx:id="imageVegetation" fitHeight="133.0" fitWidth="236.0" layoutX="81.0" layoutY="530.0" pickOnBounds="true" preserveRatio="true" />
+                              <Button fx:id="btnSearchImage" layoutX="82.0" layoutY="474.0" mnemonicParsing="false" onAction="#searchImage" prefHeight="34.0" prefWidth="235.0" text="Upload vegetatiefoto" />
                            </children>
                         </AnchorPane>
                     </content>
@@ -69,6 +72,9 @@
               </panes>
             </Accordion>
          </children>
+         <GridPane.margin>
+            <Insets top="200.0" />
+         </GridPane.margin>
       </GridPane>
       <GridPane GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
         <columnConstraints>
@@ -79,7 +85,7 @@
           <RowConstraints maxHeight="117.0" minHeight="10.0" prefHeight="87.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <GridPane prefHeight="122.0" prefWidth="800.0" GridPane.rowIndex="1">
+            <GridPane prefWidth="800.0" GridPane.rowIndex="1">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="176.0" minWidth="10.0" prefWidth="129.0" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="271.0" minWidth="10.0" prefWidth="271.0" />
