@@ -29,7 +29,7 @@ public class StartUp extends Application {
 
         stage.setOnShown((WindowEvent t) -> {
             stage.setMinWidth(1000);
-            stage.setMinHeight(700);
+            stage.setMinHeight(730);
             //stage.setX(70);
             //stage.setY(0);
         });
