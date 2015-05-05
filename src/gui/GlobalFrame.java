@@ -49,6 +49,7 @@ public class GlobalFrame extends VBox {
     private final LocationViewPanel locationViewPanel;
     private final ClassListControllerPanel classListControllerPanel;
     private final ClassListViewPanel classListViewPanel;
+    private final ManageDeterminateTable manageDeterminateTable;
 
     public GlobalFrame() {
 
@@ -58,7 +59,9 @@ public class GlobalFrame extends VBox {
         locationViewPanel = new LocationViewPanel(repositoryController);
         classListControllerPanel = new ClassListControllerPanel(classListController);
         classListViewPanel = new ClassListViewPanel(classListController);
+        manageDeterminateTable = new ManageDeterminateTable(repositoryController);
         repositoryController.addObserver(locationViewPanel);
+        
         
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("GlobalFrame.fxml"));
@@ -91,6 +94,16 @@ public class GlobalFrame extends VBox {
                 workPanel.add(locationControllerPanel, 0, 0);
                 workPanel.add(locationViewPanel, 1, 0);
                 repositoryController.addObserver(locationViewPanel);
+            }
+        });
+        
+        miDeterminateTabel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                workPanel.getChildren().clear();
+                workPanel.add(null, 0, 0);
+                workPanel.add(manageDeterminateTable, 1, 0);
+                
             }
         });
 

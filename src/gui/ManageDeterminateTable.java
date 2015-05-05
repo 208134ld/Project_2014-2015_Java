@@ -110,8 +110,8 @@ public class ManageDeterminateTable extends GridPane {
     private int currentDetTableId;
     private File vegetationPictureFile;
 
-    public ManageDeterminateTable() throws IOException {
-        rc = new RepositoryController();
+    public ManageDeterminateTable(RepositoryController repositoryController) throws IOException {
+        rc = repositoryController;
         treeItems = new ArrayList<>();
 
         loader = new FXMLLoader(getClass().getResource("ManageDeterminateTable.fxml"));
