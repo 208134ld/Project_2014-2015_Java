@@ -35,4 +35,10 @@ public class TestRepository {
         TypedQuery<Test> query = em.createNamedQuery("Test.findByClassGroup", Test.class);
         return query.setParameter("classGroup", classGroup).getResultList();
     }
+    
+    public void removeTest(Test t){
+        em.getTransaction().begin();
+        em.remove(t);
+        em.getTransaction().commit();
+    }
 }

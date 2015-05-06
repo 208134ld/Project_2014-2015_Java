@@ -256,5 +256,13 @@ public class RepositoryController extends Observable {
     public List<Exercise> findExercisesByTest(Test test){
         return exerciseRepo.findExercisesByTest(test);
     }
+    
+    public void removeExercise(Exercise e){
+        exerciseRepo.removeExercise(e);
+    }
+    
+    public void removeTest(Test t){
+        testRepo.removeTest(t);
+    }
 
 }
