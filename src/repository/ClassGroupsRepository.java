@@ -15,7 +15,6 @@ public class ClassGroupsRepository {
 
     public ClassGroupsRepository() {
         this.em = JPAUtil.getEntityManager();
-        
     }
 
     public List<Grade> getAllGrades() {
@@ -92,10 +91,10 @@ public class ClassGroupsRepository {
         em.remove(cg);
         em.getTransaction().commit();
     }
+    
     public ClassGroup findById(int id)
     {
         TypedQuery<ClassGroup> query = em.createNamedQuery("ClassGroup.findById", ClassGroup.class).setParameter("id", id);
         return query.getSingleResult();
     }
-
 }

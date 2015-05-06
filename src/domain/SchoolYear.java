@@ -14,10 +14,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-/**
- *
- * @author SAMUEL
- */
 @Entity(name = "SchoolYears")
 @Table(name = "SchoolYears")
 @NamedQueries({

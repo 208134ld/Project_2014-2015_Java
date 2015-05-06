@@ -1,7 +1,6 @@
 package repository;
 
 import domain.ClassGroup;
-import domain.Clause;
 import domain.ClauseComponent;
 import domain.ClimateChart;
 import domain.Continent;
@@ -12,14 +11,12 @@ import domain.MonthOfTheYear;
 import domain.Months;
 import domain.Parameter;
 import domain.SchoolYear;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import javafx.beans.InvalidationListener;
 
-public class RepositoryController extends Observable{
+public class RepositoryController extends Observable {
 
     private ContinentRepository continentRepo;
     private CountryRepository countryRepo;
@@ -28,7 +25,7 @@ public class RepositoryController extends Observable{
     private DeterminateTableRepository determinateRepo;
     private GradeRepository gradeRepo;
     private ClassGroupsRepository clm;
-    
+
     public RepositoryController() {
         this.continentRepo = new ContinentRepository();
         this.countryRepo = new CountryRepository();
@@ -44,24 +41,23 @@ public class RepositoryController extends Observable{
     }
 
     public void insertContinent(Continent c) {
-        try{
-                    continentRepo.insertContinent(c);
-        setChanged();
-        notifyObservers();
-        }catch(Exception e)
-        {
-            
-        }
+        try {
+            continentRepo.insertContinent(c);
+            setChanged();
+            notifyObservers();
+        } catch (Exception e) {
 
+        }
     }
-    public List<ClimateChart> findAllClimateCharts()
-    {
+
+    public List<ClimateChart> findAllClimateCharts() {
         return chartRepo.findAll();
     }
+
     public Continent findContinentById(int id) {
         return continentRepo.findContinentById(id);
     }
-    
+
     public Country findCountryByName(String name) {
         return countryRepo.findCountryByName(name);
     }
@@ -87,12 +83,9 @@ public class RepositoryController extends Observable{
     }
 
     public void insertCountry(Country c) {
-       
-       countryRepo.insertCountry(c);
+        countryRepo.insertCountry(c);
         setChanged();
         notifyObservers();
-
-
     }
 
     public Country findCountryById(int id) {
@@ -108,12 +101,9 @@ public class RepositoryController extends Observable{
     }
 
     public void InsertClimatechart(ClimateChart c) {
-       
-       chartRepo.insertClimateChart(c);
+        chartRepo.insertClimateChart(c);
         setChanged();
         notifyObservers();
-        
- 
     }
 
     public List<MonthOfTheYear> getMonthsOfTheYear() {
@@ -159,68 +149,69 @@ public class RepositoryController extends Observable{
     public List<Grade> getAllGrades() {
         return gradeRepo.getAllGrades();
     }
-    
-    public void removeDeterminateTableById(int id){
+
+    public void removeDeterminateTableById(int id) {
         determinateRepo.deleteDeterminateTableById(id);
     }
-    
-    public void createDeterminateTable(int gradeId, String name){
+
+    public void createDeterminateTable(int gradeId, String name) {
         Grade g = findGradeById(gradeId);
         DeterminateTable d = determinateRepo.createDeterminateTable(name);
         g.setDeterminateTableId(d);
     }
-    
-    public List<DeterminateTable> getAllDeterminateTables(){
+
+    public List<DeterminateTable> getAllDeterminateTables() {
         return determinateRepo.getAllDeterminateTables();
     }
-    
-    public DeterminateTable findDeterminateTableById(int id){
+
+    public DeterminateTable findDeterminateTableById(int id) {
         return determinateRepo.findDeterminateTableById(id);
     }
-    
-    public void insertClause(ClauseComponent clause){
+
+    public void insertClause(ClauseComponent clause) {
         determinateRepo.insertClause(clause);
     }
-    public void deleteCountry(int countryId)
-    {
+
+    public void deleteCountry(int countryId) {
         countryRepo.deleteCountry(countryId);
     }
-    public void deleteClimatechart(int climatechartId)
-    {
+
+    public void deleteClimatechart(int climatechartId) {
         chartRepo.deleteClimatechart(climatechartId);
     }
-    public void deleteContinent(int id)
-    {
+
+    public void deleteContinent(int id) {
         continentRepo.deleteContinent(id);
     }
-    public Continent findContinentByName(String name)
-    {
+
+    public Continent findContinentByName(String name) {
         return continentRepo.findByName(name);
     }
-    public ClassGroup findClassGroupById(int id){
+
+    public ClassGroup findClassGroupById(int id) {
         return clm.findById(id);
     }
-    public void deleteClassgroup(int id)
-    {
+
+    public void deleteClassgroup(int id) {
         clm.removeClassGroup(clm.findById(id));
     }
+
     @Override
-    public void addObserver(Observer observer)
-    {
+    public void addObserver(Observer observer) {
         super.addObserver(observer);
         observer.update(this, this);
     }
-    
-    public void removeClauseComponent(ClauseComponent clause){
+
+    public void removeClauseComponent(ClauseComponent clause) {
         determinateRepo.removeClauseComponent(clause);
     }
-    
-    public List<SchoolYear> getAllSchoolYears(){
+
+    public List<SchoolYear> getAllSchoolYears() {
         return clm.getAllSchoolYears();
     }
-    
-    public List<ClassGroup> getClassGroupsOfSchoolYear(SchoolYear sy){
+
+    public List<ClassGroup> getClassGroupsOfSchoolYear(SchoolYear sy) {
         return clm.getAllClassGroupsOfSchoolYear(sy);
     }
-    
+
 }

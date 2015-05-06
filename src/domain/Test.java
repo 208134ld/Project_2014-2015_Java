@@ -13,13 +13,13 @@ import javax.persistence.Table;
 @Entity(name = "Tests")
 @Table(name = "Tests")
 public class Test implements Serializable {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int testId;
-    
+
     private String Title;
-    private String description;   
+    private String description;
     private GregorianCalendar startDate;
     private GregorianCalendar endDate;
     private List<Exercise> exercises;
@@ -30,13 +30,12 @@ public class Test implements Serializable {
         this.startDate = startDate;
         this.endDate = endDate;
         this.exercises = exercises;
-        
     }
 
-    public Test()
-    {
+    public Test() {
         exercises = new ArrayList<>();
     }
+
     public String getTitle() {
         return Title;
     }
@@ -76,5 +75,5 @@ public class Test implements Serializable {
     public void setExercises(List<Exercise> exercises) {
         this.exercises = exercises;
     }
-    
+
 }

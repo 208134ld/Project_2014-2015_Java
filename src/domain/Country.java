@@ -25,7 +25,6 @@ import javax.persistence.Table;
         query = "SELECT c FROM Countries c WHERE c.name = :countryName")
 })
 public class Country implements Serializable {
-
     private String name;
 
     @Id
@@ -33,9 +32,6 @@ public class Country implements Serializable {
     @Column(name = "CountryID")
     private int countryId;
 
-//    @OneToMany(mappedBy="country")
-//    private ObservableList<ClimateChart> climateCharts;
-//    
     @ManyToOne
     @JoinColumn(name = "ContinentID")
     private Continent continent;
@@ -54,19 +50,16 @@ public class Country implements Serializable {
     public Country(String name, int id) {
         setName(name);
         setId(id);
-        //climateCharts = FXCollections.observableArrayList();
     }
 
     public Country(String name, Continent c) {
         setName(name);
         setContinent(c);
-        //climateCharts = FXCollections.observableArrayList();
     }
 
     public Country(String name, int id, int continentId) {
         setName(name);
         setId(id);
-        //climateCharts = FXCollections.observableArrayList();
     }
 
     public String getName() {
@@ -84,12 +77,4 @@ public class Country implements Serializable {
     public void setId(int id) {
         this.countryId = id;
     }
-
-//    public ObservableList<ClimateChart> getClimateCharts(){
-//        return climateCharts;
-//    }
-//    
-//    public ClimateChart getClimateChart(int climateChartId){
-//         return climateCharts.stream().filter(e->e.getId() == climateChartId).findFirst().get();
-//    }
 }

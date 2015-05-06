@@ -1,4 +1,3 @@
-
 package repository;
 
 import domain.Continent;
@@ -8,38 +7,37 @@ import javax.persistence.TypedQuery;
 import util.JPAUtil;
 
 public class ContinentRepository {
-    
+
     private EntityManager em;
-    
-    public ContinentRepository(){
+
+    public ContinentRepository() {
         this.em = JPAUtil.getEntityManager();
     }
-    
-    public List<Continent> getAllContinents()
-    {
+
+    public List<Continent> getAllContinents() {
         TypedQuery<Continent> query = em.createNamedQuery("Continent.findAllContinents", Continent.class);
         return query.getResultList();
     }
 
-    public void insertContinent(Continent c){
+    public void insertContinent(Continent c) {
         em.getTransaction().begin();
         em.persist(c);
         em.getTransaction().commit();
     }
-    
-    public Continent findContinentById(int id){
+
+    public Continent findContinentById(int id) {
         TypedQuery<Continent> query = em.createNamedQuery("Continent.findById", Continent.class);
         return query.setParameter("continentID", id).getSingleResult();
     }
-    public void deleteContinent(int id)
-    {
+
+    public void deleteContinent(int id) {
         em.getTransaction().begin();
         em.remove(this.findContinentById(id));
         em.getTransaction().commit();
     }
-    public Continent findByName(String name)
-    {
-        TypedQuery<Continent> query = em.createNamedQuery("Continent.findByName",Continent.class);
-        return query.setParameter("name",name).getSingleResult();
+
+    public Continent findByName(String name) {
+        TypedQuery<Continent> query = em.createNamedQuery("Continent.findByName", Continent.class);
+        return query.setParameter("name", name).getSingleResult();
     }
 }

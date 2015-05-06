@@ -1,6 +1,5 @@
 package repository;
 
-import domain.ClauseComponent;
 import domain.Grade;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -19,8 +18,8 @@ public class GradeRepository {
         TypedQuery<Grade> query = em.createNamedQuery("SelectedGrade", Grade.class);
         return query.setParameter("graad", gradeId).getSingleResult();
     }
-    
-    public List<Grade> findByDeterminateTableId(int determinateTableId){
+
+    public List<Grade> findByDeterminateTableId(int determinateTableId) {
         TypedQuery<Grade> query = em.createNamedQuery("Grade.findByDeterminateTableId", Grade.class);
         return query.setParameter("determinateTableId", determinateTableId).getResultList();
     }
@@ -29,5 +28,5 @@ public class GradeRepository {
         TypedQuery<Grade> query = em.createNamedQuery("Grade.AllGrades", Grade.class);
         return query.getResultList();
     }
-    
+
 }

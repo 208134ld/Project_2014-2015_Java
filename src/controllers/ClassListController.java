@@ -1,5 +1,9 @@
-package domain;
+package controllers;
 
+import domain.ClassGroup;
+import domain.Grade;
+import domain.SchoolYear;
+import domain.Student;
 import repository.ClassGroupsRepository;
 import java.util.Comparator;
 import java.util.List;
@@ -9,71 +13,62 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 
-/**
- *
- * @author SAMUEL
- */
 public class ClassListController extends Observable{
     
-    private ClassGroupsRepository clm = new ClassGroupsRepository();
+    private ClassGroupsRepository classRepo = new ClassGroupsRepository();
     
     public List<Grade> giveAllGrades(){
-        return /*List<Grade> li =*/ clm.getAllGrades();
-        //return li.stream().map(Grade::getGradeString).collect(Collectors.toList());
+        return classRepo.getAllGrades();
     }
     
     public List<SchoolYear> giveAllSchoolYears(){
-        return /*List<SchoolYear> li =*/ clm.getAllSchoolYears();
-        //return li.stream().map(SchoolYear::getSchoolYearString).collect(Collectors.toList());
+        return classRepo.getAllSchoolYears();
     }
     
     public List<ClassGroup> giveAllClassGroups(){
-        return /*List<ClassGroup> li =*/ clm.getAllClassGroups();
-        //return li.stream().map(ClassGroup::getGroupName).collect(Collectors.toList());
+        return classRepo.getAllClassGroups();
     }
     
     public List<Student> giveAllStudents(){
-        return /*List<Student> li =*/ clm.getAllStudents();
-        //return li.stream().map(Student::getFullName).collect(Collectors.toList());
+        return classRepo.getAllStudents();
     }
     
     public void addStudent(Student s){
-        clm.insertStudent(s);
+        classRepo.insertStudent(s);
         setChanged();
         notifyObservers();
     }
     
     public void removeStudent(Student s){
-        clm.removeStudent(s);
+        classRepo.removeStudent(s);
         setChanged();
         notifyObservers();
     }
     
     public List<SchoolYear> giveSchoolYearsOfGrade(Grade g){
-        return clm.getAllSchoolYearsOfGrade(g);
+        return classRepo.getAllSchoolYearsOfGrade(g);
     }
     
     public List<ClassGroup> giveClassGroupOfSchoolYear(SchoolYear sy){
-        return clm.getAllClassGroupsOfSchoolYear(sy);
+        return classRepo.getAllClassGroupsOfSchoolYear(sy);
     }
 
     public List<Student> giveStudentsOfClassGroup(ClassGroup cg) {
-        return clm.getAllStudentsOfClassGroup(cg);
+        return classRepo.getAllStudentsOfClassGroup(cg);
     }
     
     public ClassGroup giveClassGroupWithName(String name){
-        return clm.getClassGroupWithName(name);
+        return classRepo.getClassGroupWithName(name);
     }
     
     public Grade giveGradeWithName(String naam){
-        return clm.getGradeWithName(naam);
+        return classRepo.getGradeWithName(naam);
     }
     
     public SchoolYear giveSchoolYearWithName(String naam){
-        return clm.getSchoolYearWithName(naam);
+        return classRepo.getSchoolYearWithName(naam);
     }
-    
-    
+
     public String giveGradeInfo(ClassGroup cg){
         StringBuilder sb = new StringBuilder();
         
@@ -88,13 +83,13 @@ public class ClassListController extends Observable{
     }
     
     public void addClassGroup(ClassGroup cg){
-        clm.insertClassGroup(cg);
+        classRepo.insertClassGroup(cg);
         setChanged();
         notifyObservers();
     }
     
     public void removeClassGroup(ClassGroup cg){
-        clm.removeClassGroup(cg);
+        classRepo.removeClassGroup(cg);
         setChanged();
         notifyObservers();
     }
@@ -107,7 +102,7 @@ public class ClassListController extends Observable{
     }
 
     public SortedList<Student> giveStudentsOfClassGroupSorted(ClassGroup cg) {
-        List<Student> li = clm.getAllStudentsOfClassGroup(cg);
+        List<Student> li = classRepo.getAllStudentsOfClassGroup(cg);
         ObservableList<Student> liObs = FXCollections.observableArrayList(li);
         return new SortedList<>(liObs).sorted(sortOrder);
     }

@@ -1,7 +1,6 @@
 package util;
 
 import domain.Months;
-import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TableCell;
@@ -14,6 +13,7 @@ public class EditingCell extends TableCell<Months, Number> {
 
     private TextField textField;
     private Boolean isInteger;
+
     public EditingCell(Boolean isInteger) {
         this.isInteger = isInteger;
     }
@@ -24,7 +24,6 @@ public class EditingCell extends TableCell<Months, Number> {
         super.startEdit();
 
         if (textField == null) {
-
             createTextField();
         }
 
@@ -62,7 +61,6 @@ public class EditingCell extends TableCell<Months, Number> {
     }
 
     private void createTextField() {
-        System.out.println("Creating textfield");
         textField = new TextField();
         textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
         textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -71,22 +69,19 @@ public class EditingCell extends TableCell<Months, Number> {
             public void handle(KeyEvent t) {
                 if (t.getCode() == KeyCode.ENTER || t.getCode() == KeyCode.TAB) {
                     try {
-                        if(isInteger)
-                        {
+                        if (isInteger) {
                             Double d = Double.parseDouble(textField.getText());
                             commitEdit(Math.floor(d));
-                        }else
-                        {
-                             commitEdit(Double.parseDouble(textField.getText()));
+                        } else {
+                            commitEdit(Double.parseDouble(textField.getText()));
                         }
-                       
+
                     } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(null, "Heeft u tekst ingegeven? een komma wordt door een . weergegeven.", "Er is een fout opgetreden", JOptionPane.ERROR_MESSAGE);
                         textField.setText("0");
-                    }catch(Exception e){
-                        JOptionPane.showMessageDialog(null, "er is iets onverwacht gebeurt"+e.getCause().getMessage());
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "er is iets onverwacht gebeurt" + e.getCause().getMessage());
                     }
-                    
 
                 } else if (t.getCode() == KeyCode.ESCAPE) {
                     cancelEdit();

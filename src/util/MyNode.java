@@ -1,4 +1,3 @@
-
 package util;
 
 public class MyNode {
@@ -44,12 +43,12 @@ public class MyNode {
     public boolean isClimateChart() {
         return type.equalsIgnoreCase("ClimateChart");
     }
-    
-    public boolean isClause(){
+
+    public boolean isClause() {
         return type.equalsIgnoreCase("Clause");
     }
-    public boolean isClassgroup()
-    {
+
+    public boolean isClassgroup() {
         return type.equalsIgnoreCase("classgroup");
     }
 

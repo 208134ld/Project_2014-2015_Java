@@ -1,6 +1,5 @@
-package gui;
+package controllers;
 
-import domain.ClassListController;
 import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -73,7 +72,7 @@ public class GlobalFrame extends VBox {
         testViewPanel = new TestViewPanel(repositoryController);
         repositoryController.addObserver(locationViewPanel);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("GlobalFrame.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/GlobalFrame.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {

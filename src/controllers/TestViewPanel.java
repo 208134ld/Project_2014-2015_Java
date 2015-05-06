@@ -1,4 +1,4 @@
-package gui;
+package controllers;
 
 import domain.ClassGroup;
 import domain.SchoolYear;
@@ -14,45 +14,45 @@ import repository.RepositoryController;
 import util.MyNode;
 
 public class TestViewPanel extends GridPane {
-    
+
     @FXML
     private TreeView treeViewTest;
-    
+
     private RepositoryController rc;
     private FXMLLoader loader;
-    
-    public TestViewPanel(RepositoryController repositoryController){
+
+    public TestViewPanel(RepositoryController repositoryController) {
         rc = repositoryController;
-        loader = new FXMLLoader(getClass().getResource("TestViewPanel.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/gui/TestViewPanel.fxml"));
         loader.setRoot(this);
         loader.setController(this);
-        
+
         try {
             loader.load();
         } catch (IOException ex) {
             Logger.getLogger(ManageDeterminateTable.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         initialize();
     }
-    
-    public void initialize(){
+
+    public void initialize() {
         TreeItem<MyNode> root = new TreeItem<>(new MyNode("root", "root", 0));
-        
+
         treeViewTest.setRoot(root);
         root.setExpanded(true);
         treeViewTest.setShowRoot(false);
-        for(SchoolYear sy : rc.getAllSchoolYears()){
+        rc.getAllSchoolYears().stream().map((sy) -> {
             TreeItem<MyNode> ti = new TreeItem<>(new MyNode("Schooljaar " + sy.getSchoolYear(), "SchoolYear", sy.getSchoolYear()));
-            
-            
-            for(ClassGroup cg : rc.getClassGroupsOfSchoolYear(sy)){
-                TreeItem<MyNode> tiCg = new TreeItem<>(new MyNode("Klasgroep " + cg.getGroupName(), "ClassGroup", cg.getGroupId()));
+            rc.getClassGroupsOfSchoolYear(sy).stream().map((cg) -> new TreeItem<>(new MyNode("Klasgroep " + cg.getGroupName(), "ClassGroup", cg.getGroupId()))).forEach((tiCg) -> {
                 ti.getChildren().add(tiCg);
-            }
+            });
+            return ti;
+        }).map((ti) -> {
             ti.setExpanded(true);
+            return ti;
+        }).forEach((ti) -> {
             root.getChildren().add(ti);
-        }
+        });
     }
-    
 }

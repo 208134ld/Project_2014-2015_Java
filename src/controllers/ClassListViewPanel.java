@@ -1,22 +1,16 @@
-package gui;
+package controllers;
 
 import domain.ClassGroup;
-import domain.ClassListController;
-import domain.Grade;
-import domain.Months;
-import domain.SchoolYear;
 import domain.Student;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -39,18 +33,10 @@ import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
 import repository.RepositoryController;
-import util.EditingCell;
 import util.EditingClassCell;
 import util.MyNode;
 import util.TextFieldTreeCellImpl;
-import util.TreeIterator;
 
-/**
- * FXML Controller class
- *
- * @author SAMUEL
- * @author bremmewindows
- */
 public class ClassListViewPanel extends GridPane implements Observer {
 
     @FXML
@@ -91,7 +77,7 @@ public class ClassListViewPanel extends GridPane implements Observer {
         treeItems = new ArrayList<>();
         gradeItems = new ArrayList<>();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("ClassListViewPanel.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/ClassListViewPanel.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -101,7 +87,6 @@ public class ClassListViewPanel extends GridPane implements Observer {
         }
         initTable();
         updateClassListViewPanel();
-
     }
 
     public void updateClassListViewPanel() {
@@ -109,31 +94,34 @@ public class ClassListViewPanel extends GridPane implements Observer {
         treeItems.clear();
         gradeItems.clear();
 
-        for (Grade g : controller.giveAllGrades()) {
+        controller.giveAllGrades().stream().map((g) -> {
             TreeItem<MyNode> grade = new TreeItem<>(new MyNode("Graad " + g.getGradeString(), "Graad", g.getGrade()));
-
-            for (SchoolYear sy : controller.giveSchoolYearsOfGrade(g)) {
+            controller.giveSchoolYearsOfGrade(g).stream().map((sy) -> {
                 TreeItem<MyNode> schoolYear = new TreeItem<>(new MyNode("Leerjaar " + sy.getSchoolYearString(), "Leerjaar", sy.getSchoolYear()));
-                //controller.giveSchoolYearsOfGrade(g).stream().forEach(c -> System.out.println(c.getSchoolYear()));
-
-                for (ClassGroup cg : controller.giveClassGroupOfSchoolYear(sy)) {
-                    TreeItem<MyNode> classGroup = new TreeItem<>(new MyNode(cg.getGroupName(), "classgroup", cg.getGroupId()));
+                controller.giveClassGroupOfSchoolYear(sy).stream().map((cg) -> new TreeItem<>(new MyNode(cg.getGroupName(), "classgroup", cg.getGroupId()))).forEach((classGroup) -> {
                     schoolYear.getChildren().add(classGroup);
-                }
+                });
+                return schoolYear;
+            }).map((schoolYear) -> {
                 grade.getChildren().add(schoolYear);
+                return schoolYear;
+            }).forEach((schoolYear) -> {
                 treeItems.add(schoolYear);
-            }
+            });
+            return grade;
+        }).map((grade) -> {
             gradeItems.add(grade);
+            return grade;
+        }).forEach((grade) -> {
             treeItems.add(grade);
-            //root.getChildren().add(itemChild);
-        }
+        });
 
         obsTreeItems = FXCollections.observableArrayList(gradeItems);
         rootItem.getChildren().addAll(obsTreeItems);
         rootItem.setExpanded(true);
-        
-        rootItem.getChildren().forEach(p->p.setExpanded(true));
-        //Onderstaand gedeelte maakt het mogelijk om treeviewitems "on the spot" van naam te veranderen, dit werkt alleen met treeItem<String> dus moet nog aangepast worden
+
+        rootItem.getChildren().forEach(p -> p.setExpanded(true));
+
         classTreeView.setEditable(true);
 
         classTreeView.setCellFactory(new Callback<TreeView<MyNode>, TreeCell<MyNode>>() {
@@ -149,10 +137,7 @@ public class ClassListViewPanel extends GridPane implements Observer {
 
         });
 
-        //itemChild.setExpanded(false);
         classTreeView.setRoot(rootItem);
-
-        //selectedClassGroup = null;
 
         classTreeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<MyNode>>() {
             @Override
@@ -161,18 +146,16 @@ public class ClassListViewPanel extends GridPane implements Observer {
                 if (selectedItem != null) {
                     if (selectedItem.getValue().isClassgroup()) {
                         selectedClassGroup = rc.findClassGroupById(selectedItem.getValue().getId());
-//                     selectedClimatechart = new ClimateChart(1,"Gent",1950,1970,true,23.34534,44.34523,"30° 45' 10\" NB ","51° 3' 15\" OL ",1);
                         updateStudentListDetailPanel(selectedClassGroup);
                     }
                 }
-
             }
         });
-        
-        if(selectedClassGroup != null)
+
+        if (selectedClassGroup != null) {
             updateStudentListDetailPanel(selectedClassGroup);
-        
-        //functionaliteit in klastable steken -->leerling verwijderen en veranderen klas
+        }
+
         studentInfoTable.getSelectionModel().selectedItemProperty().
                 addListener((observableValue, oldValue, newValue) -> {
                     if (newValue != null) {
@@ -193,20 +176,18 @@ public class ClassListViewPanel extends GridPane implements Observer {
                                 @Override
                                 public void handle(ActionEvent e) {
                                     List<String> choices = new ArrayList<>();
-                                    controller.giveAllClassGroups().stream().forEach(ch->choices.add(ch.getGroupName()));
+                                    controller.giveAllClassGroups().stream().forEach(ch -> choices.add(ch.getGroupName()));
 
                                     ChoiceDialog<String> dialog = new ChoiceDialog<>(choices.get(0), choices);
-                                    dialog.setTitle("Verander de klas voor " +newValue.getFullName());
-                                    dialog.setHeaderText("Verander klas voor " +newValue.getFullName());
+                                    dialog.setTitle("Verander de klas voor " + newValue.getFullName());
+                                    dialog.setHeaderText("Verander klas voor " + newValue.getFullName());
                                     dialog.setContentText("Kies de klas");
 
-// Traditional way to get the response value.
                                     Optional<String> result = dialog.showAndWait();
                                     if (result.isPresent()) {
                                         ClassGroup c = controller.giveClassGroupWithName(result.get());
                                         newValue.setClassGroup(c);
                                         controller.addStudent(newValue);
-                                        System.out.println("Your choice: " + result.get());
                                         updateStudentListDetailPanel(selectedClassGroup);
                                     }
                                 }
@@ -221,16 +202,10 @@ public class ClassListViewPanel extends GridPane implements Observer {
     }
 
     public void updateStudentListDetailPanel(ClassGroup cg) {
-      
-        
         classLbl.setText(controller.giveGradeInfo(cg)); //Van de geselectreerde grade
-
         studentList = controller.giveStudentsOfClassGroupSorted(cg);
-        //studentList = studentList.stream().sorted(Comparator.comparing(Student::getLastName).thenComparing(Student::getFirtsName)).collect(Collectors.toList());
         studentListObservable = FXCollections.observableArrayList(studentList);
-
         studentInfoTable.setItems(studentListObservable);
-
     }
 
     @Override
@@ -239,10 +214,7 @@ public class ClassListViewPanel extends GridPane implements Observer {
     }
 
     private void initTable() {
-        //TableView opvullen
-            /*De eerste kolom verbinden met de property “firstName” van de klasse Student. */
         firstNameCol.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
-        //Analoog tweede kolom:
         lastNameCol.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
         Callback<TableColumn<Student, String>, TableCell<Student, String>> cellFactory
                 = new Callback<TableColumn<Student, String>, TableCell<Student, String>>() {
@@ -259,28 +231,20 @@ public class ClassListViewPanel extends GridPane implements Observer {
     @FXML
     private void updateCell(TableColumn.CellEditEvent<Student, String> event) {
         if (studentInfoTable.getSelectionModel().getSelectedCells().get(0).getColumn() == 0) {
-            for(Student s : studentListObservable)
-            {
-                if(event.getRowValue().getStudentId()==s.getStudentId()){
-                    System.out.println("HHHHHHHHHHHHHIER " +event.getRowValue().getStudentId() + "   --->"+event.getNewValue());
-                    s.setLastName(event.getNewValue());
-                    controller.addStudent(s);
-                }
-                    
-            }
-           
-
+            studentListObservable.stream().filter((s) -> (event.getRowValue().getStudentId() == s.getStudentId())).map((s) -> {
+                s.setLastName(event.getNewValue());
+                return s;
+            }).forEach((s) -> {
+                controller.addStudent(s);
+            });
         }
         if (studentInfoTable.getSelectionModel().getSelectedCells().get(0).getColumn() == 1) {
-        for(Student s : studentListObservable)
-            {
-                if(event.getRowValue().getStudentId()==s.getStudentId()){
-                      System.out.println("HHHHHHHHHHHHHIER " +event.getRowValue().getStudentId());
-                    s.setFirtsName(event.getNewValue());
-                    controller.addStudent(s);
-                }
-                    
-            }
+            studentListObservable.stream().filter((s) -> (event.getRowValue().getStudentId() == s.getStudentId())).map((s) -> {
+                s.setFirtsName(event.getNewValue());
+                return s;
+            }).forEach((s) -> {
+                controller.addStudent(s);
+            });
         }
     }
 }

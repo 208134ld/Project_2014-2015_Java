@@ -1,6 +1,6 @@
 package domain;
 
-import javax.persistence.Column;
+import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,12 +16,12 @@ import javax.persistence.Table;
     @NamedQuery(name="Parameter.findById",query="select p from Parameter p where p.ParameterId = :parameterId"),
     @NamedQuery(name="Parameter.findByName",query="select p from Parameter p where p.Discriminator = :name")
 })
-public class Parameter {
+public class Parameter implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int ParameterId;
-    public String Beschrijving;
+    private int ParameterId;
+    private String Beschrijving;
     private String Discriminator;
     
     public Parameter(){

@@ -1,7 +1,6 @@
-package gui;
+package controllers;
 
 import util.EditingCell;
-import com.sun.deploy.uitoolkit.impl.fx.DeployPerfLogger;
 import domain.ClimateChart;
 import domain.Continent;
 import domain.Country;
@@ -12,30 +11,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.util.Callback;
@@ -43,16 +32,10 @@ import repository.RepositoryController;
 import util.MyNode;
 import util.TextFieldTreeCellImpl;
 
-/**
- * FXML Controller class
- *
- * @author Logan Dupont
- */
 public class LocationViewPanel extends GridPane implements Observer {
 
     @FXML
     private TreeView selectionTreeView;
-
     @FXML
     private Label locationLable;
     @FXML
@@ -81,7 +64,6 @@ public class LocationViewPanel extends GridPane implements Observer {
     private Label lbTemperatureYear;
     @FXML
     private Label lbSedimentYear;
-
     @FXML
     private TableView<Months> monthTable;
     @FXML
@@ -101,12 +83,11 @@ public class LocationViewPanel extends GridPane implements Observer {
 
     public LocationViewPanel(RepositoryController repositoryController) {
         rc = repositoryController;
-        System.out.println("LOADING LOCATION VIEW");
         treeItems = new ArrayList<>();
         continentItems = new ArrayList<>();
         countryItems = new ArrayList<>();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("LocationViewPanel.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/LocationViewPanel.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -117,7 +98,6 @@ public class LocationViewPanel extends GridPane implements Observer {
 
         initMonthTable();
         updateSelectionTreeViewPanel();
-
     }
 
     public void updateLocationDetailPanel(ClimateChart c) {
@@ -150,42 +130,46 @@ public class LocationViewPanel extends GridPane implements Observer {
         countryItems.clear();
         continentItems.clear();
 
-        for (Continent c : rc.getAllContinents()) {
-
+        rc.getAllContinents().stream().map((c) -> {
             TreeItem<MyNode> itemChild = new TreeItem<>(new MyNode(c.toString(), "Continent", c.getId()));
-            for (Country co : rc.getCountriesOfContinent(c.getId())) {
+            rc.getCountriesOfContinent(c.getId()).stream().map((co) -> {
                 TreeItem<MyNode> countryChild = new TreeItem<>(new MyNode(co.getName(), "Country", co.getId()));
-
-                for (ClimateChart chart : rc.getClimateChartsOfCountry(co.getId())) {
-                    TreeItem<MyNode> climateChartChild = new TreeItem<>(new MyNode(chart.getLocation(), "ClimateChart", chart.getId()));
+                rc.getClimateChartsOfCountry(co.getId()).stream().map((chart) -> new TreeItem<>(new MyNode(chart.getLocation(), "ClimateChart", chart.getId()))).forEach((climateChartChild) -> {
                     countryChild.getChildren().add(climateChartChild);
-                }
+                });
+                return countryChild;
+            }).map((countryChild) -> {
                 itemChild.getChildren().add(countryChild);
+                return countryChild;
+            }).map((countryChild) -> {
                 treeItems.add(countryChild);
+                return countryChild;
+            }).forEach((countryChild) -> {
                 countryItems.add(countryChild);
-            }
+            });
+            return itemChild;
+        }).map((itemChild) -> {
             continentItems.add(itemChild);
+            return itemChild;
+        }).forEach((itemChild) -> {
             treeItems.add(itemChild);
-
-        }
-selectionTreeView.setCellFactory(new Callback<TreeView<MyNode>, TreeCell<MyNode>>() {
+        });
+        selectionTreeView.setCellFactory(new Callback<TreeView<MyNode>, TreeCell<MyNode>>() {
             @Override
             public TreeCell<MyNode> call(TreeView<MyNode> p) {
                 try {
                     return new TextFieldTreeCellImpl(root, treeItems, rc);
                 } catch (SQLException ex) {
-                   
+
                 }
                 return null;
             }
-
         });
         obsTreeItems = FXCollections.observableArrayList(continentItems);
         root.getChildren().addAll(obsTreeItems);
 
         root.setExpanded(true);
         selectionTreeView.setRoot(root);
-        //selectionTreeView.setShowRoot(false);
 
         selectionTreeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<MyNode>>() {
             @Override
@@ -199,9 +183,7 @@ selectionTreeView.setCellFactory(new Callback<TreeView<MyNode>, TreeCell<MyNode>
                     } catch (Exception e) {
 
                     }
-
                 }
-
             }
         });
     }
@@ -210,17 +192,16 @@ selectionTreeView.setCellFactory(new Callback<TreeView<MyNode>, TreeCell<MyNode>
         monthcol.setCellValueFactory(cellData -> cellData.getValue().monthProperty());
         sedCol.setCellValueFactory(cellData -> cellData.getValue().sedimentProperty());
         tempCol.setCellValueFactory(cellData -> cellData.getValue().temperatureProperty());
-          Callback<TableColumn<Months, Number>, TableCell<Months, Number>> cellFactory =
-                new Callback<TableColumn<Months,Number>, TableCell<Months,Number>>() {
-                     
+        Callback<TableColumn<Months, Number>, TableCell<Months, Number>> cellFactory
+                = new Callback<TableColumn<Months, Number>, TableCell<Months, Number>>() {
+
                     @Override
                     public TableCell call(TableColumn p) {
                         return new EditingCell(false);
                     }
                 };
-                Callback<TableColumn<Months, Number>, TableCell<Months, Number>> cellFactory2 =
-                new Callback<TableColumn<Months,Number>, TableCell<Months,Number>>() {
-                     
+        Callback<TableColumn<Months, Number>, TableCell<Months, Number>> cellFactory2
+                = new Callback<TableColumn<Months, Number>, TableCell<Months, Number>>() {
                     @Override
                     public TableCell call(TableColumn p) {
                         return new EditingCell(true);
@@ -232,8 +213,6 @@ selectionTreeView.setCellFactory(new Callback<TreeView<MyNode>, TreeCell<MyNode>
 
     @FXML
     private void saveDetaillWindow(MouseEvent event) {
-//        try{
-
         int g1 = Integer.parseInt(txtBGrades.getText().trim());
         int g2 = Integer.parseInt(txtLGrades.getText().trim());
         int m1 = Integer.parseInt(txtBMinutes.getText().trim());
@@ -256,28 +235,14 @@ selectionTreeView.setCellFactory(new Callback<TreeView<MyNode>, TreeCell<MyNode>
         selectedClimatechart.setEndperiod(end);
         selectedClimatechart.setLatitude(selectedClimatechart.calcDecimals(g1, m1, s1, txtBreedteParameter.getText().trim()));
         selectedClimatechart.setLongitude(selectedClimatechart.calcDecimals(g2, m2, s2, txtLengteParameter.getText().trim()));
-        //Database connectie
+
         rc.updateClimateChart(selectedClimatechart.getId(), selectedClimatechart.getLCord(), selectedClimatechart.getBCord(), selectedClimatechart.getBeginperiod(), selectedClimatechart.getEndperiod(), selectedClimatechart.getLongitude(), selectedClimatechart.getLatitude());
         updateLocationDetailPanel(selectedClimatechart);
-
-//        }catch(NumberFormatException ex)
-//        {
-//            errorBar.setText("Gelieve getallen in te voeren in de tekstvakken");
-//        }
-//        catch(IllegalArgumentException ilExc)
-//        {
-//            errorBar.setText(ilExc.getMessage());
-//        }
-//        catch(Exception e)
-//        {
-//            errorBar.setText("Er is een fout opgetreden "+e.getMessage());
-//        }
     }
 
     @FXML
     private void updateCol(TableColumn.CellEditEvent<Months, Double> event) {
         int id = monthTable.getSelectionModel().getSelectedCells().get(0).getRow();
-        System.out.println("updateKol");
         if (monthTable.getSelectionModel().getSelectedCells().get(0).getColumn() == 1) {
 
             selectedClimatechart.getMonths().get(id).setAverTemp(event.getNewValue());

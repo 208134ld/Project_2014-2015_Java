@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalDouble;
-import java.util.OptionalInt;
-import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,10 +17,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-/**
- *
- * @author bremme windows
- */
 @Entity(name = "ClimateCharts")
 @Table(name = "ClimateCharts")
 @NamedQueries({
@@ -33,7 +27,6 @@ import javax.persistence.Table;
     @NamedQuery(name="ClimateChart.findAll",query="SELECT c from ClimateCharts c")
 })
 public class ClimateChart implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ClimateChartID")
@@ -87,18 +80,6 @@ public class ClimateChart implements Serializable {
         setMonths(ms);
     }
 
-//    public ClimateChart(int id, String loc, int begin, int end, boolean equator, double latitude, double longitude,String BCord,String LCord, int countryId) {
-//        setLocation(loc);
-//        setClimateChartId(id);
-//        setBeginperiod(begin);
-//        setEndperiod(end);
-//        setLatitude(latitude);
-//        setLongitude(longitude);
-//        setLCord(LCord);
-//        setBCord(BCord);
-//        months = new ArrayList<Months>();
-////        this.countryId = countryId;
-//    }
     public ClimateChart(String location, int id) {
         setLocation(location);
         this.climateChartId = id;
@@ -120,63 +101,6 @@ public class ClimateChart implements Serializable {
         location = value;
     }
 
-//    public int getBeginperiod() {
-//        return beginperiod.get();
-//    }
-//
-//    public void setBeginperiod(int value) {
-//        beginperiod.set(value);
-//    }
-//
-//    public IntegerProperty beginperiodProperty() {
-//        return beginperiod;
-//    }
-//   public int getEndperiod() {
-//        return endperiod.get();
-//    }
-//    public void setEndperiod(int value) {
-//        endperiod.set(value);
-//    }
-//
-//    public IntegerProperty endperiodProperty() {
-//        return endperiod;
-//    }
-//    @Access(AccessType.PROPERTY)
-//    public double getLatitude() {
-//        return latitude.get();
-//    }
-//
-//    public void setLatitude(double value) {
-//        latitude.set(value);
-//    }
-//
-//    public DoubleProperty latitudeProperty() {
-//        return latitude;
-//    }
-//    public void setLongitude(double value) {
-//        longitude.set(value);
-//    }
-//
-//    public DoubleProperty longitudeProperty() {
-//        return longitude;
-//    }
-//    @Access(AccessType.PROPERTY)
-//    public double getLongitude() {
-//        return longitude.get();
-//    }
-//    @Access(AccessType.PROPERTY)
-//    public String getLCord()
-//    {
-//        return LCord.get();
-//    }
-    //    public void setLCord(String v)
-//    {
-//        LCord.set(v);
-//    }
-    //    public StringProperty LCordProperty()
-//    {
-//        return LCord;
-//    }
     public double getLatitude() {
         return latitude;
     }
@@ -229,21 +153,6 @@ public class ClimateChart implements Serializable {
         this.BCord = BCord;
     }
 
-//    @Access(AccessType.PROPERTY)
-//    public String getBCord()
-//    {
-//        return BCord.get();
-//    }
-//
-//    public void setBCord(String v)
-//    {
-//        BCord.set(v);
-//    }
-//
-//    public StringProperty BCordProperty()
-//    {
-//        return BCord;
-//    }
     public void setClimateChartId(int climateChartId) {
         this.climateChartId = climateChartId;
     }
@@ -313,6 +222,8 @@ public class ClimateChart implements Serializable {
     {
         return months.stream().mapToInt(m -> m.getSediment()).sum();       
     }
+    
+    @Override
     public String toString()
     {
         return this.location;

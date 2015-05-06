@@ -1,6 +1,6 @@
-
 package domain;
 
+import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,9 +14,8 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name="DeterminateTable.findById",query= "select d from DeterminateTable d WHERE d.determinateTableId = :id"),
     @NamedQuery(name="DeterminateTable.findAllTables",query= "select d from DeterminateTable d"),
-    
 }) 
-public class DeterminateTable {
+public class DeterminateTable implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +38,8 @@ public class DeterminateTable {
     public String getName() {
         return name;
     }
+    
+    @Override
     public String toString()
     {
         return "DeterminatieTabel " + getDeterminateTableId();

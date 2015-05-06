@@ -15,10 +15,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-/**
- *
- * @author SAMUEL
- */
 @Entity(name = "Students")
 @Table(name = "Students")
 @NamedQueries({
@@ -44,10 +40,12 @@ public class Student implements Serializable {
     @ManyToOne
     @JoinColumn(name = "groupId")
     private ClassGroup classGroup;
-
-    /*private SchoolYear schoolYear;
     
-     private Grade grade;*/
+    @Transient
+    private SimpleStringProperty lastNameProp;
+    @Transient
+    private SimpleStringProperty firstNameProp;
+
     public Student() {
     }
 
@@ -93,32 +91,10 @@ public class Student implements Serializable {
     public void setClassGroup(ClassGroup classGroup) {
         this.classGroup = classGroup;
     }
-    /*
-
-     public SchoolYear getSchoolYear() {
-     return schoolYear;
-     }
-
-     public void setSchoolYear(SchoolYear schoolYear) {
-     this.schoolYear = schoolYear;
-     }
-
-     public Grade getGrade() {
-     return grade;
-     }
-
-     public void setGrade(Grade grade) {
-     this.grade = grade;
-     }*/
 
     public String getFullName() {
         return (getLastName() + " " + getFirtsName());
     }
-
-    @Transient
-    private SimpleStringProperty lastNameProp;
-    @Transient
-    private SimpleStringProperty firstNameProp;
 
     public ObservableValue<String> lastNameProperty() {
         this.lastNameProp = new SimpleStringProperty(lastName);

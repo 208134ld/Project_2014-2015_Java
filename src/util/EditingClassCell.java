@@ -1,6 +1,5 @@
 package util;
 
-
 import domain.Student;
 import javafx.event.EventHandler;
 import javafx.scene.control.ContentDisplay;
@@ -13,13 +12,13 @@ import javax.swing.JOptionPane;
 public class EditingClassCell extends TableCell<Student, String> {
 
     private TextField textField;
+
     public EditingClassCell() {
 
     }
 
     @Override
     public void startEdit() {
-
         super.startEdit();
         if (textField == null) {
 
@@ -72,10 +71,9 @@ public class EditingClassCell extends TableCell<Student, String> {
                     } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(null, "Heeft u tekst ingegeven? een komma wordt door een . weergegeven.", "Er is een fout opgetreden", JOptionPane.ERROR_MESSAGE);
                         textField.setText("");
-                    }catch(Exception e){
-                        JOptionPane.showMessageDialog(null, "er is iets onverwacht gebeurt"+e.getCause().getMessage());
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "er is iets onverwacht gebeurt" + e.getCause().getMessage());
                     }
-                    
 
                 } else if (t.getCode() == KeyCode.ESCAPE) {
                     cancelEdit();

@@ -1,5 +1,5 @@
 
-import gui.GlobalFrame;
+import controllers.GlobalFrame;
 import java.io.IOException;
 import java.sql.SQLException;
 import javafx.application.Application;

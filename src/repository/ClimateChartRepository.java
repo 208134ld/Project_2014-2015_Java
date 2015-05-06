@@ -1,10 +1,6 @@
 package repository;
 
 import domain.ClimateChart;
-import domain.MonthOfTheYear;
-import domain.Months;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -20,7 +16,7 @@ public class ClimateChartRepository {
 
     public List<ClimateChart> getClimateChartsOfCountry(int countryId) {
         TypedQuery<ClimateChart> query = em.createNamedQuery("ClimateChart.findByCountry", ClimateChart.class);
-        
+
         return query.setParameter("countryID", countryId).getResultList();
     }
 
@@ -28,30 +24,30 @@ public class ClimateChartRepository {
         TypedQuery<ClimateChart> query = em.createNamedQuery("ClimateChart.findById", ClimateChart.class);
         return query.setParameter("chartId", chartId).getSingleResult();
     }
-    
-    public void updateClimateChart()
-    {
+
+    public void updateClimateChart() {
         em.getTransaction().begin();
         em.getTransaction().commit();
     }
-    public void updateTemp(int id,double temp)
-    {
+
+    public void updateTemp(int id, double temp) {
         em.getTransaction().begin();
-        em.createNativeQuery("UPDATE Months SET AverTemp="+temp+" WHERE MonthID="+id).executeUpdate();
-      
+        em.createNativeQuery("UPDATE Months SET AverTemp=" + temp + " WHERE MonthID=" + id).executeUpdate();
+
         em.getTransaction().commit();
     }
 
     void updateSed(int id, int sed) {
         em.getTransaction().begin();
-        em.createNativeQuery("UPDATE Months SET Sediment="+sed+" WHERE MonthID="+id).executeUpdate();
+        em.createNativeQuery("UPDATE Months SET Sediment=" + sed + " WHERE MonthID=" + id).executeUpdate();
         em.getTransaction().commit();
     }
-    public List<ClimateChart> findAll()
-    {
-        TypedQuery<ClimateChart> query = em.createNamedQuery("ClimateChart.findAll",ClimateChart.class);
+
+    public List<ClimateChart> findAll() {
+        TypedQuery<ClimateChart> query = em.createNamedQuery("ClimateChart.findAll", ClimateChart.class);
         return query.getResultList();
     }
+
     void insertClimateChart(ClimateChart c) {
         em.getTransaction().begin();
         em.persist(c);
@@ -63,5 +59,5 @@ public class ClimateChartRepository {
         em.remove(this.getClimateChartByClimateChartID(climatechartId));
         em.getTransaction().commit();
     }
-    
+
 }

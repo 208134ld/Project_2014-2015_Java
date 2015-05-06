@@ -1,4 +1,4 @@
-package gui;
+package controllers;
 
 import domain.ClauseComponent;
 import domain.DeterminateTable;
@@ -98,8 +98,6 @@ public class ManageDeterminateTable extends GridPane {
     @FXML
     private Button btnSearchImage;
 
-    //private ObservableList<TreeItem<MyNode>> obsTreeItems;
-    //private List<TreeItem<MyNode>> treeItems;
     private RepositoryController rc;
     private TreeItem<MyNode> root;
     private ObservableList<String> operatoren;
@@ -114,9 +112,8 @@ public class ManageDeterminateTable extends GridPane {
 
     public ManageDeterminateTable(RepositoryController repositoryController) {
         rc = repositoryController;
-        //treeItems = new ArrayList<>();
 
-        loader = new FXMLLoader(getClass().getResource("ManageDeterminateTable.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/gui/ManageDeterminateTable.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         operatoren = FXCollections.observableArrayList("=", ">", ">=", "<", "<=", "!=");
@@ -252,10 +249,7 @@ public class ManageDeterminateTable extends GridPane {
         recursiveClause(root, rootClause, true);
         recursiveClause(root, rootClause, false);
 
-        //observablelist wel nodig??
-        //obsTreeItems = FXCollections.observableArrayList(treeItems);
         try {
-            //root.getChildren().addAll(obsTreeItems);
             root.setExpanded(true);
             treeViewDeterminateTable.setRoot(root);
         } catch (NullPointerException ex) {
@@ -318,12 +312,9 @@ public class ManageDeterminateTable extends GridPane {
                         txtClimateFeature.setText(selectedClauseComponent.getClimatefeature());
                         parDropd.setDisable(true);
                         operatorDropd.setDisable(true);
-
                     }
                 } catch (Exception e) {
-                    //foutmelding.setText("Fout met het weergeven van de eigenschappen");
                 }
-
             }
         }
         );
@@ -495,7 +486,6 @@ public class ManageDeterminateTable extends GridPane {
         }
 
         viewDeterminateTable();
-
     }
 
     @FXML
@@ -514,7 +504,7 @@ public class ManageDeterminateTable extends GridPane {
     @FXML
     private void createDeterminateTable() {
         int graad = Integer.parseInt(createGradeCombo.getSelectionModel().getSelectedItem().split(" ")[1]);
-        String name = "";
+        String name;
         if (txtNameNewDeterminateTable.getText().length() == 0) {
             name = "Nieuwe determineertabel";
         } else {
@@ -640,7 +630,6 @@ public class ManageDeterminateTable extends GridPane {
         selectedClauseComponent.setVegetationfeature("Vegetatiekenmerk");
         selectedClauseComponent.setWaarde(0);
         rc.updateRepo();
-
     }
 
     @FXML

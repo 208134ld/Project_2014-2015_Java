@@ -5,9 +5,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
-/**
- * @author BremmeWindows
- */
 public class JPAUtil 
 {
     private static final String PERSISTENCE_UNIT_NAME = "HOGENT1415_11";

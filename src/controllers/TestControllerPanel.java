@@ -1,4 +1,4 @@
-package gui;
+package controllers;
 
 import domain.ClimateChart;
 import domain.DeterminateTable;
@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -70,7 +68,7 @@ public class TestControllerPanel extends TitledPane {
 
     public TestControllerPanel(RepositoryController repositoryController) {
         rc = repositoryController;
-        loader = new FXMLLoader(getClass().getResource("TestControllerPanel.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/gui/TestControllerPanel.fxml"));
         loader.setRoot(this);
         loader.setController(this);
         try {
@@ -100,18 +98,16 @@ public class TestControllerPanel extends TitledPane {
             oefening.setValue(exercises.get(0));
             oefeningenCounter++;
         } catch (Exception e) {
-            //todo foutmelding
+
         }
         graad.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue ov, Object t, Object t1) {
                 if (graad.getSelectionModel().selectedItemProperty().get().getGrade() == 2) {
-
                     setEditableGraad2(true);
                 } else {
                     setEditableGraad2(false);
                 }
-
             }
         });
         oefening.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
@@ -127,7 +123,6 @@ public class TestControllerPanel extends TitledPane {
                 } catch (Exception e) {
 
                 }
-
             }
         });
         klimatogram.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
@@ -138,7 +133,6 @@ public class TestControllerPanel extends TitledPane {
                 } catch (Exception e) {
 
                 }
-
             }
         });
         determinatieTabel.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
@@ -149,10 +143,8 @@ public class TestControllerPanel extends TitledPane {
                 } catch (Exception e) {
 
                 }
-
             }
         });
-
     }
 
     private void setEditableGraad2(boolean waarde) {
@@ -175,7 +167,6 @@ public class TestControllerPanel extends TitledPane {
 
             //DATABASE TOEVOEGEN
             Titel.clear();
-
         } catch (NullPointerException nule) {
             errorText.setText("Een oefening moet minstens 1 vraag hebben");
         } catch (Exception e) {
@@ -188,7 +179,6 @@ public class TestControllerPanel extends TitledPane {
         try {
             String vraagbox = vraag.getText();
             if (vragen == null) {
-                System.out.println("isnull");
                 List<String> eenVraag = new ArrayList<String>();
                 eenVraag.add(vraagbox);
                 vragen = FXCollections.observableArrayList(eenVraag);
@@ -203,10 +193,8 @@ public class TestControllerPanel extends TitledPane {
 
         } catch (NullPointerException nulEx) {
             errorText.setText("Geen vraag gevonden");
-            //todo leeg textfield error
         } catch (Exception e) {
             errorText.setText(e.getMessage());
-            // todo global error
         }
     }
 
@@ -226,15 +214,12 @@ public class TestControllerPanel extends TitledPane {
         try {
             voegDataToe();
             if ((oefeningenCounter - oefening.getSelectionModel().getSelectedIndex()) == 2) {
-
                 exercises.add(new Exercise("oefening " + this.oefeningenCounter));
                 oefening.setValue(exercises.get(oefeningenCounter - 1));
                 oefeningenCounter++;
                 graad.setDisable(true);
                 resetLists();
-
             }
-
         } catch (NullPointerException nule) {
             errorText.setText("Een oefening moet minstens 1 vraag hebben");
         } catch (Exception e) {
@@ -248,7 +233,6 @@ public class TestControllerPanel extends TitledPane {
         List<String> vragenlijst = new ArrayList<>();
         if (graad.getSelectionModel().getSelectedItem().getGrade() != 2) {
             vragenlijst = vragen;
-            System.out.println("GRAAD 2");
             if (vragenlijst.size() == 0) {
                 throw new NullPointerException();
             }
@@ -267,5 +251,4 @@ public class TestControllerPanel extends TitledPane {
         klimatogram.setValue(climateCharts.get(0));
         determinatieTabel.setValue(detTable.get(0));
     }
-
 }
