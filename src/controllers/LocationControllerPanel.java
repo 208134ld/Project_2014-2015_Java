@@ -263,6 +263,7 @@ public class LocationControllerPanel extends Accordion {
                 };
         tempCol.setCellFactory(cellFactory);
         sedCol.setCellFactory(cellFactory2);
+        
     }
 
     @FXML
@@ -274,9 +275,9 @@ public class LocationControllerPanel extends Accordion {
             }
 
             WebEngine eng = siteView.getEngine();
-            eng.load(WEBSITE + "ClimateChart/ShowExercises?selectedYear=3&continentId=" + 1 + "&countryId=" + "1" + "&climateId=" + selectedClimatechart.getId());
+            eng.load(WEBSITE + "ClimateChart/ShowExercises?selectedYear=3&continentId=" + selectedClimatechart.getCountry().getContinent().getId() + "&countryId=" + selectedClimatechart.getCountry().getId() + "&climateId=" + selectedClimatechart.getId());
             webProgress.progressProperty().bind(eng.getLoadWorker().progressProperty());
-
+            siteView.setZoom(0.70);
             eng.getLoadWorker().stateProperty().addListener(
                     new ChangeListener<Worker.State>() {
                         @Override
