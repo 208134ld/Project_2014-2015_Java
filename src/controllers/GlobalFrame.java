@@ -137,6 +137,7 @@ public class GlobalFrame extends VBox {
                 //workPanel.add(testViewPanel, 0, 0);
                 workPanel.add(testControllerPanel, 1, 0);
                 testViewPanel.initialize();
+                testControllerPanel.initialize();
                 //testControllerPanel.addObserver(testViewPanel);
             }
         });

@@ -95,4 +95,9 @@ public class ClassGroup implements Serializable {
         this.groupId = groupId;
     }
     
+    @Override
+    public String toString(){
+        return this.groupName;
+    }
+    
 }

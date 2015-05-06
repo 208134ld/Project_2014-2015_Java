@@ -6,15 +6,18 @@ import domain.ClimateChart;
 import domain.Continent;
 import domain.Country;
 import domain.DeterminateTable;
+import domain.Exercise;
 import domain.Grade;
 import domain.MonthOfTheYear;
 import domain.Months;
 import domain.Parameter;
 import domain.SchoolYear;
+import domain.Test;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import javax.persistence.TypedQuery;
 
 public class RepositoryController extends Observable {
 
@@ -25,6 +28,8 @@ public class RepositoryController extends Observable {
     private DeterminateTableRepository determinateRepo;
     private GradeRepository gradeRepo;
     private ClassGroupsRepository clm;
+    private TestRepository testRepo;
+    private ExerciseRepository exerciseRepo;
 
     public RepositoryController() {
         this.continentRepo = new ContinentRepository();
@@ -34,6 +39,8 @@ public class RepositoryController extends Observable {
         this.determinateRepo = new DeterminateTableRepository();
         this.gradeRepo = new GradeRepository();
         this.clm = new ClassGroupsRepository();
+        this.testRepo = new TestRepository();
+        this.exerciseRepo = new ExerciseRepository();
     }
 
     public List<Continent> getAllContinents() {
@@ -212,6 +219,42 @@ public class RepositoryController extends Observable {
 
     public List<ClassGroup> getClassGroupsOfSchoolYear(SchoolYear sy) {
         return clm.getAllClassGroupsOfSchoolYear(sy);
+    }
+    
+    public List<ClassGroup> getAllClassGroups(){
+        return clm.getAllClassGroups();
+    }
+    
+    public List<Test> getAllTests() {
+        return testRepo.getAllTests();
+    }
+
+    public void insertTest(Test t) {
+        testRepo.insertTest(t);
+    }
+
+    public Test findTestById(int id) {
+        return testRepo.findTestById(id);
+    }
+    
+    public List<Test> findTestsByClassGroup(ClassGroup classGroup){
+        return testRepo.findTestsByClassGroup(classGroup);
+    }
+    
+    public List<Exercise> getAllExercises() {
+        return exerciseRepo.getAllExercises();
+    }
+
+    public void insertExercise(Exercise e) {
+        exerciseRepo.insertExercise(e);
+    }
+
+    public Exercise findExerciseById(int id) {
+        return exerciseRepo.findExerciseById(id);
+    }
+    
+    public List<Exercise> findExercisesByTest(Test test){
+        return exerciseRepo.findExercisesByTest(test);
     }
 
 }

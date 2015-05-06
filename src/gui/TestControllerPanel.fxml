@@ -20,8 +20,11 @@
       <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="75.0" minHeight="10.0" prefHeight="75.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="321.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="321.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="321.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="508.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="508.0" minHeight="6.0" prefHeight="50.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="508.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="508.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="508.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
    </rowConstraints>
@@ -67,18 +70,17 @@
             <DatePicker fx:id="dpTestEnd" prefHeight="25.0" prefWidth="243.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
-      <Label text="Bestaande vragen:" GridPane.rowIndex="4" />
-      <Button fx:id="btnDeleteSelectedExercise" mnemonicParsing="false" onAction="#deleteSelectedExercise" text="verwijder geselecteerde vraag" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+      <Label text="Bestaande vragen:" GridPane.rowIndex="6" />
+      <Button fx:id="btnDeleteSelectedExercise" mnemonicParsing="false" onAction="#deleteSelectedExercise" text="verwijder geselecteerde vraag" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6">
          <GridPane.margin>
             <Insets left="15.0" />
          </GridPane.margin>
       </Button>
-      <Label text="Vraag:" GridPane.rowIndex="5" />
-      <GridPane prefHeight="47.0" prefWidth="421.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+      <Label text="Vraag:" GridPane.rowIndex="7" />
+      <GridPane prefHeight="47.0" prefWidth="421.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="277.0" minWidth="10.0" prefWidth="260.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="152.0" minWidth="10.0" prefWidth="74.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -86,23 +88,50 @@
         </rowConstraints>
          <children>
             <TextField fx:id="txtExerciseName" prefHeight="25.0" prefWidth="103.0" GridPane.rowIndex="1" />
-            <Button fx:id="btnAddExercise" mnemonicParsing="false" onAction="#addExercise" prefHeight="25.0" prefWidth="152.0" text="voeg vraag toe" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <Label text="Punten vraag:" GridPane.columnIndex="1" GridPane.halignment="LEFT" />
             <Label text="Naam vraag:" />
-            <TextField fx:id="txtExerciseQuotation" maxHeight="-Infinity" maxWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="txtExerciseQuotation" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="174.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
-      <ComboBox fx:id="comboClassGroupExercises" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-      <Label text="Klimatogram:" GridPane.rowIndex="6" />
-      <ComboBox fx:id="comboTestClimateChart" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-      <Label text="Determinatietabel:" GridPane.rowIndex="7" />
-      <ComboBox fx:id="comboTestDeterminateTable" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+      <ComboBox fx:id="comboClassGroupExercises" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+      <Label text="Klimatogram:" GridPane.rowIndex="8" />
+      <ComboBox fx:id="comboTestClimateChart" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+      <Label text="Determinatietabel:" GridPane.rowIndex="9" />
+      <ComboBox fx:id="comboTestDeterminateTable" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
       <ComboBox fx:id="comboTestClassGroup" prefWidth="150.0" GridPane.columnIndex="1" />
       <Label text="Klasgroep:">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Button fx:id="btnSaveTest" mnemonicParsing="false" onAction="#saveTest" prefHeight="25.0" prefWidth="280.0" text="Slaag toets op" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+      <Button fx:id="btnEditTest" mnemonicParsing="false" onAction="#editTest" prefHeight="25.0" prefWidth="122.0" text="Slaag toets op" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <Button fx:id="btnEditExercise" mnemonicParsing="false" onAction="#editExercise" prefHeight="25.0" prefWidth="115.0" text="Slaag vraag op" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+      <Label fx:id="txtInfo" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+      <Label text="Toets:" GridPane.rowIndex="5" />
+      <GridPane GridPane.columnIndex="1" GridPane.rowIndex="5">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="199.0" minWidth="10.0" prefWidth="156.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="152.0" minWidth="10.0" prefWidth="81.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="235.0" minWidth="10.0" prefWidth="235.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <ComboBox fx:id="comboChooseTest" prefWidth="150.0" />
+            <Button fx:id="btnViewTest" mnemonicParsing="false" onAction="#viewTest" text="Bekijk toets" GridPane.columnIndex="1" />
+            <Button fx:id="btnDeleteTest" mnemonicParsing="false" onAction="#deleteTest" text=" Verwijder toets" GridPane.columnIndex="2" />
+         </children>
+      </GridPane>
+      <Button fx:id="btnSaveTest" mnemonicParsing="false" onAction="#saveTest" prefHeight="25.0" prefWidth="174.0" text="Slaag als nieuwe toets op" GridPane.columnIndex="1" GridPane.rowIndex="4">
+         <GridPane.margin>
+            <Insets left="130.0" />
+         </GridPane.margin>
+      </Button>
+      <Button fx:id="btnAddExercise" mnemonicParsing="false" onAction="#addExercise" prefHeight="25.0" prefWidth="179.0" text="Slaag als nieuwe vraag op" GridPane.columnIndex="1" GridPane.rowIndex="10">
+         <GridPane.margin>
+            <Insets left="120.0" />
+         </GridPane.margin>
+      </Button>
    </children>
 </fx:root>
