@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -19,7 +20,7 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name = "Exercise.findAllExercises", query = "select e from Exercises e"),
     @NamedQuery(name = "Exercise.findById",query = "SELECT e FROM Exercises e WHERE e.exerciseId = :exerciseId"),
-    @NamedQuery(name = "Exercise.findByTest",query = "SELECT e FROM Exercises e WHERE e.test = :test")
+    @NamedQuery(name = "Exercise.findByTest",query = "SELECT e FROM Exercises e WHERE e.testId = :test")
 })
 public class Exercise implements Serializable {
 
@@ -37,7 +38,8 @@ public class Exercise implements Serializable {
     private Double punten;
     
     @ManyToOne
-    private Test test;
+    @JoinColumn(name = "testId")
+    private Test testId;
 
     public Exercise(){
         
@@ -51,7 +53,7 @@ public class Exercise implements Serializable {
     public Exercise(String name, double quotation, ClimateChart chart, DeterminateTable dTable, Test test) {
         this.naam = name;
         this.punten = quotation;
-        this.test = test;
+        this.testId = test;
         this.climateChart = chart;
         this.detTable = dTable;
     }
@@ -101,11 +103,11 @@ public class Exercise implements Serializable {
     }
 
     public Test getTest() {
-        return test;
+        return testId;
     }
 
     public void setTest(Test test) {
-        this.test = test;
+        this.testId = test;
     }
     
     @Override

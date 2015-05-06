@@ -1,6 +1,5 @@
 package repository;
 
-import domain.ClassGroup;
 import domain.Exercise;
 import domain.Test;
 import java.util.List;
@@ -35,5 +34,11 @@ public class ExerciseRepository {
     public List<Exercise> findExercisesByTest(Test test){
         TypedQuery<Exercise> query = em.createNamedQuery("Exercise.findByTest", Exercise.class);
         return query.setParameter("test", test).getResultList();
+    }
+    
+    public void removeExercise(Exercise e){
+        em.getTransaction().begin();
+        em.remove(e);
+        em.getTransaction().commit();
     }
 }

@@ -4,16 +4,12 @@ import domain.ClassGroup;
 import domain.ClimateChart;
 import domain.DeterminateTable;
 import domain.Exercise;
-import domain.Grade;
 import domain.Test;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -26,10 +22,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
 import repository.RepositoryController;
 
 public class TestControllerPanel extends GridPane {
@@ -104,6 +97,10 @@ public class TestControllerPanel extends GridPane {
     private Button btnViewTest;
     @FXML
     private Button btnDeleteTest;
+    @FXML
+    private Button btnEditExercise;
+    @FXML
+    private Button btnEditTest;
 
     private RepositoryController rc;
     private FXMLLoader loader;
@@ -122,13 +119,13 @@ public class TestControllerPanel extends GridPane {
     }
 
     public void initialize() {
+
         txtInfo.setText("");
         disableForm(true);
-        
+
         ObservableList<ClassGroup> observableListClassGroups = FXCollections.observableArrayList(rc.getAllClassGroups());
         comboTestClassGroup.setItems(observableListClassGroups);
-        //comboTestClassGroup.setValue(observableListClassGroups.get(0));
-        
+
         comboTestClassGroup.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ClassGroup>() {
             @Override
             public void changed(ObservableValue<? extends ClassGroup> observable, ClassGroup oldValue, ClassGroup newValue) {
@@ -136,79 +133,136 @@ public class TestControllerPanel extends GridPane {
                 disableForm(false);
                 ClassGroup cg = (ClassGroup) comboTestClassGroup.getSelectionModel().selectedItemProperty().getValue();
                 ObservableList<Test> observableListTests = FXCollections.observableArrayList(rc.findTestsByClassGroup(cg));
-                if(!observableListTests.isEmpty()){
+                if (!observableListTests.isEmpty()) {
                     comboChooseTest.setItems(observableListTests);
                     comboChooseTest.setValue(observableListTests.get(0));
-                }
-                else{
+                    txtTestTitle.setText(null);
+                    txtAreaDescription.setText(null);
+                    dpTestBegin.setValue(null);
+                    dpTestEnd.setValue(null);
+                } else {
                     txtInfo.setText("Er zijn nog geen testen voor deze klasgroep.");
+                    comboChooseTest.setDisable(true);
+                    btnViewTest.setDisable(true);
+                    btnDeleteTest.setDisable(true);
                 }
+                btnEditTest.setDisable(true);
+                btnEditExercise.setDisable(true);
+                btnAddExercise.setDisable(true);
+                btnDeleteSelectedExercise.setDisable(true);
+                comboClassGroupExercises.setDisable(true);
+                txtExerciseName.setDisable(true);
+                txtExerciseQuotation.setDisable(true);
+                comboTestClimateChart.setDisable(true);
+                comboTestDeterminateTable.setDisable(true);
             }
         }
         );
-        
+
         comboClassGroupExercises.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Exercise>() {
             @Override
             public void changed(ObservableValue<? extends Exercise> observable, Exercise oldValue, Exercise newValue) {
                 txtInfo.setText("");
-                Exercise e = (Exercise)comboClassGroupExercises.getSelectionModel().selectedItemProperty().getValue();
-                txtExerciseName.setText(e.getNaam());
-                txtExerciseQuotation.setText(e.getPunten().toString());
-                comboTestClimateChart.setValue(e.getClimateChart());
-                comboTestDeterminateTable.setValue(e.getDetTable());
+                try {
+                    Exercise e = (Exercise) comboClassGroupExercises.getSelectionModel().selectedItemProperty().getValue();
+                    txtExerciseName.setText(e.getNaam());
+                    txtExerciseQuotation.setText(e.getPunten().toString());
+                    comboTestClimateChart.setValue(e.getClimateChart());
+                    comboTestDeterminateTable.setValue(e.getDetTable());
+                } catch (NullPointerException e) {
+
+                }
             }
         }
         );
-        
-        ObservableList<ClimateChart> observableListClimateCharts= FXCollections.observableArrayList(rc.findAllClimateCharts());
-        ObservableList<DeterminateTable> observableListDeterminateTables= FXCollections.observableArrayList(rc.getAllDeterminateTables());
-        
+
+        comboChooseTest.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Test>() {
+            @Override
+            public void changed(ObservableValue<? extends Test> observable, Test oldValue, Test newValue) {
+                try {
+                    viewTest();
+                } catch (Exception ex) {
+
+                }
+            }
+        }
+        );
+
+        ObservableList<ClimateChart> observableListClimateCharts = FXCollections.observableArrayList(rc.findAllClimateCharts());
+        ObservableList<DeterminateTable> observableListDeterminateTables = FXCollections.observableArrayList(rc.getAllDeterminateTables());
+
         comboTestClimateChart.setItems(observableListClimateCharts);
         comboTestDeterminateTable.setItems(observableListDeterminateTables);
-        if(!observableListClimateCharts.isEmpty())
+        if (!observableListClimateCharts.isEmpty()) {
             comboTestClimateChart.setValue(observableListClimateCharts.get(0));
-        if(!observableListDeterminateTables.isEmpty())
+        }
+        if (!observableListDeterminateTables.isEmpty()) {
             comboTestDeterminateTable.setValue(observableListDeterminateTables.get(0));
+        }
     }
 
     @FXML
     private void deleteSelectedExercise() {
-        
+        Exercise e = (Exercise) comboClassGroupExercises.getSelectionModel().getSelectedItem();
+        rc.removeExercise(e);
+        viewTest();
+        if (rc.findExercisesByTest(e.getTest()).isEmpty()) {
+            comboClassGroupExercises.setValue(null);
+            txtExerciseName.setText("");
+            txtExerciseQuotation.setText("");
+            comboTestClimateChart.setValue("");
+            comboTestDeterminateTable.setValue("");
+            btnEditExercise.setDisable(true);
+            comboClassGroupExercises.setDisable(true);
+            btnDeleteSelectedExercise.setDisable(true);
+        }
     }
 
     @FXML
     private void addExercise() {
-        Exercise e = new Exercise(txtExerciseName.getText(), Double.parseDouble(txtExerciseQuotation.getText()), 
-                (ClimateChart)comboTestClimateChart.getSelectionModel().getSelectedItem(),
-                (DeterminateTable) comboTestDeterminateTable.getSelectionModel().getSelectedItem(),
-                (Test)comboChooseTest.getSelectionModel().getSelectedItem());
-        System.out.println((ClimateChart)comboTestClimateChart.getSelectionModel().getSelectedItem());
-        rc.insertExercise(e);
-        txtInfo.setText("De vraag is succesvol opgeslagen");
-        txtExerciseName.setText("");
-        txtExerciseQuotation.setText("");
-        comboTestClimateChart.setValue("");
-        comboTestDeterminateTable.setValue("");
-        viewTest();
+        try {
+            Exercise e = new Exercise(txtExerciseName.getText(), Double.parseDouble(txtExerciseQuotation.getText()),
+                    (ClimateChart) comboTestClimateChart.getSelectionModel().getSelectedItem(),
+                    (DeterminateTable) comboTestDeterminateTable.getSelectionModel().getSelectedItem(),
+                    (Test) comboChooseTest.getSelectionModel().getSelectedItem());
+            rc.insertExercise(e);
+            txtInfo.setText("De vraag is succesvol opgeslagen");
+            txtExerciseName.setText("");
+            txtExerciseQuotation.setText("");
+            comboTestClimateChart.setValue("");
+            comboTestDeterminateTable.setValue("");
+            viewTest();
+            txtInfo.setText("De vraag is succesvol opgeslagen.");
+        } catch (Exception ex) {
+            txtInfo.setText("U moet alles correct invullen.");
+        }
     }
 
     @FXML
     private void saveTest() {
-        LocalDate localDate = dpTestBegin.getValue();
-        Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
-        Date dateBegin = Date.from(instant);
-        LocalDate localDate2 = dpTestEnd.getValue();
-        Instant instant2 = Instant.from(localDate2.atStartOfDay(ZoneId.systemDefault()));
-        Date dateEnd = Date.from(instant2);
-        Test t = new Test(txtTestTitle.getText(), txtAreaDescription.getText(), dateBegin, dateEnd, (ClassGroup)comboTestClassGroup.getSelectionModel().getSelectedItem());
-        rc.insertTest(t);
-        initialize();
-        txtInfo.setText(String.format("De test '%s' is succesvol opgeslagen, u kan hiervoor nu vragen toevoegen.", txtTestTitle.getText()));
+        try {
+            LocalDate localDate = dpTestBegin.getValue();
+            Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+            Date dateBegin = Date.from(instant);
+            LocalDate localDate2 = dpTestEnd.getValue();
+            Instant instant2 = Instant.from(localDate2.atStartOfDay(ZoneId.systemDefault()));
+            Date dateEnd = Date.from(instant2);
+            Test t = new Test(txtTestTitle.getText(), txtAreaDescription.getText(), dateBegin, dateEnd, (ClassGroup) comboTestClassGroup.getSelectionModel().getSelectedItem());
+            rc.insertTest(t);
+            initialize();
+            txtInfo.setText(String.format("De test '%s' is succesvol opgeslagen, u kan hiervoor nu vragen toevoegen.", txtTestTitle.getText()));
+            txtTestTitle.setText(null);
+            txtAreaDescription.setText(null);
+            dpTestBegin.setValue(null);
+            dpTestEnd.setValue(null);
+        } catch (Exception ex) {
+            txtInfo.setText("U moet alles correct invullen.");
+        }
     }
-    
+
     @FXML
-    private void viewTest(){
-        Test t = (Test)comboChooseTest.getSelectionModel().getSelectedItem();
+    private void viewTest() {
+        Test t = (Test) comboChooseTest.getSelectionModel().getSelectedItem();
         txtTestTitle.setText(t.getTitle());
         txtAreaDescription.setText(t.getDescription());
         Date date = t.getStartDate();
@@ -219,38 +273,109 @@ public class TestControllerPanel extends GridPane {
         instant = date.toInstant();
         localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
         dpTestEnd.setValue(localDate);
-        
+
         ObservableList<Exercise> observableListExercises = FXCollections.observableArrayList(rc.findExercisesByTest(t));
-        if(!observableListExercises.isEmpty()){
+        if (!observableListExercises.isEmpty()) {
+            btnEditExercise.setDisable(false);
+            btnDeleteSelectedExercise.setDisable(false);
+            comboClassGroupExercises.setDisable(false);
             comboClassGroupExercises.setItems(observableListExercises);
             comboClassGroupExercises.setValue(observableListExercises.get(0));
-            txtExerciseName.setText(observableListExercises.get(0).getNaam());
-            txtExerciseQuotation.setText(observableListExercises.get(0).getPunten().toString());
-            comboTestClimateChart.setValue(observableListExercises.get(0).getClimateChart());
-            comboTestDeterminateTable.setValue(observableListExercises.get(0).getDetTable());
-        }
-        else{
+        } else {
+            comboClassGroupExercises.setValue(null);
+            txtExerciseName.setText("");
+            txtExerciseQuotation.setText("");
+            comboTestClimateChart.setValue("");
+            comboTestDeterminateTable.setValue("");
+            btnEditExercise.setDisable(true);
             txtInfo.setText("Er zijn nog geen vragen voor deze toets.");
         }
-        
+
+        txtExerciseName.setDisable(false);
+        txtExerciseQuotation.setDisable(false);
+        comboTestClimateChart.setDisable(false);
+        comboTestDeterminateTable.setDisable(false);
+        btnAddExercise.setDisable(false);
+        btnEditTest.setDisable(false);
     }
-    
+
     @FXML
-    private void deleteTest(){
-        
+    private void deleteTest() {
+        Test t = (Test) comboChooseTest.getSelectionModel().getSelectedItem();
+        rc.findExercisesByTest(t).stream().forEach((e) -> {
+            rc.removeExercise(e);
+        });
+        rc.removeTest(t);
+        disableForm(false);
+        ClassGroup cg = (ClassGroup) comboTestClassGroup.getSelectionModel().selectedItemProperty().getValue();
+        ObservableList<Test> observableListTests = FXCollections.observableArrayList(rc.findTestsByClassGroup(cg));
+        if (!observableListTests.isEmpty()) {
+            comboChooseTest.setItems(observableListTests);
+            comboChooseTest.setValue(observableListTests.get(0));
+        } else {
+            txtInfo.setText("Er zijn nog geen testen voor deze klasgroep.");
+            comboChooseTest.setDisable(true);
+            btnViewTest.setDisable(true);
+            btnDeleteTest.setDisable(true);
+        }
+        btnEditTest.setDisable(true);
+        btnEditExercise.setDisable(true);
+        btnAddExercise.setDisable(true);
+        btnDeleteSelectedExercise.setDisable(true);
+        comboClassGroupExercises.setDisable(true);
+        txtExerciseName.setDisable(true);
+        txtExerciseQuotation.setDisable(true);
+        comboTestClimateChart.setDisable(true);
+        comboTestDeterminateTable.setDisable(true);
+        txtInfo.setText("Test succesvol verwijderd.");
+        txtTestTitle.setText(null);
+        txtAreaDescription.setText(null);
+        dpTestBegin.setValue(null);
+        dpTestEnd.setValue(null);
+        txtExerciseName.setText(null);
+        txtExerciseQuotation.setText(null);
+        comboTestClimateChart.setValue(null);
+        comboTestDeterminateTable.setValue(null);
     }
-    
+
     @FXML
-    private void editExercise(){
-        
+    private void editExercise() {
+        try {
+            Exercise e = (Exercise) comboClassGroupExercises.getSelectionModel().getSelectedItem();
+            e.setNaam(txtExerciseName.getText());
+            e.setPunten(Double.parseDouble(txtExerciseQuotation.getText()));
+            e.setClimateChart((ClimateChart) comboTestClimateChart.getSelectionModel().getSelectedItem());
+            e.setDetTable((DeterminateTable) comboTestDeterminateTable.getSelectionModel().getSelectedItem());
+            e.setTest((Test) comboChooseTest.getSelectionModel().getSelectedItem());
+            rc.updateRepo();
+            //comboClassGroupExercises.setValue(e);
+        } catch (Exception ex) {
+            txtInfo.setText("U moet alles correct invullen.");
+        }
     }
-    
+
     @FXML
-    private void editTest(){
-        
+    private void editTest() {
+        try {
+            Test t = (Test) comboChooseTest.getSelectionModel().getSelectedItem();
+            t.setTitle(txtTestTitle.getText());
+            t.setDescription(txtAreaDescription.getText());
+            LocalDate localDate = dpTestBegin.getValue();
+            Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+            Date dateBegin = Date.from(instant);
+            t.setStartDate(dateBegin);
+            localDate = dpTestEnd.getValue();
+            instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+            Date dateEnd = Date.from(instant);
+            t.setEndDate(dateEnd);
+            comboChooseTest.setValue(t.getTitle());
+            rc.updateRepo();
+        } catch (Exception ex) {
+            txtInfo.setText("U moet alles correct invullen.");
+        }
     }
-    
-    private void disableForm(Boolean bool){
+
+    private void disableForm(Boolean bool) {
         txtTestTitle.setDisable(bool);
         txtAreaDescription.setDisable(bool);
         dpTestBegin.setDisable(bool);
@@ -263,176 +388,10 @@ public class TestControllerPanel extends GridPane {
         comboTestClimateChart.setDisable(bool);
         comboTestDeterminateTable.setDisable(bool);
         btnSaveTest.setDisable(bool);
+        btnEditTest.setDisable(bool);
+        comboChooseTest.setDisable(bool);
+        btnViewTest.setDisable(bool);
+        btnDeleteTest.setDisable(bool);
+        btnEditExercise.setDisable(bool);
     }
-
-//    private void initialize() {
-//        try {
-//            climateCharts = FXCollections.observableArrayList(rc.findAllClimateCharts());
-//            klimatogram.setItems(climateCharts);
-//            klimatogram.setValue(climateCharts.get(0));
-//            detTable = FXCollections.observableArrayList(rc.getAllDeterminateTables());
-//            determinatieTabel.setItems(detTable);
-//            determinatieTabel.setValue(detTable.get(0));
-//            grades = FXCollections.observableArrayList(rc.getAllGrades());
-//            graad.setItems(grades);
-//            graad.setValue(grades.get(0));
-//            List<Exercise> lijst = new ArrayList<>();
-//            lijst.add(new Exercise("oefening " + oefeningenCounter));
-//            exercises = FXCollections.observableArrayList(lijst);
-//            oefening.setItems(exercises);
-//            oefening.setValue(exercises.get(0));
-//            oefeningenCounter++;
-//        } catch (Exception e) {
-//
-//        }
-//        graad.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-//            @Override
-//            public void changed(ObservableValue ov, Object t, Object t1) {
-//                if (graad.getSelectionModel().selectedItemProperty().get().getGrade() == 2) {
-//                    setEditableGraad2(true);
-//                } else {
-//                    setEditableGraad2(false);
-//                }
-//            }
-//        });
-//        oefening.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-//            @Override
-//            public void changed(ObservableValue ov, Object t, Object t1) {
-//                try {
-//                    Exercise e = oefening.getSelectionModel().getSelectedItem();
-//                    klimatogram.setValue(e.getClimateChart());
-//                    determinatieTabel.setValue(e.getDetTable());
-//                    vragen = FXCollections.observableArrayList(e.getQuestions());
-//                    alleVragen.setItems(vragen);
-//                    alleVragen.setValue(vragen.get(0));
-//                } catch (Exception e) {
-//
-//                }
-//            }
-//        });
-//        klimatogram.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-//            @Override
-//            public void changed(ObservableValue ov, Object t, Object t1) {
-//                try {
-//                    oefening.getSelectionModel().getSelectedItem().setClimateChart(klimatogram.getSelectionModel().getSelectedItem());
-//                } catch (Exception e) {
-//
-//                }
-//            }
-//        });
-//        determinatieTabel.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-//            @Override
-//            public void changed(ObservableValue ov, Object t, Object t1) {
-//                try {
-//                    oefening.getSelectionModel().getSelectedItem().setDetTable(determinatieTabel.getSelectionModel().getSelectedItem());
-//                } catch (Exception e) {
-//
-//                }
-//            }
-//        });
-//    }
-//    private void setEditableGraad2(boolean waarde) {
-//        vraag.setDisable(waarde);
-//        alleVragen.setDisable(waarde);
-//        voegVraagToe.setDisable(waarde);
-//        verwijderVraag.setDisable(waarde);
-//    }
-//
-//    @FXML
-//    private void saveOefening(MouseEvent event) {
-//        try {
-//            Test t = new Test();
-//            t.setTitle(Titel.getText());
-//            t.setStartDate(new GregorianCalendar(begindatum.getValue().getYear(), begindatum.getValue().getMonth().getValue(), begindatum.getValue().getDayOfMonth()));
-//            t.setEndDate(new GregorianCalendar(einddatum.getValue().getYear(), einddatum.getValue().getMonth().getValue(), einddatum.getValue().getDayOfMonth()));
-//            t.setDescription(Beschrijving.getText());
-//            voegDataToe();
-//            t.setExercises(exercises);
-//
-//            //DATABASE TOEVOEGEN
-//            Titel.clear();
-//        } catch (NullPointerException nule) {
-//            errorText.setText("Een oefening moet minstens 1 vraag hebben");
-//        } catch (Exception e) {
-//            errorText.setText(e.getMessage());
-//        }
-//    }
-//
-//    @FXML
-//    private void voegVraagToe(MouseEvent event) {
-//        try {
-//            String vraagbox = vraag.getText();
-//            if (vragen == null) {
-//                List<String> eenVraag = new ArrayList<String>();
-//                eenVraag.add(vraagbox);
-//                vragen = FXCollections.observableArrayList(eenVraag);
-//                alleVragen.setItems(vragen);
-//                alleVragen.setValue(vragen.get(0));
-//                vraag.clear();
-//            } else {
-//                vragen.add(vraagbox);
-//                vraag.clear();
-//                alleVragen.setValue(vragen.get(vragen.size() - 1));
-//            }
-//
-//        } catch (NullPointerException nulEx) {
-//            errorText.setText("Geen vraag gevonden");
-//        } catch (Exception e) {
-//            errorText.setText(e.getMessage());
-//        }
-//    }
-//
-//    @FXML
-//    private void verwijderVraag(MouseEvent event) {
-//        try {
-//            vragen.remove(alleVragen.getSelectionModel().getSelectedItem());
-//        } catch (NullPointerException nulexc) {
-//            errorText.setText("kon vraag niet verwijderen omdat er geen vraag geselecteerd is");
-//        } catch (Exception e) {
-//            errorText.setText(e.getMessage());
-//        }
-//    }
-//
-//    @FXML
-//    private void nieuweoefening(MouseEvent event) {
-//        try {
-//            voegDataToe();
-//            if ((oefeningenCounter - oefening.getSelectionModel().getSelectedIndex()) == 2) {
-//                exercises.add(new Exercise("oefening " + this.oefeningenCounter));
-//                oefening.setValue(exercises.get(oefeningenCounter - 1));
-//                oefeningenCounter++;
-//                graad.setDisable(true);
-//                resetLists();
-//            }
-//        } catch (NullPointerException nule) {
-//            errorText.setText("Een oefening moet minstens 1 vraag hebben");
-//        } catch (Exception e) {
-//            errorText.setText("Onbekende fout " + e.getMessage());
-//        }
-//    }
-//
-//    private void voegDataToe() {
-//        ClimateChart c = klimatogram.getSelectionModel().getSelectedItem();
-//        DeterminateTable d = determinatieTabel.getSelectionModel().getSelectedItem();
-//        List<String> vragenlijst = new ArrayList<>();
-//        if (graad.getSelectionModel().getSelectedItem().getGrade() != 2) {
-//            vragenlijst = vragen;
-//            if (vragenlijst.size() == 0) {
-//                throw new NullPointerException();
-//            }
-//
-//            oefening.getSelectionModel().getSelectedItem().setQuestions(vragenlijst);
-//        }
-//        oefening.getSelectionModel().getSelectedItem().setClimateChart(c);
-//        oefening.getSelectionModel().getSelectedItem().setDetTable(d);
-//    }
-//
-//    private void resetLists() {
-//        vraag.clear();
-//        List<String> lijst = new ArrayList<>();
-//        vragen = FXCollections.observableArrayList(lijst);
-//        alleVragen.setItems(vragen);
-//        klimatogram.setValue(climateCharts.get(0));
-//        determinatieTabel.setValue(detTable.get(0));
-//    }
 }
