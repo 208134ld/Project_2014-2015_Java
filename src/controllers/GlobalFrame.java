@@ -129,8 +129,12 @@ public class GlobalFrame extends VBox {
         miTest.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                resetConstraints();
-                workPanel.add(testViewPanel, 0, 0);
+                workPanel.getChildren().clear();
+                workPanel.getColumnConstraints().get(0).setMinWidth(0);
+                workPanel.getColumnConstraints().get(0).setPrefWidth(0);
+                workPanel.getColumnConstraints().get(0).setMaxWidth(0);
+                workPanel.getColumnConstraints().get(0).setHgrow(Priority.NEVER);
+                //workPanel.add(testViewPanel, 0, 0);
                 workPanel.add(testControllerPanel, 1, 0);
                 testViewPanel.initialize();
                 //testControllerPanel.addObserver(testViewPanel);
