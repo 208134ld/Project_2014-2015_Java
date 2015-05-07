@@ -10,7 +10,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root minHeight="650.0" minWidth="800.0" prefHeight="650.0" prefWidth="800.0" type="GridPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root minHeight="650.0" minWidth="800.0" prefHeight="650.0" prefWidth="900.0" type="GridPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
@@ -28,22 +28,22 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TreeView fx:id="treeViewDeterminateTable" prefWidth="400.0" />
-            <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+            <TreeView fx:id="treeViewDeterminateTable" prefWidth="400.0" GridPane.vgrow="ALWAYS" />
+            <ScrollPane fx:id="scrollPaneClause" GridPane.columnIndex="1">
                <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="750.0" prefWidth="400.0">
+                <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="480.0">
                      <children>
-                        <ComboBox fx:id="parDropd" layoutX="143.0" layoutY="116.0" prefHeight="25.0" prefWidth="125.0" />
-                        <ComboBox fx:id="operatorDropd" layoutX="143.0" layoutY="153.0" prefHeight="25.0" prefWidth="70.0" />
-                        <TextField fx:id="waardeParameter" layoutX="145.0" layoutY="227.0" prefHeight="25.0" prefWidth="84.0" promptText="waarde" />
-                        <TextField fx:id="txtClimateFeature" layoutX="145.0" layoutY="270.0" prefHeight="25.0" prefWidth="181.0" promptText="(alleen mogelijk bij resultaat)" />
-                        <Label layoutX="35.0" layoutY="274.0" text="Klimaatkenmerk:" />
-                        <Button fx:id="saveItem" layoutX="82.0" layoutY="588.0" mnemonicParsing="false" onAction="#saveDetItem" prefHeight="34.0" prefWidth="235.0" text="Opslaan en kinderknopen toevoegen" />
-                        <Label layoutX="21.0" layoutY="322.0" text="Vegetatiekenmerk:" />
-                        <TextField fx:id="txtVegetationFeature" layoutX="145.0" layoutY="318.0" prefHeight="25.0" prefWidth="181.0" promptText="(alleen mogelijk bij resultaat)" />
+                        <ComboBox fx:id="parDropd" layoutX="143.0" layoutY="57.0" prefHeight="25.0" prefWidth="125.0" />
+                        <ComboBox fx:id="operatorDropd" layoutX="143.0" layoutY="94.0" prefHeight="25.0" prefWidth="70.0" />
+                        <TextField fx:id="waardeParameter" layoutX="145.0" layoutY="211.0" prefHeight="25.0" prefWidth="84.0" promptText="waarde" />
+                        <TextField fx:id="txtClimateFeature" layoutX="107.0" layoutY="266.0" prefHeight="25.0" prefWidth="168.0" promptText="(alleen mogelijk bij resultaat)" />
+                        <Label layoutX="15.0" layoutY="270.0" text="Klimaatkenmerk:" />
+                        <Button fx:id="saveItem" layoutX="96.0" layoutY="393.0" mnemonicParsing="false" onAction="#saveDetItem" prefHeight="34.0" prefWidth="235.0" text="Opslaan" />
+                        <Label layoutX="5.0" layoutY="304.0" text="Vegetatiekenmerk:" />
+                        <TextField fx:id="txtVegetationFeature" layoutX="107.0" layoutY="300.0" prefHeight="25.0" prefWidth="167.0" promptText="(alleen mogelijk bij resultaat)" />
                         <Text fx:id="foutmelding" fill="#901d1d" layoutX="68.0" layoutY="696.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="275.13671875" />
-                        <ComboBox fx:id="parDropd2" layoutX="143.0" layoutY="190.0" prefHeight="25.0" prefWidth="124.0" />
-                        <RadioButton fx:id="par2RadioButton" layoutX="150.0" layoutY="57.0" mnemonicParsing="false" onAction="#unblockPar2" text="2de parameter">
+                        <ComboBox fx:id="parDropd2" layoutX="143.0" layoutY="174.0" prefHeight="25.0" prefWidth="124.0" />
+                        <RadioButton fx:id="par2RadioButton" layoutX="152.0" layoutY="148.0" mnemonicParsing="false" onAction="#unblockPar2" text="2de parameter">
                            <toggleGroup>
                               <ToggleGroup fx:id="par2OrValueRadioButtonGroup" />
                            </toggleGroup>
@@ -53,17 +53,17 @@
                               <ToggleGroup fx:id="ClauseOrResult" />
                            </toggleGroup>
                         </RadioButton>
-                        <Label alignment="CENTER_RIGHT" layoutX="21.0" layoutY="57.0" text="Wat wilt u gebruiken?" />
+                        <Label alignment="CENTER_RIGHT" layoutX="23.0" layoutY="148.0" text="Wat wilt u gebruiken?" />
                         <Label alignment="CENTER_RIGHT" layoutX="106.0" layoutY="14.0" text="Type:" />
                         <RadioButton fx:id="rbTypeClause" layoutX="150.0" layoutY="14.0" mnemonicParsing="false" onAction="#switchToClause" selected="true" text="Knoop" toggleGroup="$ClauseOrResult" />
-                        <RadioButton fx:id="valueRadioButton" layoutX="269.0" layoutY="57.0" mnemonicParsing="false" onAction="#unblockValue" selected="true" text="Waarde" toggleGroup="$par2OrValueRadioButtonGroup" />
-                        <Label alignment="CENTER_RIGHT" layoutX="54.0" layoutY="120.0" text="Parameter 1:" />
-                        <Label alignment="CENTER_RIGHT" layoutX="69.0" layoutY="157.0" text="Operator:" />
-                        <Label alignment="CENTER_RIGHT" layoutX="54.0" layoutY="194.0" text="Parameter 2:" />
-                        <Label alignment="CENTER_RIGHT" layoutX="73.0" layoutY="231.0" text="Waarde:" />
-                        <Button fx:id="btnDeleteItem" layoutX="82.0" layoutY="640.0" mnemonicParsing="false" onAction="#deleteItem" prefHeight="34.0" prefWidth="235.0" text="Verwijder deze knoop + kinderknopen" />
-                        <ImageView fx:id="imageVegetation" fitHeight="133.0" fitWidth="236.0" layoutX="81.0" layoutY="421.0" pickOnBounds="true" preserveRatio="true" />
-                        <Button fx:id="btnSearchImage" layoutX="82.0" layoutY="372.0" mnemonicParsing="false" onAction="#searchImage" prefHeight="34.0" prefWidth="235.0" text="Upload vegetatiefoto" />
+                        <RadioButton fx:id="valueRadioButton" layoutX="271.0" layoutY="148.0" mnemonicParsing="false" onAction="#unblockValue" selected="true" text="Waarde" toggleGroup="$par2OrValueRadioButtonGroup" />
+                        <Label alignment="CENTER_RIGHT" layoutX="54.0" layoutY="61.0" text="Parameter 1:" />
+                        <Label alignment="CENTER_RIGHT" layoutX="69.0" layoutY="98.0" text="Operator:" />
+                        <Label alignment="CENTER_RIGHT" layoutX="54.0" layoutY="178.0" text="Parameter 2:" />
+                        <Label alignment="CENTER_RIGHT" layoutX="73.0" layoutY="215.0" text="Waarde:" />
+                        <Button fx:id="btnDeleteItem" layoutX="96.0" layoutY="436.0" mnemonicParsing="false" onAction="#deleteItem" prefHeight="34.0" prefWidth="235.0" text="Verwijder" />
+                        <ImageView fx:id="imageVegetation" fitHeight="97.0" fitWidth="145.0" layoutX="281.0" layoutY="264.0" pickOnBounds="true" preserveRatio="true" />
+                        <Button fx:id="btnSearchImage" layoutX="40.0" layoutY="335.0" mnemonicParsing="false" onAction="#searchImage" prefHeight="34.0" prefWidth="235.0" text="Upload vegetatiefoto" />
                      </children>
                   </AnchorPane>
                </content>
@@ -99,7 +99,7 @@
                      </GridPane.margin>
                   </ComboBox>
                   <ComboBox fx:id="createGradeCombo" prefHeight="25.0" prefWidth="112.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="TOP" />
-                  <Button fx:id="btnCreateDeterminateTable" mnemonicParsing="false" onAction="#createDeterminateTable" prefHeight="25.0" prefWidth="359.0" text="Maak nieuwe determineertabel aan voor de geselecteerde graad" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="TOP" />
+                  <Button fx:id="btnCreateDeterminateTable" mnemonicParsing="false" onAction="#createDeterminateTable" prefHeight="25.0" prefWidth="365.0" text="Maak nieuwe determineertabel aan voor de geselecteerde graad" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.valignment="TOP" />
                   <Label prefHeight="17.0" prefWidth="80.0" text="Kies de graad" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
                      <GridPane.margin>
                         <Insets top="5.0" />
@@ -110,19 +110,22 @@
                         <Insets bottom="18.0" />
                      </GridPane.margin>
                   </Label>
-                  <Button fx:id="btnConnectDeterminateTable" mnemonicParsing="false" onAction="#connectDeterminateTableToGrade" prefHeight="25.0" prefWidth="377.0" text="Koppel geselecteerde graad met geselecteerde determinatietabel" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+                  <Button fx:id="btnConnectDeterminateTable" mnemonicParsing="false" onAction="#connectDeterminateTableToGrade" prefHeight="25.0" prefWidth="365.0" text="Koppel geselecteerde graad met geselecteerde determinatietabel" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                      <GridPane.margin>
                         <Insets bottom="15.0" />
                      </GridPane.margin>
                   </Button>
-                  <TextField fx:id="txtNameNewDeterminateTable" maxWidth="145.0" minWidth="100.0" prefHeight="25.0" prefWidth="145.0" promptText="Naam determinatietabel" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
+                  <TextField fx:id="txtNameNewDeterminateTable" maxWidth="145.0" minWidth="100.0" prefHeight="25.0" prefWidth="145.0" promptText="Naam determinatietabel" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
+                     <GridPane.margin>
+                        <Insets bottom="8.0" right="8.0" />
+                     </GridPane.margin></TextField>
                </children>
             </GridPane>
             <GridPane>
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="186.0" minWidth="10.0" prefWidth="97.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="449.0" minWidth="10.0" prefWidth="449.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="449.0" minWidth="10.0" prefWidth="229.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="504.0" minWidth="10.0" prefWidth="504.0" />
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints maxHeight="68.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
@@ -130,16 +133,14 @@
                   <RowConstraints maxHeight="17.0" minHeight="10.0" prefHeight="17.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <ComboBox fx:id="gradeCombo" prefWidth="150.0" GridPane.columnIndex="1" GridPane.valignment="BOTTOM">
+                  <ComboBox fx:id="gradeCombo" prefHeight="25.0" prefWidth="238.0" GridPane.columnIndex="1" GridPane.valignment="BOTTOM">
                      <GridPane.margin>
                         <Insets bottom="5.0" />
                      </GridPane.margin></ComboBox>
-                  <Button fx:id="btnDeleteDeterminateTable" mnemonicParsing="false" onAction="#deleteDeterminateTable" prefHeight="25.0" prefWidth="177.0" text="Ontkoppel determinatietabel" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP" />
-                  <Button fx:id="btnViewDeterminateTable" mnemonicParsing="false" onAction="#viewDeterminateTable" prefHeight="25.0" prefWidth="153.0" text="Bekijk determinatietabel!" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
+                  <Button fx:id="btnDeleteDeterminateTable" mnemonicParsing="false" onAction="#deleteDeterminateTable" prefHeight="25.0" prefWidth="177.0" text="Ontkoppel determinatietabel" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.valignment="BOTTOM">
                      <GridPane.margin>
-                        <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
-                     </GridPane.margin>
-                  </Button>
+                        <Insets bottom="5.0" />
+                     </GridPane.margin></Button>
                   <Label prefHeight="28.0" prefWidth="105.0" text="Geef de graad in:" GridPane.valignment="BOTTOM">
                      <GridPane.margin>
                         <Insets bottom="5.0" left="15.0" />
