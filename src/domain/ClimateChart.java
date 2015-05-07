@@ -197,6 +197,10 @@ public class ClimateChart implements Serializable {
         if (minutes > 60 || seconds > 60) {
             throw new IllegalArgumentException("minuten en seconden moeten kleiner zijn dan 60");
         }
+        if(degree>180)
+        {
+            throw new IllegalArgumentException("graden moeten kleiner dan 180 zijn");
+        }
         return degree + "° " + minutes + "' " + seconds + "\" ";
     }
 

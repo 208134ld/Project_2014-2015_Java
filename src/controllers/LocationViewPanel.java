@@ -214,6 +214,8 @@ public class LocationViewPanel extends GridPane implements Observer {
 
     @FXML
     private void saveDetaillWindow(MouseEvent event) {
+        try{
+            
         int g1 = Integer.parseInt(txtBGrades.getText().trim());
         int g2 = Integer.parseInt(txtLGrades.getText().trim());
         int m1 = Integer.parseInt(txtBMinutes.getText().trim());
@@ -239,6 +241,17 @@ public class LocationViewPanel extends GridPane implements Observer {
 
         rc.updateClimateChart(selectedClimatechart.getId(), selectedClimatechart.getLCord(), selectedClimatechart.getBCord(), selectedClimatechart.getBeginperiod(), selectedClimatechart.getEndperiod(), selectedClimatechart.getLongitude(), selectedClimatechart.getLatitude());
         updateLocationDetailPanel(selectedClimatechart);
+        }catch(NullPointerException e)
+        {
+            this.errorBar.setText("Er is een leeg veld");
+        }catch(NumberFormatException numbExce)
+        {
+            this.errorBar.setText("Illegaal karakter ingegeven");
+        }catch(Exception e)
+        {
+            this.errorBar.setText(e.getMessage());
+        }
+       
     }
 
     @FXML

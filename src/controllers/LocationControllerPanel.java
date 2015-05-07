@@ -239,7 +239,17 @@ public class LocationControllerPanel extends Accordion {
         Arrays.asList(MonthOfTheYear.values()).stream().forEach(month -> monthList.add(new Months(0, 0, month)));
         tableMonthList = FXCollections.observableList(monthList);
         monthTable.setItems(tableMonthList);
-        }catch(Exception e)
+        }catch(NumberFormatException nullExc)
+        {
+            this.errorBar.setText("Er mag geen text in de velden zijn");
+        }catch(IllegalArgumentException ilex)
+        {
+            this.errorBar.setText(ilex.getMessage());
+        }catch(NullPointerException nulExc)
+        {
+            this.errorBar.setText("Er mogen geen lege velden zijn");
+        }
+        catch(Exception e)
         {
             this.errorBar.setText(e.getMessage());
         }
