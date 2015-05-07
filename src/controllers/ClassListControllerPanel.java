@@ -1,6 +1,7 @@
 package controllers;
 
 import domain.ClassGroup;
+import domain.Grade;
 import domain.SchoolYear;
 import domain.Student;
 import java.io.IOException;
@@ -29,9 +30,9 @@ public class ClassListControllerPanel extends Accordion {
 
     //Klas deel
     @FXML
-    private ComboBox<String> dbKlasGraad;
+    private ComboBox<Grade> dbKlasGraad;
     @FXML
-    private ComboBox<String> dbKlasLeerjaar;
+    private ComboBox<SchoolYear> dbKlasLeerjaar;
     @FXML
     private TextField txtKlasName;
     @FXML
@@ -39,11 +40,11 @@ public class ClassListControllerPanel extends Accordion {
 
     //Leerling deel
     @FXML
-    private ComboBox<String> dbLeerlingGraad;
+    private ComboBox<Grade> dbLeerlingGraad;
     @FXML
-    private ComboBox<String> dbLeerlingLeerjaar;
+    private ComboBox<SchoolYear> dbLeerlingLeerjaar;
     @FXML
-    private ComboBox<String> dbLeerlingKlas;
+    private ComboBox<ClassGroup> dbLeerlingKlas;
     @FXML
     private TextField txtNaam;
     @FXML
@@ -54,9 +55,9 @@ public class ClassListControllerPanel extends Accordion {
     private Text errorText;
     private ClassListController controller;
     //lijst voor klas deel
-    private ObservableList<String> gradeList;
-    private ObservableList<String> schoolyearList;
-    private ObservableList<String> classGroupList;
+    private ObservableList<Grade> gradeList;
+    private ObservableList<SchoolYear> schoolyearList;
+    private ObservableList<ClassGroup> classGroupList;
 
     public ClassListControllerPanel(ClassListController clc) {
 
@@ -79,16 +80,18 @@ public class ClassListControllerPanel extends Accordion {
         //Klas deel comboBox
         setExpandedPane(tpKlas);
 
-        gradeList = FXCollections.observableList(controller.giveAllGrades()
-                .stream().map(c -> c.getGradeString()).sorted().collect(Collectors.toList()));
+//        gradeList = FXCollections.observableList(controller.giveAllGrades()       .stream().map(c -> c.getGradeString()).sorted().collect(Collectors.toList()));
+        gradeList = FXCollections.observableList(controller.giveAllGrades());
+//         
         dbKlasGraad.setItems(gradeList);
         dbKlasGraad.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue ov, Object t, Object t1) {
 
-                schoolyearList = FXCollections.observableList(controller.giveSchoolYearsOfGrade(controller.giveGradeWithName(t1.toString()))
-                        .stream().map(c -> c.getSchoolYearString()).sorted().collect(Collectors.toList()));
-                dbKlasLeerjaar.setItems(schoolyearList);
+//                schoolyearList = FXCollections.observableList(controller.giveSchoolYearsOfGrade(controller.giveGradeWithName(t1.toString())).stream().map(c -> c.getSchoolYearString()).sorted().collect(Collectors.toList()));
+                 schoolyearList = FXCollections.observableList(controller.giveSchoolYearsOfGrade((Grade) t1));
+//                        
+                    dbKlasLeerjaar.setItems(schoolyearList);
             }
         });
 
@@ -98,8 +101,8 @@ public class ClassListControllerPanel extends Accordion {
             @Override
             public void changed(ObservableValue ov, Object t, Object t1) {
 
-                schoolyearList = FXCollections.observableList(controller.giveSchoolYearsOfGrade(controller.giveGradeWithName(t1.toString()))
-                        .stream().map(c -> c.getSchoolYearString()).sorted().collect(Collectors.toList()));
+                schoolyearList = FXCollections.observableList(controller.giveSchoolYearsOfGrade((Grade) t1));
+//                        .stream().map(c -> c.getSchoolYearString()).sorted().collect(Collectors.toList()));
                 dbLeerlingLeerjaar.setItems(schoolyearList);
                 dbLeerlingKlas.setItems(null);
                 dbLeerlingLeerjaar.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
@@ -107,8 +110,8 @@ public class ClassListControllerPanel extends Accordion {
                     public void changed(ObservableValue ov, Object t, Object t1) {
 
                         try {
-                            classGroupList = FXCollections.observableList(controller.giveClassGroupOfSchoolYear(controller.giveSchoolYearWithName(t1.toString()))
-                                    .stream().map(c -> c.getGroupName()).sorted().collect(Collectors.toList()));
+                            classGroupList = FXCollections.observableList(controller.giveClassGroupOfSchoolYear((SchoolYear) t1));
+//                                    .stream().map(c -> c.getGroupName()).sorted().collect(Collectors.toList()));
                             dbLeerlingKlas.setItems(classGroupList);
                             errorText.setText("");
                         } catch (NullPointerException nullex) {
@@ -123,7 +126,7 @@ public class ClassListControllerPanel extends Accordion {
 
     @FXML
     private void addKlas(ActionEvent event) {
-        SchoolYear sy = controller.giveSchoolYearWithName(dbKlasLeerjaar.getSelectionModel().getSelectedItem());//new SchoolYear(Integer.parseInt(dbKlasLeerjaar.getSelectionModel().getSelectedItem()), g);
+        SchoolYear sy = dbKlasLeerjaar.getSelectionModel().getSelectedItem();//new SchoolYear(Integer.parseInt(dbKlasLeerjaar.getSelectionModel().getSelectedItem()), g);
 
         controller.addClassGroup(new ClassGroup(txtKlasName.getText(), sy));
         txtKlasName.clear();
@@ -132,7 +135,7 @@ public class ClassListControllerPanel extends Accordion {
     @FXML
     private void addLeerling(ActionEvent event) {
         try {
-            ClassGroup cg = controller.giveClassGroupWithName(dbLeerlingKlas.getSelectionModel().getSelectedItem());
+            ClassGroup cg = dbLeerlingKlas.getSelectionModel().getSelectedItem();
             controller.addStudent(new Student(txtNaam.getText(), txtVoornaam.getText(), cg));
             txtNaam.clear();
             txtVoornaam.clear();

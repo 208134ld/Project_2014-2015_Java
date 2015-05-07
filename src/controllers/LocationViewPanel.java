@@ -38,8 +38,8 @@ public class LocationViewPanel extends GridPane implements Observer {
     private TreeView selectionTreeView;
     @FXML
     private Label locationLable;
-    @FXML
-    private Label errorBar;
+//    @FXML
+//    private Label errorBar;
     @FXML
     private TextField txtBGrades;
     @FXML
@@ -243,13 +243,13 @@ public class LocationViewPanel extends GridPane implements Observer {
         updateLocationDetailPanel(selectedClimatechart);
         }catch(NullPointerException e)
         {
-            this.errorBar.setText("Er is een leeg veld");
+//            this.errorBar.setText("Er is een leeg veld");
         }catch(NumberFormatException numbExce)
         {
-            this.errorBar.setText("Illegaal karakter ingegeven");
+//            this.errorBar.setText("Illegaal karakter ingegeven");
         }catch(Exception e)
         {
-            this.errorBar.setText(e.getMessage());
+//            this.errorBar.setText(e.getMessage());
         }
        
     }
