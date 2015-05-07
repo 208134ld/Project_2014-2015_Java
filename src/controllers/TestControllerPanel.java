@@ -4,6 +4,7 @@ import domain.ClassGroup;
 import domain.ClimateChart;
 import domain.DeterminateTable;
 import domain.Exercise;
+import domain.Pdfmaker;
 import domain.Test;
 import java.io.IOException;
 import java.time.Instant;
@@ -22,6 +23,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import repository.RepositoryController;
 
@@ -64,7 +66,7 @@ public class TestControllerPanel extends GridPane {
 //    private ObservableList<String> vragen;
 //    private int oefeningenCounter = 1;
     @FXML
-    private ComboBox comboTestClassGroup;
+    private ComboBox<ClassGroup> comboTestClassGroup;
     @FXML
     private TextField txtTestTitle;
     @FXML
@@ -92,7 +94,7 @@ public class TestControllerPanel extends GridPane {
     @FXML
     private Label txtInfo;
     @FXML
-    private ComboBox comboChooseTest;
+    private ComboBox<Test> comboChooseTest;
     @FXML
     private Button btnViewTest;
     @FXML
@@ -237,7 +239,24 @@ public class TestControllerPanel extends GridPane {
             txtInfo.setText("U moet alles correct invullen.");
         }
     }
-
+    @FXML
+    private void makePdf(MouseEvent event)
+    {
+        Test t = (Test) comboChooseTest.getSelectionModel().getSelectedItem();
+        txtTestTitle.setText(t.getTitle());
+        txtAreaDescription.setText(t.getDescription());
+        Date date = t.getStartDate();
+        Instant instant = date.toInstant();
+        LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+        dpTestBegin.setValue(localDate);
+        date = t.getEndDate();
+        instant = date.toInstant();
+        localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+        dpTestEnd.setValue(localDate);
+        ObservableList<Exercise> observableListExercises = FXCollections.observableArrayList(rc.findExercisesByTest(t));
+        Pdfmaker pdf = new Pdfmaker(rc.findExercisesByTest(t),t);
+        pdf.makePdf();
+    }
     @FXML
     private void saveTest() {
         try {
@@ -247,14 +266,13 @@ public class TestControllerPanel extends GridPane {
             LocalDate localDate2 = dpTestEnd.getValue();
             Instant instant2 = Instant.from(localDate2.atStartOfDay(ZoneId.systemDefault()));
             Date dateEnd = Date.from(instant2);
+            ClassGroup c =(ClassGroup) comboTestClassGroup.getSelectionModel().getSelectedItem();
             Test t = new Test(txtTestTitle.getText(), txtAreaDescription.getText(), dateBegin, dateEnd, (ClassGroup) comboTestClassGroup.getSelectionModel().getSelectedItem());
             rc.insertTest(t);
             initialize();
             txtInfo.setText(String.format("De test '%s' is succesvol opgeslagen, u kan hiervoor nu vragen toevoegen.", txtTestTitle.getText()));
-            txtTestTitle.setText(null);
-            txtAreaDescription.setText(null);
-            dpTestBegin.setValue(null);
-            dpTestEnd.setValue(null);
+            txtTestTitle.clear();
+            txtAreaDescription.clear();
         } catch (Exception ex) {
             txtInfo.setText("U moet alles correct invullen.");
         }
@@ -368,7 +386,7 @@ public class TestControllerPanel extends GridPane {
             instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
             Date dateEnd = Date.from(instant);
             t.setEndDate(dateEnd);
-            comboChooseTest.setValue(t.getTitle());
+            comboChooseTest.setValue(t);
             rc.updateRepo();
         } catch (Exception ex) {
             txtInfo.setText("U moet alles correct invullen.");

@@ -190,7 +190,8 @@ public class LocationControllerPanel extends Accordion {
 
     @FXML
     private void addClimateChart(MouseEvent event) {
-        String loc = txtLocation.getText().trim();
+        try{
+            String loc = txtLocation.getText().trim();
         int begin = Integer.parseInt(startPeriod.getText().trim());
         int end = Integer.parseInt(endPeriod.getText().trim());
         int g1 = Integer.parseInt(BGrades.getText().trim());
@@ -222,7 +223,7 @@ public class LocationControllerPanel extends Accordion {
         List<Months> maanden = new ArrayList<>();
         monthList.stream().forEach(p -> maanden.add(p));
         maanden.stream().forEach(mont -> mont.setClimateChart(c));
-        c.setMonths(maanden);
+        c.setMonths(maanden);        
         repositoryController.InsertClimatechart(c);
         txtLocation.clear();
         startPeriod.clear();
@@ -238,6 +239,11 @@ public class LocationControllerPanel extends Accordion {
         Arrays.asList(MonthOfTheYear.values()).stream().forEach(month -> monthList.add(new Months(0, 0, month)));
         tableMonthList = FXCollections.observableList(monthList);
         monthTable.setItems(tableMonthList);
+        }catch(Exception e)
+        {
+            this.errorBar.setText(e.getMessage());
+        }
+        
     }
 
     public void initMonthTable() {
@@ -275,7 +281,7 @@ public class LocationControllerPanel extends Accordion {
             }
 
             WebEngine eng = siteView.getEngine();
-            eng.load(WEBSITE + "ClimateChart/ShowExercises?selectedYear=3&continentId=" + selectedClimatechart.getCountry().getContinent().getId() + "&countryId=" + selectedClimatechart.getCountry().getId() + "&climateId=" + selectedClimatechart.getId());
+            eng.load(WEBSITE + "ClimateChart/ShowExercises?selectedYear=1&continentId=" + selectedClimatechart.getCountry().getContinent().getId() + "&countryId=" + selectedClimatechart.getCountry().getId() + "&climateId=" + selectedClimatechart.getId());
             webProgress.progressProperty().bind(eng.getLoadWorker().progressProperty());
             siteView.setZoom(0.70);
             eng.getLoadWorker().stateProperty().addListener(

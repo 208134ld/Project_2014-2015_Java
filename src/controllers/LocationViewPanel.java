@@ -119,6 +119,7 @@ public class LocationViewPanel extends GridPane implements Observer {
         lbSedimentYear.setText(Integer.toString(c.calcSedimentYear()) + " mm");
         List<Months> maanden = new ArrayList<>();
         c.getMonths().stream().sorted((e1, e2) -> e1.getMonth().compareTo(e2.getMonth())).forEach(m -> maanden.add(m));
+        c.setMonths(maanden);
         // TABLE
         monthsList = FXCollections.observableArrayList(maanden);
         monthTable.setItems(monthsList);
@@ -242,6 +243,7 @@ public class LocationViewPanel extends GridPane implements Observer {
 
     @FXML
     private void updateCol(TableColumn.CellEditEvent<Months, Double> event) {
+        
         int id = monthTable.getSelectionModel().getSelectedCells().get(0).getRow();
         if (monthTable.getSelectionModel().getSelectedCells().get(0).getColumn() == 1) {
 

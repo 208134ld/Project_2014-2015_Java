@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 @Entity(name = "ClimateCharts")
@@ -48,6 +49,7 @@ public class ClimateChart implements Serializable {
     @Column(name = "AboveEquator")
     private boolean aboveEquator;
     @OneToMany(mappedBy = "climateChart",cascade = CascadeType.PERSIST)
+    @OrderColumn(name="MonthProp")
     private List<Months> months;
     @ManyToOne
     @JoinColumn(name = "CountryID")
