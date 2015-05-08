@@ -1,6 +1,5 @@
 package controllers;
 
-import util.EditingCell;
 import domain.ClimateChart;
 import domain.Continent;
 import domain.Country;
@@ -29,10 +28,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.util.Callback;
 import repository.RepositoryController;
+import util.EditingCell;
 
 public class LocationControllerPanel extends Accordion {
 
@@ -111,6 +112,10 @@ public class LocationControllerPanel extends Accordion {
     @FXML
     private Label errorBar;
     @FXML
+    private Text errorLabelCont;
+    @FXML
+    private Text errorTextLand;
+    @FXML
     private Button btnAddClimateChart;
     @FXML
     private Button btnRemoveClimateChart;
@@ -174,23 +179,49 @@ public class LocationControllerPanel extends Accordion {
 
     @FXML
     private void addContinent(MouseEvent event) {
-        repositoryController.insertContinent(new Continent(txtContinentName.getText().trim()));
+        try{
+            if(txtContinentName.getText().length()==0)
+                throw new NullPointerException();
+             repositoryController.insertContinent(new Continent(txtContinentName.getText().trim()));
         txtContinentName.clear();
         updateComboBoxes();
+        errorLabelCont.setText("");
+        }catch(NullPointerException nule)
+        {
+            errorLabelCont.setText("Naam van het continent mag niet leeg zijn");
+        }catch(Exception e)
+        {
+            errorLabelCont.setText("Continent opslaan mislukt");
+        }
+       
     }
 
     @FXML
     private void addCountry(MouseEvent event) {
+        
+        try{
+            if(txtCountryName.getText().length()==0)
+                throw new NullPointerException();
         Continent continent = repositoryController.findContinentById(
-                cbContinentCountry.getSelectionModel().getSelectedIndex() + 1);
+        cbContinentCountry.getSelectionModel().getSelectedIndex() + 1);
         repositoryController.insertCountry(new Country(txtCountryName.getText().trim(), continent));
         txtCountryName.clear();
         updateComboBoxes();
+        errorTextLand.setText("");
+        }catch(NullPointerException nulle)
+        {
+            errorTextLand.setText("Naam van het land mag niet leeg zijn");
+        }catch(Exception e)
+        {
+            errorTextLand.setText("Land opslaan mislukt. Alle velden moeten ingevuld zijn");
+        }
     }
 
     @FXML
     private void addClimateChart(MouseEvent event) {
         try{
+            if(txtLocation.getText().length()==0)
+                throw new NullPointerException("Locatie mag niet leeg zijn");
             String loc = txtLocation.getText().trim();
         int begin = Integer.parseInt(startPeriod.getText().trim());
         int end = Integer.parseInt(endPeriod.getText().trim());
@@ -239,6 +270,7 @@ public class LocationControllerPanel extends Accordion {
         Arrays.asList(MonthOfTheYear.values()).stream().forEach(month -> monthList.add(new Months(0, 0, month)));
         tableMonthList = FXCollections.observableList(monthList);
         monthTable.setItems(tableMonthList);
+        errorBar.setText("");
         }catch(NumberFormatException nullExc)
         {
             this.errorBar.setText("Er mag geen text in de velden zijn");

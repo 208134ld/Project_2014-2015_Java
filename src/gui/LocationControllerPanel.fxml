@@ -36,6 +36,7 @@
                         <Insets top="10.0" />
                      </VBox.margin>
                   </GridPane>
+                  <Text fx:id="errorLabelCont" fill="#b51d1d" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="309.13671875" />
                </children>
             </VBox>
          </content>
@@ -71,6 +72,7 @@
                         <Insets top="10.0" />
                      </VBox.margin>
                   </GridPane>
+                  <Text fx:id="errorTextLand" fill="#c91c1c" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="416.13671875" />
                </children>
             </VBox>
          </content>
