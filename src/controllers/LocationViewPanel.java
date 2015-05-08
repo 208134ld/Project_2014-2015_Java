@@ -1,6 +1,5 @@
 package controllers;
 
-import util.EditingCell;
 import domain.ClimateChart;
 import domain.Continent;
 import domain.Country;
@@ -17,6 +16,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -27,8 +27,10 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
 import repository.RepositoryController;
+import util.EditingCell;
 import util.MyNode;
 import util.TextFieldTreeCellImpl;
 
@@ -72,7 +74,10 @@ public class LocationViewPanel extends GridPane implements Observer {
     private TableColumn<Months, Number> tempCol;
     @FXML
     private TableColumn<Months, Number> sedCol;
-
+    @FXML
+    private Text errorText;
+    @FXML
+    private Button saveBut;
     private RepositoryController rc;
     public static ClimateChart selectedClimatechart;
     private ObservableList<TreeItem<MyNode>> obsTreeItems;
@@ -95,12 +100,28 @@ public class LocationViewPanel extends GridPane implements Observer {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
-
+        disableEverything(true);
         initMonthTable();
         updateSelectionTreeViewPanel();
+        
     }
-
+    private void disableEverything(boolean disable)
+    {
+        txtBGrades.setDisable(disable);
+        txtBMinutes.setDisable(disable);
+        txtBSeconds.setDisable(disable);
+        txtLGrades.setDisable(disable);
+        txtLMinutes.setDisable(disable);
+        txtLSeconds.setDisable(disable);
+        txtBeginPeriod.setDisable(disable);
+        txtEndPeriod.setDisable(disable);
+        txtBreedteParameter.setDisable(disable);
+        txtLengteParameter.setDisable(disable);
+        saveBut.setDisable(disable);
+    }
     public void updateLocationDetailPanel(ClimateChart c) {
+        if(txtBGrades.disableProperty().getValue()==true)
+            disableEverything(false);
         locationLable.setText(c.getLocation());
         txtBGrades.setText(c.getBCord().split("°")[0].trim());
         txtBGrades.setText(c.getBCord().split("°")[0].trim());
@@ -161,7 +182,7 @@ public class LocationViewPanel extends GridPane implements Observer {
                 try {
                     return new TextFieldTreeCellImpl(root, treeItems, rc);
                 } catch (SQLException ex) {
-
+errorText.setText("cell in de boom veranderen is mislukt");
                 }
                 return null;
             }
@@ -182,7 +203,7 @@ public class LocationViewPanel extends GridPane implements Observer {
                         selectedClimatechart.setMonths(rc.getMonthsOfClimateChart(selectedItem.getValue().getId()));
                         updateLocationDetailPanel(selectedClimatechart);
                     } catch (Exception e) {
-
+errorText.setText("Kon de gewenste klimatogram niet vinden in de databank");
                     }
                 }
             }
@@ -241,15 +262,16 @@ public class LocationViewPanel extends GridPane implements Observer {
 
         rc.updateClimateChart(selectedClimatechart.getId(), selectedClimatechart.getLCord(), selectedClimatechart.getBCord(), selectedClimatechart.getBeginperiod(), selectedClimatechart.getEndperiod(), selectedClimatechart.getLongitude(), selectedClimatechart.getLatitude());
         updateLocationDetailPanel(selectedClimatechart);
-        }catch(NullPointerException e)
+        errorText.setText("");
+        
+        }catch(IllegalArgumentException e)
         {
-//            this.errorBar.setText("Er is een leeg veld");
-        }catch(NumberFormatException numbExce)
-        {
-//            this.errorBar.setText("Illegaal karakter ingegeven");
+           errorText.setText(e.getMessage());
+        } catch(NullPointerException e){
+            errorText.setText("Alle velden moeten ingevuld zijn");
         }catch(Exception e)
         {
-//            this.errorBar.setText(e.getMessage());
+            errorText.setText("Er is een onbekende fout gebeurt");
         }
        
     }
