@@ -5,12 +5,14 @@ import domain.Student;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -175,7 +177,7 @@ public class ClassListViewPanel extends GridPane implements Observer {
                             cmItem3.setOnAction(new EventHandler<ActionEvent>() {
                                 @Override
                                 public void handle(ActionEvent e) {
-                                    List<ClassGroup> choices =controller.giveAllClassGroups();
+                                    List<ClassGroup> choices =controller.giveAllClassGroups().stream().sorted(bySchoolYear).collect(Collectors.toList());
                                     ChoiceDialog<ClassGroup> dialog = new ChoiceDialog<>(choices.get(0), choices);
                                     
                                     dialog.setTitle("Verander de klas voor " + newValue.getFullName());
@@ -246,4 +248,5 @@ public class ClassListViewPanel extends GridPane implements Observer {
             });
         }
     }
+    private final Comparator<ClassGroup> bySchoolYear = (p1, p2) -> Integer.compare(p1.getSchoolYear().getSchoolYear(),p2.getSchoolYear().getSchoolYear());
 }
