@@ -5,12 +5,14 @@ import domain.Student;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -160,7 +162,7 @@ public class ClassListViewPanel extends GridPane implements Observer {
                 addListener((observableValue, oldValue, newValue) -> {
                     if (newValue != null) {
                         int index = studentInfoTable.getSelectionModel().getSelectedIndex();
-                        if (index != currentIndex) {
+//                        if (index != currentIndex) {
                             cm.getItems().clear();
                             MenuItem cmItem2 = new MenuItem("Verwijder " + newValue.getFirtsName());
                             cmItem2.setOnAction(new EventHandler<ActionEvent>() {
@@ -175,17 +177,16 @@ public class ClassListViewPanel extends GridPane implements Observer {
                             cmItem3.setOnAction(new EventHandler<ActionEvent>() {
                                 @Override
                                 public void handle(ActionEvent e) {
-                                    List<String> choices = new ArrayList<>();
-                                    controller.giveAllClassGroups().stream().forEach(ch -> choices.add(ch.getGroupName()));
-
-                                    ChoiceDialog<String> dialog = new ChoiceDialog<>(choices.get(0), choices);
+                                    List<ClassGroup> choices =controller.giveAllClassGroups().stream().sorted(bySchoolYear).collect(Collectors.toList());
+                                    ChoiceDialog<ClassGroup> dialog = new ChoiceDialog<>(choices.get(0), choices);
+                                    
                                     dialog.setTitle("Verander de klas voor " + newValue.getFullName());
                                     dialog.setHeaderText("Verander klas voor " + newValue.getFullName());
                                     dialog.setContentText("Kies de klas");
 
-                                    Optional<String> result = dialog.showAndWait();
+                                    Optional<ClassGroup> result = dialog.showAndWait();
                                     if (result.isPresent()) {
-                                        ClassGroup c = controller.giveClassGroupWithName(result.get());
+                                        ClassGroup c = result.get();
                                         newValue.setClassGroup(c);
                                         controller.addStudent(newValue);
                                         updateStudentListDetailPanel(selectedClassGroup);
@@ -196,7 +197,7 @@ public class ClassListViewPanel extends GridPane implements Observer {
                             cm.getItems().add(cmItem3);
                             studentInfoTable.setContextMenu(cm);
                             currentIndex = index;
-                        }
+//                        }
                     }
                 });
     }
@@ -247,4 +248,5 @@ public class ClassListViewPanel extends GridPane implements Observer {
             });
         }
     }
+    private final Comparator<ClassGroup> bySchoolYear = (p1, p2) -> Integer.compare(p1.getSchoolYear().getSchoolYear(),p2.getSchoolYear().getSchoolYear());
 }

@@ -77,5 +77,9 @@ public class SchoolYear implements Serializable {
     public void setGrade(Grade grade) {
         this.grade = grade;
     }
+    public String toString()
+    {
+        return this.getSchoolYear()+"";
+    }
 
 }

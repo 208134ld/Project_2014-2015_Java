@@ -42,6 +42,7 @@
                     </rowConstraints>
                   </GridPane>
                   <Button fx:id="btnKlasToevoegen" mnemonicParsing="false" onAction="#addKlas" text="Toevoegen" />
+                  <Text fx:id="errorText1" disable="true" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: red;" wrappingWidth="564.13671875" />
                </children>
             </VBox>
          </content>

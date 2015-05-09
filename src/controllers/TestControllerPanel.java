@@ -388,6 +388,9 @@ public class TestControllerPanel extends GridPane {
             t.setEndDate(dateEnd);
             comboChooseTest.setValue(t);
             rc.updateRepo();
+            comboChooseTest.setItems(FXCollections.observableArrayList(rc.findTestsByClassGroup(comboTestClassGroup.getSelectionModel().getSelectedItem())));
+            
+            
         } catch (Exception ex) {
             txtInfo.setText("U moet alles correct invullen.");
         }

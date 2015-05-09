@@ -228,7 +228,27 @@ public class ClimateChart implements Serializable {
     {
         return months.stream().mapToInt(m -> m.getSediment()).sum();       
     }
-    
+    public String getGrade(boolean isBreedte)
+    {
+        if(isBreedte)
+            return getBCord().split("°")[0].trim();
+        else
+            return getLCord().split("°")[0].trim();
+    }
+    public String getMinutes(boolean isBreedte)
+    {
+        if(isBreedte)
+            return getBCord().split("°")[1].split("'")[0].trim();
+        else
+            return getLCord().split("°")[1].split("'")[0].trim();
+    }
+    public String getSeconds(boolean isBreedte)
+    {
+        if(isBreedte)
+            return getBCord().split("°")[1].split("'")[1].trim().split("\"")[0];
+        else
+            return getLCord().split("°")[1].split("'")[1].trim().split("\"")[0];
+    }
     @Override
     public String toString()
     {
