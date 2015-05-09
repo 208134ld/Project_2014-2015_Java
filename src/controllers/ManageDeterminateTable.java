@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -114,17 +115,6 @@ public class ManageDeterminateTable extends GridPane {
     private int currentDetTableId;
     private File vegetationPictureFile;
 
-    //variabelen om te checken of er een clause is aangepast zonder op te slagen
-    private String par1 = "";
-    private String par2 = "";
-    private String operator = "";
-    private int waarde = 0;
-    private String climateFeature = "";
-    private String vegetationFeature = "";
-    private Image vegetationPicture = null;
-    private boolean change = false;
-    private Boolean comingFromError = false;
-
     public ManageDeterminateTable(RepositoryController repositoryController) {
         rc = repositoryController;
 
@@ -170,6 +160,76 @@ public class ManageDeterminateTable extends GridPane {
         if (gradeCombo.getSelectionModel().getSelectedItem() != null) {
             viewDeterminateTable();
         }
+
+        treeViewDeterminateTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<MyNode>>() {
+            @Override
+            public void changed(ObservableValue<? extends TreeItem<MyNode>> observable, TreeItem<MyNode> oldValue, TreeItem<MyNode> newValue) {
+                try {
+                    scrollPaneClause.setVvalue(scrollPaneClause.getVmin());
+                    imageVegetation.setImage(null);
+                    foutmelding.setText("");
+                    disableAddClause(false);
+                    try {
+                        selectedClauseComponent = rc.findClauseById(newValue.getValue().getId());
+                        try {
+                            byte[] byteArray = selectedClauseComponent.getVegetationPicture();
+                            imageVegetation.setImage(new Image(new ByteArrayInputStream(byteArray)));
+                        } catch (NullPointerException ex) {
+                        }
+                    } catch (NullPointerException ex) {
+                        disableAddClause(true);
+                    }
+
+                    if (newValue.getValue().getType().equals("Clause")) {
+
+                        rbTypeClause.setSelected(true);
+                        txtClimateFeature.setDisable(true);
+                        txtVegetationFeature.setDisable(true);
+                        btnSearchImage.setDisable(true);
+                        operatorDropd.setValue(selectedClauseComponent.getOperator().toString());
+                        if (selectedClauseComponent.getPar2_ParameterId() != null) {
+                            parDropd2.setValue(rc.findParameterById(selectedClauseComponent.getPar2_ParameterId().getParameterId()).getDiscriminator().toString());
+                            waardeParameter.setDisable(true);
+                            par2RadioButton.setSelected(true);
+                        } else {
+                            valueRadioButton.setSelected(true);
+                            parDropd2.setValue("");
+                            parDropd2.setDisable(true);
+                            waardeParameter.setDisable(false);
+                        }
+                        parDropd.setValue(rc.findParameterById(selectedClauseComponent.getPar1_ParameterId().getParameterId()).getDiscriminator().toString());
+                        waardeParameter.setText(selectedClauseComponent.getWaarde() + "");
+                        txtClimateFeature.setText(selectedClauseComponent.getName());
+
+                        RadioButton rb3 = (RadioButton) par2OrValueRadioButtonGroup.getSelectedToggle();
+
+                        if (rb3.getText().equals("Waarde")) {
+                            unblockValue();
+                        } else {
+                            unblockPar2();
+                        }
+
+                    } else {
+                        rbTypeResult.setSelected(true);
+                        txtClimateFeature.setDisable(false);
+                        parDropd2.setDisable(true);
+                        parDropd2.setValue("");
+                        par2RadioButton.setDisable(true);
+                        valueRadioButton.setDisable(true);
+                        waardeParameter.setDisable(true);
+                        waardeParameter.setText("0");
+                        txtVegetationFeature.setText(selectedClauseComponent.getVegetationfeature());
+                        txtClimateFeature.setText(selectedClauseComponent.getClimatefeature());
+                        parDropd.setDisable(true);
+                        parDropd.setValue("");
+                        operatorDropd.setDisable(true);
+                        operatorDropd.setValue("");
+                    }
+                } catch (Exception e) {
+                }
+            }
+        }
+        );
     }
 
     private void initialize() {
@@ -200,12 +260,10 @@ public class ManageDeterminateTable extends GridPane {
 
         if (graden.isEmpty()) {
             gradeCombo.setDisable(true);
-            //btnViewDeterminateTable.setDisable(true);
         } else {
             gradeCombo.setItems(graden);
             gradeCombo.setValue(graden.get(0));
             gradeCombo.setDisable(false);
-            //btnViewDeterminateTable.setDisable(false);
         }
 
         if (graden2.isEmpty()) {
@@ -283,170 +341,6 @@ public class ManageDeterminateTable extends GridPane {
         } catch (NullPointerException ex) {
         }
 
-        treeViewDeterminateTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<MyNode>>() {
-            @Override
-            public void changed(ObservableValue<? extends TreeItem<MyNode>> observable, TreeItem<MyNode> oldValue, TreeItem<MyNode> newValue) {
-                System.out.println("13ste");
-                boolean check = false;
-                boolean checkChange = false;
-
-                //try {
-                if (change) {
-                    try {
-                        selectedClauseComponent = rc.findClauseById(newValue.getValue().getId());
-                    } catch (Exception ex) {
-                        System.out.println("hier.");
-                    }
-
-                    if (selectedClauseComponent.getDiscriminator().equals("Clause")) {
-                        if (!par1.equals(parDropd.getSelectionModel().getSelectedItem())) {
-                            System.out.println("1");
-                            checkChange = true;
-                        }
-                        else if (!par2.equals(parDropd2.getSelectionModel().getSelectedItem())) {
-                                System.out.println("2");
-                                checkChange = true;
-                        }//selectedClausecomponent is fout, ge moet de waarden uit de fxml halen!!!!
-                        else if (!operator.equals(operatorDropd.getSelectionModel().getSelectedItem())) {
-                            System.out.println("3");
-                            checkChange = true;
-                        }
-                        else if (waarde != Integer.parseInt(waardeParameter.getText())) {
-                            System.out.println("4");
-                            checkChange = true;
-                        }
-                    } else {
-                        Image imageCheck = null;
-                        try {
-                            byte[] byteArray = selectedClauseComponent.getVegetationPicture();
-                            imageCheck = new Image(new ByteArrayInputStream(byteArray));
-                        } catch (Exception ex) {
-                            System.out.println("kfkfk");
-                        }
-                        if (!climateFeature.equals(selectedClauseComponent.getClimatefeature())) {
-                            checkChange = true;
-                        } else if (!vegetationFeature.equals(selectedClauseComponent.getVegetationfeature())) {
-                            checkChange = true;
-                        } else if (vegetationPicture.equals(imageCheck)) {
-                            checkChange = true;
-                        }
-                    }
-
-                //} catch (NullPointerException ex) {
-                    //    System.out.println("Fout bij listener.");
-                    //}
-                }
-
-                if (checkChange) {
-                    Alert alert = new Alert(AlertType.CONFIRMATION);
-                    alert.setTitle("Fout");
-                    alert.setHeaderText("Er zijn aanpassingen die nog niet zijn opgeslagen.");
-                    alert.setContentText("Wilt u deze alsnog opslagen?");
-                    ButtonType buttonTypeOne = new ButtonType("Ja");
-                    ButtonType buttonTypeTwo = new ButtonType("Nee");
-                    ButtonType buttonTypeCancel = new ButtonType("Terug", ButtonData.CANCEL_CLOSE);
-
-                    alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
-
-                    Optional<ButtonType> result = alert.showAndWait();
-                    if (result.get() == buttonTypeOne) {
-                        selectedClauseComponent = rc.findClauseById(oldValue.getValue().getId());
-                        comingFromError = true;
-                        saveDetItem();
-                        selectedClauseComponent = rc.findClauseById(newValue.getValue().getId());
-                    } else if (result.get() == buttonTypeTwo) {
-
-                    } else {
-                        check = true;
-                    }
-                }
-
-                if (!check) {
-                    try {
-                        scrollPaneClause.setVvalue(scrollPaneClause.getVmin());
-                        imageVegetation.setImage(null);
-                        foutmelding.setText("");
-                        disableAddClause(false);
-                        try {
-                            selectedClauseComponent = rc.findClauseById(newValue.getValue().getId());
-                            try {
-                                byte[] byteArray = selectedClauseComponent.getVegetationPicture();
-                                imageVegetation.setImage(new Image(new ByteArrayInputStream(byteArray)));
-                            } catch (NullPointerException ex) {
-                            }
-                        } catch (NullPointerException ex) {
-                            disableAddClause(true);
-                        }
-
-                        if (newValue.getValue().getType().equals("Clause")) {
-                            par1 = rc.findParameterById(selectedClauseComponent.getPar1_ParameterId().getParameterId()).getDiscriminator().toString();
-
-                            operator = selectedClauseComponent.getOperator().toString();
-                            climateFeature = "";
-                            vegetationFeature = "";
-                            vegetationPicture = null;
-                            rbTypeClause.setSelected(true);
-                            txtClimateFeature.setDisable(true);
-                            txtVegetationFeature.setDisable(true);
-                            btnSearchImage.setDisable(true);
-                            operatorDropd.setValue(selectedClauseComponent.getOperator().toString());
-                            if (selectedClauseComponent.getPar2_ParameterId() != null) {
-                                parDropd2.setValue(rc.findParameterById(selectedClauseComponent.getPar2_ParameterId().getParameterId()).getDiscriminator().toString());
-                                waardeParameter.setDisable(true);
-                                par2RadioButton.setSelected(true);
-                                par2 = rc.findParameterById(selectedClauseComponent.getPar2_ParameterId().getParameterId()).getDiscriminator().toString();
-                                waarde = 0;
-                            } else {
-                                valueRadioButton.setSelected(true);
-                                parDropd2.setValue("");
-                                parDropd2.setDisable(true);
-                                waardeParameter.setDisable(false);
-                                par2 = "";
-                                waarde = selectedClauseComponent.getWaarde();
-                            }
-                            parDropd.setValue(rc.findParameterById(selectedClauseComponent.getPar1_ParameterId().getParameterId()).getDiscriminator().toString());
-                            waardeParameter.setText(selectedClauseComponent.getWaarde() + "");
-                            txtClimateFeature.setText(selectedClauseComponent.getName());
-
-                            RadioButton rb = (RadioButton) par2OrValueRadioButtonGroup.getSelectedToggle();
-
-                            if (rb.getText().equals("Waarde")) {
-                                unblockValue();
-                            } else {
-                                unblockPar2();
-                            }
-
-                        } else {
-                            rbTypeResult.setSelected(true);
-                            txtClimateFeature.setDisable(false);
-                            parDropd2.setDisable(true);
-                            par2RadioButton.setDisable(true);
-                            valueRadioButton.setDisable(true);
-                            waardeParameter.setDisable(true);
-                            txtVegetationFeature.setText(selectedClauseComponent.getVegetationfeature());
-                            txtClimateFeature.setText(selectedClauseComponent.getClimatefeature());
-                            parDropd.setDisable(true);
-                            operatorDropd.setDisable(true);
-                            par1 = null;
-                            par2 = null;
-                            operator = null;
-                            waarde = 0;
-                            vegetationFeature = selectedClauseComponent.getVegetationfeature();
-                            climateFeature = selectedClauseComponent.getClimatefeature();
-                            try {
-                                byte[] byteArray = selectedClauseComponent.getVegetationPicture();
-                                vegetationPicture = new Image(new ByteArrayInputStream(byteArray));
-                            } catch (NullPointerException ex) {
-                            }
-                        }
-                        change = true;
-                    } catch (Exception e) {
-                    }
-                }
-            }
-        }
-        );
-
         if (clauses.isEmpty()) {
             initialize();
             treeViewDeterminateTable.setRoot(null);
@@ -463,22 +357,22 @@ public class ManageDeterminateTable extends GridPane {
                 } catch (NoResultException ex) {
 
                 }
-                type = "(Ja Knoop)";
+                type = "Ja: ";
             } else {
                 try {
                     clause = rc.findClauseById(parentClause.getNoClause().getClauseComponentId());
                 } catch (NoResultException ex) {
                 }
-                type = "(Nee Knoop)";
+                type = "Nee: ";
             }
             if (clause != null) {
                 if (clause.getName() != null) {
-                    TreeItem<MyNode> newNode = new TreeItem<>(new MyNode(clause.getName() + " " + type, "Clause", clause.getClauseComponentId()));
+                    TreeItem<MyNode> newNode = new TreeItem<>(new MyNode(type + clause.getName(), "Clause", clause.getClauseComponentId()));
                     recursiveClause(newNode, clause, true);
                     recursiveClause(newNode, clause, false);
                     node.getChildren().add(newNode);
                 } else {
-                    TreeItem<MyNode> newNode = new TreeItem<>(new MyNode(clause.getClimatefeature() + " " + type, "Result", clause.getClauseComponentId()));
+                    TreeItem<MyNode> newNode = new TreeItem<>(new MyNode(type + clause.getClimatefeature(), "Result", clause.getClauseComponentId()));
                     node.getChildren().add(newNode);
                 }
             }
@@ -488,20 +382,16 @@ public class ManageDeterminateTable extends GridPane {
         if (node != null) {
             node.setExpanded(true);
         }
-
     }
 
     @FXML
     private void saveDetItem() {
-        System.out.println("1ste");
         try {
             if (selectedClauseComponent != null) {
 
                 RadioButton rbClauseOrResult = (RadioButton) ClauseOrResult.getSelectedToggle();
                 RadioButton rbValueOrPar2 = (RadioButton) par2OrValueRadioButtonGroup.getSelectedToggle();
-                
-                System.out.println("2ste");
-                
+
                 if (selectedClauseComponent.getDiscriminator().equals("Clause")) {
                     if (rbClauseOrResult.getText().equals("Knoop")) {
                         if (operatorDropd.getSelectionModel().getSelectedItem() != null) {
@@ -510,11 +400,12 @@ public class ManageDeterminateTable extends GridPane {
                         if (parDropd.getSelectionModel().getSelectedItem() != null) {
                             selectedClauseComponent.setPar1_ParameterId(rc.findParameterByName(parDropd.getSelectionModel().getSelectedItem()));
                         }
-                        System.out.println("3ste");
                         if (rbValueOrPar2.getText().equals("Waarde")) {
                             selectedClauseComponent.setWaarde(Integer.parseInt(waardeParameter.getText()));
                             selectedClauseComponent.setPar2_ParameterId(null);
+
                             selectedClauseComponent.setName(String.format("%s %s %s", parDropd.getSelectionModel().getSelectedItem().toString(), operatorDropd.getSelectionModel().getSelectedItem().toString(), waardeParameter.getText()));
+
                         } else {
                             selectedClauseComponent.setPar2_ParameterId(rc.findParameterByName(parDropd2.getSelectionModel().getSelectedItem()));
                             selectedClauseComponent.setWaarde(0);
@@ -531,9 +422,7 @@ public class ManageDeterminateTable extends GridPane {
                             rc.insertClause(newClause);
                             selectedClauseComponent.setNoClause(newClause);
                         }
-                        System.out.println("4ste");
                         rc.updateRepo();
-                        System.out.println("5ste");
                     } else {
                         ClauseComponent yesClause = selectedClauseComponent.getYesClause();
                         ClauseComponent noClause = selectedClauseComponent.getNoClause();
@@ -600,9 +489,7 @@ public class ManageDeterminateTable extends GridPane {
                         rc.updateRepo();
                     }
                 }
-                System.out.println("6ste");
                 TreeIterator<MyNode> iterator = new TreeIterator<>(root);
-                System.out.println("7ste");
                 while (iterator.hasNext()) {
                     MyNode node = iterator.next().getValue();
                     if (node.getId() == selectedClauseComponent.getClauseComponentId()) {
@@ -611,22 +498,15 @@ public class ManageDeterminateTable extends GridPane {
                         break;
                     }
                 }
-                System.out.println("8ste");
                 rc.updateRepo();
-                foutmelding.setText("Opslaan succesvol");
-                System.out.println("9ste");
             }
         } catch (Exception e) {
             foutmelding.setText("Er is een onbekende fout opgetreden");
         }
-        System.out.println("10ste");
-        if(comingFromError){
-            System.out.println("11ste");
-            viewDeterminateTable();
-            System.out.println("12ste");
-            comingFromError = false;
-        }
-            
+
+        viewDeterminateTable();
+        enableTreeView();
+        foutmelding.setText("Opslaan succesvol");
     }
 
     @FXML
@@ -806,5 +686,15 @@ public class ManageDeterminateTable extends GridPane {
         } else {
             path = null;
         }
+    }
+
+    @FXML
+    private void disableTreeView() {
+        foutmelding.setText("U heeft uw aanpassingen nog niet opgeslagen.");
+        treeViewDeterminateTable.setDisable(true);
+    }
+
+    private void enableTreeView() {
+        treeViewDeterminateTable.setDisable(false);
     }
 }

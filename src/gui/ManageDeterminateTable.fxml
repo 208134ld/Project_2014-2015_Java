@@ -33,37 +33,37 @@
                <content>
                 <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="480.0">
                      <children>
-                        <ComboBox fx:id="parDropd" layoutX="143.0" layoutY="57.0" prefHeight="25.0" prefWidth="125.0" />
-                        <ComboBox fx:id="operatorDropd" layoutX="143.0" layoutY="94.0" prefHeight="25.0" prefWidth="70.0" />
-                        <TextField fx:id="waardeParameter" layoutX="145.0" layoutY="211.0" prefHeight="25.0" prefWidth="84.0" promptText="waarde" />
-                        <TextField fx:id="txtClimateFeature" layoutX="107.0" layoutY="266.0" prefHeight="25.0" prefWidth="168.0" promptText="(alleen mogelijk bij resultaat)" />
+                        <ComboBox fx:id="parDropd" layoutX="143.0" layoutY="57.0" onMouseClicked="#disableTreeView" prefHeight="25.0" prefWidth="125.0" />
+                        <ComboBox fx:id="operatorDropd" layoutX="143.0" layoutY="94.0" onMouseClicked="#disableTreeView" prefHeight="25.0" prefWidth="70.0" />
+                        <TextField fx:id="waardeParameter" layoutX="145.0" layoutY="211.0" onMouseClicked="#disableTreeView" prefHeight="25.0" prefWidth="84.0" promptText="waarde" />
+                        <TextField fx:id="txtClimateFeature" layoutX="107.0" layoutY="266.0" onMouseClicked="#disableTreeView" prefHeight="25.0" prefWidth="168.0" promptText="(alleen mogelijk bij resultaat)" />
                         <Label layoutX="15.0" layoutY="270.0" text="Klimaatkenmerk:" />
-                        <Button fx:id="saveItem" layoutX="96.0" layoutY="393.0" mnemonicParsing="false" onAction="#saveDetItem" prefHeight="34.0" prefWidth="235.0" text="Opslaan" />
+                        <Button fx:id="saveItem" layoutX="40.0" layoutY="377.0" mnemonicParsing="false" onAction="#saveDetItem" prefHeight="34.0" prefWidth="235.0" text="Opslaan" />
                         <Label layoutX="5.0" layoutY="304.0" text="Vegetatiekenmerk:" />
-                        <TextField fx:id="txtVegetationFeature" layoutX="107.0" layoutY="300.0" prefHeight="25.0" prefWidth="167.0" promptText="(alleen mogelijk bij resultaat)" />
-                        <Text fx:id="foutmelding" fill="#901d1d" layoutX="68.0" layoutY="696.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="275.13671875" />
-                        <ComboBox fx:id="parDropd2" layoutX="143.0" layoutY="174.0" prefHeight="25.0" prefWidth="124.0" />
-                        <RadioButton fx:id="par2RadioButton" layoutX="152.0" layoutY="148.0" mnemonicParsing="false" onAction="#unblockPar2" text="2de parameter">
+                        <TextField fx:id="txtVegetationFeature" layoutX="107.0" layoutY="300.0" onMouseClicked="#disableTreeView" prefHeight="25.0" prefWidth="167.0" promptText="(alleen mogelijk bij resultaat)" />
+                        <Text fx:id="foutmelding" fill="#901d1d" layoutX="40.0" layoutY="470.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="275.13671875" />
+                        <ComboBox fx:id="parDropd2" layoutX="143.0" layoutY="174.0" onMouseClicked="#disableTreeView" prefHeight="25.0" prefWidth="124.0" />
+                        <RadioButton fx:id="par2RadioButton" layoutX="152.0" layoutY="148.0" mnemonicParsing="false" onAction="#unblockPar2" onMouseClicked="#disableTreeView" text="2de parameter">
                            <toggleGroup>
                               <ToggleGroup fx:id="par2OrValueRadioButtonGroup" />
                            </toggleGroup>
                         </RadioButton>
-                        <RadioButton fx:id="rbTypeResult" layoutX="270.0" layoutY="14.0" mnemonicParsing="false" onAction="#switchToResult" selected="true" text="Resultaat">
+                        <RadioButton fx:id="rbTypeResult" layoutX="270.0" layoutY="14.0" mnemonicParsing="false" onAction="#switchToResult" onMouseClicked="#disableTreeView" selected="true" text="Resultaat">
                            <toggleGroup>
                               <ToggleGroup fx:id="ClauseOrResult" />
                            </toggleGroup>
                         </RadioButton>
                         <Label alignment="CENTER_RIGHT" layoutX="23.0" layoutY="148.0" text="Wat wilt u gebruiken?" />
                         <Label alignment="CENTER_RIGHT" layoutX="106.0" layoutY="14.0" text="Type:" />
-                        <RadioButton fx:id="rbTypeClause" layoutX="150.0" layoutY="14.0" mnemonicParsing="false" onAction="#switchToClause" selected="true" text="Knoop" toggleGroup="$ClauseOrResult" />
-                        <RadioButton fx:id="valueRadioButton" layoutX="271.0" layoutY="148.0" mnemonicParsing="false" onAction="#unblockValue" selected="true" text="Waarde" toggleGroup="$par2OrValueRadioButtonGroup" />
+                        <RadioButton fx:id="rbTypeClause" layoutX="150.0" layoutY="14.0" mnemonicParsing="false" onAction="#switchToClause" onMouseClicked="#disableTreeView" selected="true" text="Knoop" toggleGroup="$ClauseOrResult" />
+                        <RadioButton fx:id="valueRadioButton" layoutX="271.0" layoutY="148.0" mnemonicParsing="false" onAction="#unblockValue" onMouseClicked="#disableTreeView" selected="true" text="Waarde" toggleGroup="$par2OrValueRadioButtonGroup" />
                         <Label alignment="CENTER_RIGHT" layoutX="54.0" layoutY="61.0" text="Parameter 1:" />
                         <Label alignment="CENTER_RIGHT" layoutX="69.0" layoutY="98.0" text="Operator:" />
                         <Label alignment="CENTER_RIGHT" layoutX="54.0" layoutY="178.0" text="Parameter 2:" />
                         <Label alignment="CENTER_RIGHT" layoutX="73.0" layoutY="215.0" text="Waarde:" />
-                        <Button fx:id="btnDeleteItem" layoutX="96.0" layoutY="436.0" mnemonicParsing="false" onAction="#deleteItem" prefHeight="34.0" prefWidth="235.0" text="Verwijder" />
+                        <Button fx:id="btnDeleteItem" layoutX="40.0" layoutY="419.0" mnemonicParsing="false" onAction="#deleteItem" prefHeight="34.0" prefWidth="235.0" text="Verwijder" />
                         <ImageView fx:id="imageVegetation" fitHeight="97.0" fitWidth="145.0" layoutX="281.0" layoutY="264.0" pickOnBounds="true" preserveRatio="true" />
-                        <Button fx:id="btnSearchImage" layoutX="40.0" layoutY="335.0" mnemonicParsing="false" onAction="#searchImage" prefHeight="34.0" prefWidth="235.0" text="Upload vegetatiefoto" />
+                        <Button fx:id="btnSearchImage" layoutX="40.0" layoutY="335.0" mnemonicParsing="false" onAction="#searchImage" onMouseClicked="#disableTreeView" prefHeight="34.0" prefWidth="235.0" text="Upload vegetatiefoto" />
                      </children>
                   </AnchorPane>
                </content>
