@@ -173,11 +173,12 @@ public class ClassListViewPanel extends GridPane implements Observer {
                                     updateStudentListDetailPanel(selectedClassGroup);
                                 }
                             });
-                            MenuItem cmItem3 = new MenuItem("verander klasgroep");
+                            MenuItem cmItem3 = new MenuItem("Verander klasgroep");
                             cmItem3.setOnAction(new EventHandler<ActionEvent>() {
                                 @Override
                                 public void handle(ActionEvent e) {
                                     List<ClassGroup> choices =controller.giveAllClassGroups().stream().sorted(bySchoolYear).collect(Collectors.toList());
+                                    choices.remove(newValue.getClassGroup());
                                     ChoiceDialog<ClassGroup> dialog = new ChoiceDialog<>(choices.get(0), choices);
                                     
                                     dialog.setTitle("Verander de klas voor " + newValue.getFullName());
