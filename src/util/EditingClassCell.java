@@ -20,11 +20,7 @@ public class EditingClassCell extends TableCell<Student, String> {
     @Override
     public void startEdit() {
         super.startEdit();
-        if (textField == null) {
-
-            createTextField();
-        }
-
+        createTextField();
         setGraphic(textField);
         setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         textField.selectAll();

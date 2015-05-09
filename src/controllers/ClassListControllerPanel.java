@@ -161,6 +161,8 @@ public class ClassListControllerPanel extends Accordion {
         if(txtNaam.getText().length()==0||txtVoornaam.getText().length()==0)
             throw new NullPointerException();
             ClassGroup cg = dbLeerlingKlas.getSelectionModel().getSelectedItem();
+            if(cg ==null)
+                throw new NullPointerException();
             controller.addStudent(new Student(txtNaam.getText(), txtVoornaam.getText(), cg));
             txtNaam.clear();
             txtVoornaam.clear();
@@ -169,6 +171,7 @@ public class ClassListControllerPanel extends Accordion {
             errorText.setText("De klas is niet gevonden.");
         }catch(NullPointerException nulex)
         {
+            System.out.println("nullexc throwed");
             errorText.setText("Vul alle velden in");
         }catch(Exception e)
         {

@@ -232,20 +232,29 @@ public class ClassListViewPanel extends GridPane implements Observer {
     @FXML
     private void updateCell(TableColumn.CellEditEvent<Student, String> event) {
         if (studentInfoTable.getSelectionModel().getSelectedCells().get(0).getColumn() == 0) {
-            studentListObservable.stream().filter((s) -> (event.getRowValue().getStudentId() == s.getStudentId())).map((s) -> {
-                s.setLastName(event.getNewValue());
-                return s;
-            }).forEach((s) -> {
-                controller.addStudent(s);
-            });
+            for(Student s : studentListObservable)
+            {
+                System.out.println("LINE 237: " +event.getRowValue().getStudentId()+" =? " +s.getStudentId());
+                if(event.getRowValue().getStudentId()==s.getStudentId()){
+                    s.setLastName(event.getNewValue());
+                    controller.addStudent(s);
+                    break;
+                }
+                    
+            }
+           
+
         }
         if (studentInfoTable.getSelectionModel().getSelectedCells().get(0).getColumn() == 1) {
-            studentListObservable.stream().filter((s) -> (event.getRowValue().getStudentId() == s.getStudentId())).map((s) -> {
-                s.setFirtsName(event.getNewValue());
-                return s;
-            }).forEach((s) -> {
-                controller.addStudent(s);
-            });
+        for(Student s : studentListObservable)
+            {
+                if(event.getRowValue().getStudentId()==s.getStudentId()){
+                    s.setFirtsName(event.getNewValue());
+                    controller.addStudent(s);
+                    break;
+                }
+                    
+            }
         }
     }
     private final Comparator<ClassGroup> bySchoolYear = (p1, p2) -> Integer.compare(p1.getSchoolYear().getSchoolYear(),p2.getSchoolYear().getSchoolYear());
