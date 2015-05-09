@@ -10,13 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Optional;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -29,6 +33,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+import javax.swing.JOptionPane;
 import repository.RepositoryController;
 import util.EditingCell;
 import util.MyNode;
@@ -85,6 +90,8 @@ public class LocationViewPanel extends GridPane implements Observer {
     private List<TreeItem<MyNode>> continentItems;
     private List<TreeItem<MyNode>> countryItems;
     private ObservableList<Months> monthsList;
+    private boolean firstTime = true;
+    int i = 0;
 
     public LocationViewPanel(RepositoryController repositoryController) {
         rc = repositoryController;
@@ -103,10 +110,10 @@ public class LocationViewPanel extends GridPane implements Observer {
         disableEverything(true);
         initMonthTable();
         updateSelectionTreeViewPanel();
-        
+
     }
-    private void disableEverything(boolean disable)
-    {
+
+    private void disableEverything(boolean disable) {
         txtBGrades.setDisable(disable);
         txtBMinutes.setDisable(disable);
         txtBSeconds.setDisable(disable);
@@ -119,20 +126,23 @@ public class LocationViewPanel extends GridPane implements Observer {
         txtLengteParameter.setDisable(disable);
         saveBut.setDisable(disable);
     }
+
     public void updateLocationDetailPanel(ClimateChart c) {
-        if(txtBGrades.disableProperty().getValue()==true)
+        if (txtBGrades.disableProperty().getValue() == true) {
             disableEverything(false);
+        }
         locationLable.setText(c.getLocation());
-        txtBGrades.setText(c.getBCord().split("°")[0].trim());
-        txtBGrades.setText(c.getBCord().split("°")[0].trim());
-        txtBMinutes.setText(c.getBCord().split("°")[1].split("'")[0].trim());
+        txtBGrades.setText(c.getGrade(true));
+        txtBMinutes.setText(c.getMinutes(true));
+        txtBSeconds.setText(c.getSeconds(true));
+        txtLGrades.setText(c.getGrade(false));
+        txtLMinutes.setText(c.getMinutes(false));
+        txtLSeconds.setText(c.getSeconds(false));
+//        txtBGrades.setText(c.getBCord().split("°")[0].trim());
+//        txtBMinutes.setText(c.getBCord().split("°")[1].split("'")[0].trim());
         String waarde = c.getBCord().split("°")[1].split("'")[1].trim();
-        txtBSeconds.setText(waarde.split("\"")[0]);
         txtBreedteParameter.setText(waarde.substring(waarde.length() - 2, waarde.length()).trim());
-        txtLGrades.setText(c.getLCord().split("°")[0].trim());
-        txtLMinutes.setText(c.getLCord().split("°")[1].split("'")[0].trim());
         waarde = c.getLCord().split("°")[1].split("'")[1].trim();
-        txtLSeconds.setText(waarde.split("\"")[0]);
         txtLengteParameter.setText(waarde.substring(waarde.length() - 2, waarde.length()));
         txtBeginPeriod.setText(c.getBeginperiod() + "");
         txtEndPeriod.setText(c.getEndperiod() + "");
@@ -182,7 +192,7 @@ public class LocationViewPanel extends GridPane implements Observer {
                 try {
                     return new TextFieldTreeCellImpl(root, treeItems, rc);
                 } catch (SQLException ex) {
-errorText.setText("cell in de boom veranderen is mislukt");
+                    errorText.setText("cell in de boom veranderen is mislukt");
                 }
                 return null;
             }
@@ -199,15 +209,53 @@ errorText.setText("cell in de boom veranderen is mislukt");
                 TreeItem<MyNode> selectedItem = newValue;
                 if (selectedItem.getValue().getType().equalsIgnoreCase("ClimateChart")) {
                     try {
-                        selectedClimatechart = rc.getClimateChartByClimateChartID(selectedItem.getValue().getId());
-                        selectedClimatechart.setMonths(rc.getMonthsOfClimateChart(selectedItem.getValue().getId()));
-                        updateLocationDetailPanel(selectedClimatechart);
+                        if (!(newValue.getValue().getId() == i)) {
+                            if (isClimateChartNotUpToDate()) {
+                                Alert alert = new Alert(AlertType.CONFIRMATION);
+                                alert.setTitle("gewijzigde data opslaan");
+                                alert.setHeaderText("De wijzigingen zijn nog niet opgeslaan ");
+                                alert.setContentText("Wilt u ze opslaan?");
+                                Optional<ButtonType> result = alert.showAndWait();
+                                if (result.get() == ButtonType.OK) {
+                                    saveDetaillWindow();
+                                } else {
+    // ... user chose CANCEL or closed the dialog
+                                }
+                            }
+                            selectedClimatechart = rc.getClimateChartByClimateChartID(selectedItem.getValue().getId());
+                            selectedClimatechart.setMonths(rc.getMonthsOfClimateChart(selectedItem.getValue().getId()));
+                            updateLocationDetailPanel(selectedClimatechart);
+                            i = newValue.getValue().getId();
+                        }
+
                     } catch (Exception e) {
-errorText.setText("Kon de gewenste klimatogram niet vinden in de databank");
+                        errorText.setText("Kon de gewenste klimatogram niet vinden in de databank");
                     }
                 }
             }
         });
+    }
+
+    private boolean isClimateChartNotUpToDate() {
+        boolean isChecked = false;
+
+        if (!firstTime) {
+            if (selectedClimatechart.getBeginperiod() != Integer.parseInt(txtBeginPeriod.getText())) {
+                isChecked = true;
+            }
+            if (selectedClimatechart.getEndperiod() != Integer.parseInt(txtEndPeriod.getText())) {
+                isChecked = true;
+            }
+            if (!(selectedClimatechart.getGrade(true).equals(txtBGrades.getText()) && selectedClimatechart.getMinutes(true).equals(txtBMinutes.getText()) && selectedClimatechart.getSeconds(true).equals(txtBSeconds.getText()))) {
+                isChecked = true;
+            }
+            if (!(selectedClimatechart.getGrade(false).equals(txtLGrades.getText()) && selectedClimatechart.getMinutes(false).equals(txtLMinutes.getText()) && selectedClimatechart.getSeconds(false).equals(txtLSeconds.getText()))) {
+                isChecked = true;
+            }
+        } else {
+            firstTime = false;
+        }
+        return isChecked;
     }
 
     public void initMonthTable() {
@@ -234,51 +282,48 @@ errorText.setText("Kon de gewenste klimatogram niet vinden in de databank");
     }
 
     @FXML
-    private void saveDetaillWindow(MouseEvent event) {
-        try{
-            
-        int g1 = Integer.parseInt(txtBGrades.getText().trim());
-        int g2 = Integer.parseInt(txtLGrades.getText().trim());
-        int m1 = Integer.parseInt(txtBMinutes.getText().trim());
-        int m2 = Integer.parseInt(txtLMinutes.getText().trim());
-        int s1 = Integer.parseInt(txtBSeconds.getText().trim());
-        int s2 = Integer.parseInt(txtLSeconds.getText().trim());
-        int begin = Integer.parseInt(txtBeginPeriod.getText().trim());
-        int end = Integer.parseInt(txtEndPeriod.getText().trim());
-        if (!(txtLengteParameter.getText().trim().equalsIgnoreCase("ol") || txtLengteParameter.getText().trim().equalsIgnoreCase("wl"))) {
-            throw new IllegalArgumentException("Lengteparameter kan alleen OL of WL zijn");
-        }
-        if (!(txtBreedteParameter.getText().equalsIgnoreCase("nb") || txtBreedteParameter.getText().equalsIgnoreCase("zb"))) {
-            throw new IllegalArgumentException("Breedteparameter kan alleen NB of ZB zijn");
-        }
-        String longi = selectedClimatechart.giveCords(g1, m1, s1) + txtBreedteParameter.getText().toUpperCase().trim();
-        String lat = selectedClimatechart.giveCords(g2, m2, s2) + txtLengteParameter.getText().toUpperCase().trim();
-        selectedClimatechart.setBCord(longi);
-        selectedClimatechart.setLCord(lat);
-        selectedClimatechart.setBeginperiod(begin);
-        selectedClimatechart.setEndperiod(end);
-        selectedClimatechart.setLatitude(selectedClimatechart.calcDecimals(g1, m1, s1, txtBreedteParameter.getText().trim()));
-        selectedClimatechart.setLongitude(selectedClimatechart.calcDecimals(g2, m2, s2, txtLengteParameter.getText().trim()));
+    private void saveDetaillWindow() {
+        try {
+            int g1 = Integer.parseInt(txtBGrades.getText().trim());
+            int g2 = Integer.parseInt(txtLGrades.getText().trim());
+            int m1 = Integer.parseInt(txtBMinutes.getText().trim());
+            int m2 = Integer.parseInt(txtLMinutes.getText().trim());
+            int s1 = Integer.parseInt(txtBSeconds.getText().trim());
+            int s2 = Integer.parseInt(txtLSeconds.getText().trim());
+            int begin = Integer.parseInt(txtBeginPeriod.getText().trim());
+            int end = Integer.parseInt(txtEndPeriod.getText().trim());
+            if (!(txtLengteParameter.getText().trim().equalsIgnoreCase("ol") || txtLengteParameter.getText().trim().equalsIgnoreCase("wl"))) {
+                throw new IllegalArgumentException("Lengteparameter kan alleen OL of WL zijn");
+            }
+            if (!(txtBreedteParameter.getText().equalsIgnoreCase("nb") || txtBreedteParameter.getText().equalsIgnoreCase("zb"))) {
+                throw new IllegalArgumentException("Breedteparameter kan alleen NB of ZB zijn");
+            }
+            String longi = selectedClimatechart.giveCords(g1, m1, s1) + txtBreedteParameter.getText().toUpperCase().trim();
+            String lat = selectedClimatechart.giveCords(g2, m2, s2) + txtLengteParameter.getText().toUpperCase().trim();
+            selectedClimatechart.setBCord(longi);
+            selectedClimatechart.setLCord(lat);
+            selectedClimatechart.setBeginperiod(begin);
+            selectedClimatechart.setEndperiod(end);
+            selectedClimatechart.setLatitude(selectedClimatechart.calcDecimals(g1, m1, s1, txtBreedteParameter.getText().trim()));
+            selectedClimatechart.setLongitude(selectedClimatechart.calcDecimals(g2, m2, s2, txtLengteParameter.getText().trim()));
 
-        rc.updateClimateChart(selectedClimatechart.getId(), selectedClimatechart.getLCord(), selectedClimatechart.getBCord(), selectedClimatechart.getBeginperiod(), selectedClimatechart.getEndperiod(), selectedClimatechart.getLongitude(), selectedClimatechart.getLatitude());
-        updateLocationDetailPanel(selectedClimatechart);
-        errorText.setText("");
-        
-        }catch(IllegalArgumentException e)
-        {
-           errorText.setText(e.getMessage());
-        } catch(NullPointerException e){
+            rc.updateClimateChart(selectedClimatechart.getId(), selectedClimatechart.getLCord(), selectedClimatechart.getBCord(), selectedClimatechart.getBeginperiod(), selectedClimatechart.getEndperiod(), selectedClimatechart.getLongitude(), selectedClimatechart.getLatitude());
+            updateLocationDetailPanel(selectedClimatechart);
+            errorText.setText("");
+
+        } catch (IllegalArgumentException e) {
+            errorText.setText(e.getMessage());
+        } catch (NullPointerException e) {
             errorText.setText("Alle velden moeten ingevuld zijn");
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
             errorText.setText("Er is een onbekende fout gebeurt");
         }
-       
+
     }
 
     @FXML
     private void updateCol(TableColumn.CellEditEvent<Months, Double> event) {
-        
+
         int id = monthTable.getSelectionModel().getSelectedCells().get(0).getRow();
         if (monthTable.getSelectionModel().getSelectedCells().get(0).getColumn() == 1) {
 
