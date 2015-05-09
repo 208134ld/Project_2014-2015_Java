@@ -84,28 +84,42 @@ public class ClassListControllerPanel extends Accordion {
         dbKlasGraad.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue ov, Object t, Object t1) {
-                
-                    schoolyearList = FXCollections.observableList(controller.giveSchoolYearsOfGrade((Grade) t1));
-                    dbKlasLeerjaar.setItems(schoolyearList);
-                    dbKlasLeerjaar.setValue(schoolyearList.get(0));
+
+                schoolyearList = FXCollections.observableList(controller.giveSchoolYearsOfGrade((Grade) t1));
+                dbKlasLeerjaar.setItems(schoolyearList);
+                dbKlasLeerjaar.setValue(schoolyearList.get(0));
             }
         });
 
         //Leerling deel comboBox
-        try{
-            dbLeerlingGraad.setItems(gradeList);
+        //try {
+        dbLeerlingGraad.setItems(gradeList);
         dbLeerlingGraad.setValue(gradeList.get(0));
         schoolyearList = FXCollections.observableList(controller.giveSchoolYearsOfGrade((gradeList.get(0))));
         dbLeerlingLeerjaar.setItems(schoolyearList);
         dbLeerlingLeerjaar.setValue(schoolyearList.get(0));
-         classGroupList = FXCollections.observableList(controller.giveClassGroupOfSchoolYear(schoolyearList.get(0)));
-        dbLeerlingKlas.setItems(classGroupList);
-        dbLeerlingKlas.setValue(classGroupList.get(0));
-        }catch(Exception e)
-        {
-            errorText.setText("geen klas gevonden voor dit jaar");
-        }
-        
+        classGroupList = FXCollections.observableList(controller.giveClassGroupOfSchoolYear(schoolyearList.get(0)));
+        classListEmpty();
+        dbLeerlingLeerjaar.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ObservableValue ov, Object t, Object t1) {
+
+                        try {
+                            classGroupList = FXCollections.observableList(controller.giveClassGroupOfSchoolYear((SchoolYear) t1));
+                            errorText.setText("");
+                            classListEmpty();
+                        } catch (NullPointerException nullex) {
+                        } /*catch (Exception e) {
+                         errorText.setText("Er is geen klas voor dit jaar");
+                         }*/
+
+                    }
+                }
+                );
+        /*} catch (Exception e) {
+         errorText.setText("geen klas gevonden voor dit jaar");
+         }*/
+
         dbLeerlingGraad.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue ov, Object t, Object t1) {
@@ -114,52 +128,67 @@ public class ClassListControllerPanel extends Accordion {
                 dbLeerlingLeerjaar.setItems(schoolyearList);
                 dbLeerlingLeerjaar.setValue(schoolyearList.get(0));
                 classGroupList = FXCollections.observableList(controller.giveClassGroupOfSchoolYear(schoolyearList.get(0)));
-                dbLeerlingKlas.setItems(classGroupList);
-                             dbLeerlingKlas.setValue(classGroupList.get(0));
+                classListEmpty();
                 dbLeerlingLeerjaar.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
                     @Override
                     public void changed(ObservableValue ov, Object t, Object t1) {
 
                         try {
                             classGroupList = FXCollections.observableList(controller.giveClassGroupOfSchoolYear((SchoolYear) t1));
-//                                    .stream().map(c -> c.getGroupName()).sorted().collect(Collectors.toList()));
-                            dbLeerlingKlas.setItems(classGroupList);
-                             dbLeerlingKlas.setValue(classGroupList.get(0));
                             errorText.setText("");
+                            classListEmpty();
                         } catch (NullPointerException nullex) {
-                        } catch (Exception e) {
-                            errorText.setText("Er is geen klas voor dit jaar");
-                        }
+                        } /*catch (Exception e) {
+                         errorText.setText("Er is geen klas voor dit jaar");
+                         }*/
+
                     }
-                });
+                }
+                );
             }
-        });
+        }
+        );
+    }
+
+    private void classListEmpty() {
+        if (classGroupList.isEmpty()) {
+            errorText.setText("Geen klas gevonden voor dit leerjaar");
+            dbLeerlingKlas.setDisable(true);
+            txtNaam.setDisable(true);
+            txtVoornaam.setDisable(true);
+        } else {
+            dbLeerlingKlas.setDisable(false);
+            txtNaam.setDisable(false);
+            txtVoornaam.setDisable(false);
+            dbLeerlingKlas.setItems(classGroupList);
+            dbLeerlingKlas.setValue(classGroupList.get(0));
+        }
     }
 
     @FXML
     private void addKlas(ActionEvent event) {
-        try{
-            if(txtKlasName.getText().length()==0)
+        try {
+            if (txtKlasName.getText().length() == 0) {
                 throw new NullPointerException();
+            }
             SchoolYear sy = dbKlasLeerjaar.getSelectionModel().getSelectedItem();//new SchoolYear(Integer.parseInt(dbKlasLeerjaar.getSelectionModel().getSelectedItem()), g);
-        controller.addClassGroup(new ClassGroup(txtKlasName.getText(), sy));
-        txtKlasName.clear();
-        errorText1.setText("");
-        }catch(NullPointerException nule)
-        {
+            controller.addClassGroup(new ClassGroup(txtKlasName.getText(), sy));
+            txtKlasName.clear();
+            errorText1.setText("");
+        } catch (NullPointerException nule) {
             errorText1.setText("Vul alle gegevens in");
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
             errorText1.setText("Er is iets misgelopen. Probeer opnieuw");
         }
-        
+
     }
 
     @FXML
     private void addLeerling(ActionEvent event) {
         try {
-        if(txtNaam.getText().length()==0||txtVoornaam.getText().length()==0)
-            throw new NullPointerException();
+            if (txtNaam.getText().length() == 0 || txtVoornaam.getText().length() == 0) {
+                throw new NullPointerException();
+            }
             ClassGroup cg = dbLeerlingKlas.getSelectionModel().getSelectedItem();
             if(cg ==null)
                 throw new NullPointerException();
@@ -169,12 +198,10 @@ public class ClassListControllerPanel extends Accordion {
             errorText.setText("");
         } catch (NoResultException invok) {
             errorText.setText("De klas is niet gevonden.");
-        }catch(NullPointerException nulex)
-        {
-            System.out.println("nullexc throwed");
+
+        } catch (NullPointerException nulex) {
             errorText.setText("Vul alle velden in");
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
             errorText.setText("Er is geen klas voor dit jaar");
         }
     }
