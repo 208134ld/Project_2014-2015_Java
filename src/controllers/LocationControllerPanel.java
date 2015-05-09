@@ -27,11 +27,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.util.Callback;
+import javax.persistence.NoResultException;
 import repository.RepositoryController;
 import util.EditingCell;
 
@@ -50,7 +52,8 @@ public class LocationControllerPanel extends Accordion {
     @FXML
     private Button btnAddContinent;
     @FXML
-    private Button btnRemoveContinent;
+    private Label errorContinent;
+    
 
     //Country-Part
     @FXML
@@ -60,15 +63,11 @@ public class LocationControllerPanel extends Accordion {
     @FXML
     private Button btnAddCountry;
     @FXML
-    private Button btnRemoveCountry;
-
-    //ClimateChart-Part
+    private Label errorCountry;
+    
+    //ClimateChart-Part 
     @FXML
-    private ComboBox<String> lengteChoice;
-    @FXML
-    private TextField txtLocation;
-    @FXML
-    private ComboBox<String> breedteChoice;
+    private TextField txtLocation; 
     @FXML
     private ComboBox<String> cbContinentClimateChart;
     @FXML
@@ -80,7 +79,7 @@ public class LocationControllerPanel extends Accordion {
     @FXML
     private TextField BSeconds;
     @FXML
-    private TextField BreedteParameter;
+    private ComboBox<String> breedteChoice;
     @FXML
     private TextField LGrades;
     @FXML
@@ -88,7 +87,7 @@ public class LocationControllerPanel extends Accordion {
     @FXML
     private TextField LSeconds;
     @FXML
-    private TextField LengteParameter;
+    private ComboBox<String> lengteChoice;
     @FXML
     private TextField startPeriod;
     @FXML
@@ -102,23 +101,11 @@ public class LocationControllerPanel extends Accordion {
     @FXML
     private TableColumn<Months, Number> sedCol;
     @FXML
-    private ComboBox<MonthOfTheYear> cbMonth;
-    @FXML
-    private TextField txtTemp;
-    @FXML
-    private TextField txtSed;
-    @FXML
     private Button btnAddRow;
     @FXML
     private Label errorBar;
     @FXML
-    private Text errorLabelCont;
-    @FXML
-    private Text errorTextLand;
-    @FXML
     private Button btnAddClimateChart;
-    @FXML
-    private Button btnRemoveClimateChart;
     @FXML
     private WebView siteView;
     @FXML
@@ -147,10 +134,26 @@ public class LocationControllerPanel extends Accordion {
         setExpandedPane(tpContinent);
 
         updateComboBoxes();
-        breedteChoice.setItems(FXCollections.observableArrayList(new String[]{"NB", "ZB"}));
-        breedteChoice.setValue("NB");
-        lengteChoice.setItems(FXCollections.observableArrayList(new String[]{"OL", "WL"}));
-        lengteChoice.setValue("OL");
+        
+        //Fields Disabled
+        txtCountryName.setDisable(true);
+        btnAddCountry.setDisable(true);
+        txtLocation.setDisable(true);
+        cbCountryClimateChart.setDisable(true);
+        BGrades.setDisable(true);
+        BMinutes.setDisable(true);
+        BSeconds.setDisable(true);
+        breedteChoice.setDisable(true);
+        LGrades.setDisable(true);
+        LMinutes.setDisable(true);
+        LSeconds.setDisable(true);
+        lengteChoice.setDisable(true);
+        startPeriod.setDisable(true);
+        endPeriod.setDisable(true);
+        tempCol.setEditable(false);
+        sedCol.setEditable(false);
+        btnAddClimateChart.setDisable(true);
+        
         monthOfTheYearList = FXCollections.observableList(repositoryController.getMonthsOfTheYear());
         initMonthTable();
         monthList = new ArrayList<>();
@@ -163,57 +166,128 @@ public class LocationControllerPanel extends Accordion {
 
     public void updateComboBoxes() {
         continentList = FXCollections.observableList(repositoryController.getAllContinents()
-                .stream().map(c -> c.getName()).collect(Collectors.toList()));
+                .stream().map(c -> c.getName()).sorted().collect(Collectors.toList()));
         cbContinentCountry.setItems(continentList);
+        cbContinentCountry.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue ov, Object t, Object t1) {
+                txtCountryName.setDisable(false);
+                btnAddCountry.setDisable(false);
+            }
+        });
         cbContinentClimateChart.setItems(continentList);
         cbContinentClimateChart.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
             @Override
             public void changed(ObservableValue ov, Object t, Object t1) {
+                cbCountryClimateChart.setDisable(false);
                 countryList = FXCollections.observableList(repositoryController.getCountriesOfContinent(
                         repositoryController.findContinentByName(cbContinentClimateChart.getSelectionModel().getSelectedItem()).getId())
-                        .stream().map(c -> c.getName()).collect(Collectors.toList()));
+                        .stream().map(c -> c.getName()).sorted().collect(Collectors.toList()));
                 cbCountryClimateChart.setItems(countryList);
             }
         });
+        cbCountryClimateChart.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue ov, Object t, Object t1) {
+                txtLocation.setDisable(false);
+                BGrades.setDisable(false);
+                BMinutes.setDisable(false);
+                BSeconds.setDisable(false);
+                breedteChoice.setDisable(false);
+                LGrades.setDisable(false);
+                LMinutes.setDisable(false);
+                LSeconds.setDisable(false);
+                lengteChoice.setDisable(false);
+                startPeriod.setDisable(false);
+                endPeriod.setDisable(false);
+                tempCol.setEditable(true);
+                sedCol.setEditable(true);
+                btnAddClimateChart.setDisable(false);
+            }
+        });
+        breedteChoice.setItems(FXCollections.observableArrayList(new String[]{"NB", "ZB"}));
+        breedteChoice.setValue("NB");
+        lengteChoice.setItems(FXCollections.observableArrayList(new String[]{"OL", "WL"}));
+        lengteChoice.setValue("OL");
     }
 
     @FXML
-    private void addContinent(MouseEvent event) {
-        try{
-            if(txtContinentName.getText().length()==0)
-                throw new NullPointerException();
-             repositoryController.insertContinent(new Continent(txtContinentName.getText().trim()));
-        txtContinentName.clear();
-        updateComboBoxes();
-        errorLabelCont.setText("");
-        }catch(NullPointerException nule)
-        {
-            errorLabelCont.setText("Naam van het continent mag niet leeg zijn");
-        }catch(Exception e)
-        {
-            errorLabelCont.setText("Continent opslaan mislukt");
+    private void fillTextFieldContinent(KeyEvent event) {
+        String regex = "^[a-zA-Z]*$";
+        if(txtContinentName.getText().trim().matches(regex) == true){
+            btnAddContinent.setDisable(false);
+            errorContinent.setText("");
         }
-       
+        else
+        {
+            btnAddContinent.setDisable(true);
+            errorContinent.setText("Gelieve enkel letters te gebruiken");
+        }
     }
+    
+    @FXML
+    private void addContinent(MouseEvent event){
+        if(txtContinentName.getText().trim().isEmpty() == false){
+            try{
+                if(repositoryController.getAllContinents().contains(
+                        repositoryController.findContinentByName(txtContinentName.getText().toLowerCase()))
+                        == true){
+                txtContinentName.clear();
+                errorContinent.setText("Deze benaming bestaad reeds, gelieve iets anders te kiezen");
+                }
+            }
+            catch(NoResultException ex){
+                errorContinent.setText("");
+                repositoryController.insertContinent(new Continent(txtContinentName.getText().trim()));
+                txtContinentName.clear();
+                updateComboBoxes();
+            }  
+        }
+        else
+        {
+            txtContinentName.clear();
+            errorContinent.setText("Gelieve het invoervak in te vullen");
+        }    
+    }
+    
+    @FXML
+    private void fillTextFieldCountry(KeyEvent event) {
+        String regex = "^[a-zA-Z]*$";
+        if(txtContinentName.getText().trim().matches(regex) == true){
+            btnAddCountry.setDisable(false);
+            errorCountry.setText("");
+        }
+        else
+        {
+            btnAddCountry.setDisable(true);
+            errorCountry.setText("Gelieve enkel letters te gebruiken");
+        }
+    }  
 
     @FXML
     private void addCountry(MouseEvent event) {
-        
-        try{
-            if(txtCountryName.getText().length()==0)
-                throw new NullPointerException();
-        Continent continent = repositoryController.findContinentById(
-        cbContinentCountry.getSelectionModel().getSelectedIndex() + 1);
-        repositoryController.insertCountry(new Country(txtCountryName.getText().trim(), continent));
-        txtCountryName.clear();
-        updateComboBoxes();
-        errorTextLand.setText("");
-        }catch(NullPointerException nulle)
+        if(txtCountryName.getText().trim().isEmpty() == false){
+            Continent continent = repositoryController.findContinentByName(
+                cbContinentCountry.getSelectionModel().getSelectedItem());
+            try{
+                if(repositoryController.getCountriesOfContinent(continent.getId()).contains(
+                        repositoryController.findCountryByName(txtCountryName.getText().toLowerCase()))
+                        == true){
+                txtCountryName.clear();
+                errorCountry.setText("Deze benaming bestaad reeds, gelieve iets anders te kiezen");
+                }
+            }
+            catch(NoResultException ex){
+                errorCountry.setText(""); 
+                repositoryController.insertCountry(new Country(txtCountryName.getText().trim(), continent));
+                txtCountryName.clear();
+                updateComboBoxes();
+            }  
+        }
+        else
         {
-            errorTextLand.setText("Naam van het land mag niet leeg zijn");
-        }catch(Exception e)
-        {
-            errorTextLand.setText("Land opslaan mislukt. Alle velden moeten ingevuld zijn");
+            txtCountryName.clear();
+            errorCountry.setText("Gelieve het invoervak in te vullen");
         }
     }
 

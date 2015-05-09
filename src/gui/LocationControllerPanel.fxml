@@ -20,7 +20,7 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="txtContinentName" maxWidth="-Infinity" />
+                  <TextField fx:id="txtContinentName" maxWidth="-Infinity" onKeyReleased="#fillTextFieldContinent" />
                   <GridPane maxWidth="-Infinity">
                      <children>
                         <Button fx:id="btnAddContinent" mnemonicParsing="false" onMouseClicked="#addContinent" text="Toevoegen" GridPane.halignment="LEFT" />
@@ -36,7 +36,7 @@
                         <Insets top="10.0" />
                      </VBox.margin>
                   </GridPane>
-                  <Text fx:id="errorLabelCont" fill="#b51d1d" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="309.13671875" />
+                  <Label fx:id="errorContinent" prefHeight="47.0" prefWidth="562.0" textFill="RED" />
                </children>
             </VBox>
          </content>
@@ -56,7 +56,7 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="txtCountryName" maxWidth="-Infinity" />
+                  <TextField fx:id="txtCountryName" maxWidth="-Infinity" onKeyReleased="#fillTextFieldCountry" />
                   <GridPane maxWidth="-Infinity">
                      <children>
                         <Button fx:id="btnAddCountry" mnemonicParsing="false" onMouseClicked="#addCountry" text="Toevoegen" GridPane.halignment="LEFT" />
@@ -72,7 +72,7 @@
                         <Insets top="10.0" />
                      </VBox.margin>
                   </GridPane>
-                  <Text fx:id="errorTextLand" fill="#c91c1c" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="416.13671875" />
+                  <Label fx:id="errorCountry" prefHeight="47.0" prefWidth="562.0" textFill="RED" />
                </children>
             </VBox>
          </content>
