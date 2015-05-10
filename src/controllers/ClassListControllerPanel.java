@@ -172,9 +172,12 @@ public class ClassListControllerPanel extends Accordion {
                 throw new NullPointerException();
             }
             SchoolYear sy = dbKlasLeerjaar.getSelectionModel().getSelectedItem();//new SchoolYear(Integer.parseInt(dbKlasLeerjaar.getSelectionModel().getSelectedItem()), g);
-            controller.addClassGroup(new ClassGroup(txtKlasName.getText(), sy));
+            ClassGroup cg = new ClassGroup(txtKlasName.getText(),sy);
+            controller.addClassGroup(cg);
+            classGroupList.add(cg);
             txtKlasName.clear();
             errorText1.setText("");
+            classListEmpty();
         } catch (NullPointerException nule) {
             errorText1.setText("Vul alle gegevens in");
         } catch (Exception e) {
