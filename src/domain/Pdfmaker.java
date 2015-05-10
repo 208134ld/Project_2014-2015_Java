@@ -15,6 +15,7 @@ import com.itextpdf.text.Header;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.TabSettings;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -60,6 +61,7 @@ public class Pdfmaker {
             table.setTotalWidth(550f);
             table.setLockedWidth(true);
             table.setHeaderRows(1);
+            
             Paragraph p =new Paragraph(test.getTitle());
             p.setAlignment(Element.ALIGN_CENTER);
             PdfPCell cell = new PdfPCell(p);
@@ -79,26 +81,34 @@ public class Pdfmaker {
             doc.add(Chunk.NEWLINE);
             for(Exercise e : ex)
             {
-            doc.add(new Paragraph("Vraag " +counter +" Punten/"+e.getPunten()));
-            doc.add(Chunk.NEWLINE);
+                Paragraph par = new Paragraph();
+                par.add("Vraag " +counter);
+                par.add(Chunk.TABBING);
+                par.add(Chunk.TABBING);
+                par.add(Chunk.TABBING);
+                par.add(Chunk.TABBING);
+                par.add(e.getPunten()+"/");
+                doc.add(par);
             doc.add(new Paragraph("Klimatogram "+e.getClimateChart().getLocation()+" "+e.getPunten()));
             Robot r = new Robot();
             Desktop.getDesktop().browse(new URI("http://climatechart.azurewebsites.net/ClimateChart/ShowExercises?selectedYear=1&continentId="+e.getClimateChart().getCountry().getContinent().getId()+"&countryId="+e.getClimateChart().getCountry().getContinent().getId()+"&climateId="+e.getClimateChart().getId()));
-            TimeUnit.SECONDS.sleep(4);
-            
+            TimeUnit.SECONDS.sleep(6);
             BufferedImage bi=r.createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize().width*7/10,Toolkit.getDefaultToolkit().getScreenSize().width*8/14));
-            File file = new File("screenCapture.jpg");
+            File file = new File("screenCapture"+counter+".jpg");
             ImageIO.write(bi,"jpg", file);
             Image img = Image.getInstance("screenCapture.jpg");
             img.scaleAbsolute(400, 300);
-            System.out.println("adding image");
             doc.add(img);
-            System.out.println("adding par " +e.getNaam());
+            doc.add(Chunk.NEWLINE);
             doc.add(new Paragraph(e.getNaam()));
+            doc.add(Chunk.NEXTPAGE);
             counter++;
+            
             }
-           
+            
             doc.close();
+            File filz = new File(test.getTitle()+".pdf");
+            Desktop.getDesktop().open(filz);
         }catch(Exception e)
         {
             

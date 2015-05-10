@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name = "Continent.findAllContinents", query = "select c from Continents c"),
     @NamedQuery(name = "Continent.findById",query = "SELECT c FROM Continents c WHERE c.continentId = :continentID"),
-    @NamedQuery(name="Continent.findByName",query="SELECT c FROM Continents c WHERE c.name =:name")
+    @NamedQuery(name="Continent.findByName",query="SELECT c FROM Continents c WHERE LOWER(c.name) =:name")
 })
 public class Continent implements Serializable {
     private String name;
