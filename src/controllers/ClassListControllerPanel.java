@@ -5,6 +5,7 @@ import domain.Grade;
 import domain.SchoolYear;
 import domain.Student;
 import java.io.IOException;
+import java.util.List;
 import java.util.stream.Collectors;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -101,21 +102,21 @@ public class ClassListControllerPanel extends Accordion {
         classGroupList = FXCollections.observableList(controller.giveClassGroupOfSchoolYear(schoolyearList.get(0)));
         classListEmpty();
         dbLeerlingLeerjaar.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-                    @Override
-                    public void changed(ObservableValue ov, Object t, Object t1) {
+            @Override
+            public void changed(ObservableValue ov, Object t, Object t1) {
 
-                        try {
-                            classGroupList = FXCollections.observableList(controller.giveClassGroupOfSchoolYear((SchoolYear) t1));
-                            errorText.setText("");
-                            classListEmpty();
-                        } catch (NullPointerException nullex) {
-                        } /*catch (Exception e) {
-                         errorText.setText("Er is geen klas voor dit jaar");
-                         }*/
+                try {
+                    classGroupList = FXCollections.observableList(controller.giveClassGroupOfSchoolYear((SchoolYear) t1));
+                    errorText.setText("");
+                    classListEmpty();
+                } catch (NullPointerException nullex) {
+                } /*catch (Exception e) {
+                 errorText.setText("Er is geen klas voor dit jaar");
+                 }*/
 
-                    }
-                }
-                );
+            }
+        }
+        );
         /*} catch (Exception e) {
          errorText.setText("geen klas gevonden voor dit jaar");
          }*/
@@ -171,11 +172,11 @@ public class ClassListControllerPanel extends Accordion {
             if (txtKlasName.getText().length() == 0) {
                 throw new NullPointerException();
             }
-            
+
             if (controller.giveAllClassGroups().contains(controller.giveClassGroupWithName(txtKlasName.getText()))) {
                 errorText1.setText("Deze klasnaam bestaat al");
             }
-            
+
         } catch (NoResultException nre) {
             SchoolYear sy = dbKlasLeerjaar.getSelectionModel().getSelectedItem();
             controller.addClassGroup(new ClassGroup(txtKlasName.getText(), sy));
@@ -195,14 +196,35 @@ public class ClassListControllerPanel extends Accordion {
             if (txtNaam.getText().length() == 0 || txtVoornaam.getText().length() == 0) {
                 throw new NullPointerException();
             }
-            
-            ClassGroup cg = dbLeerlingKlas.getSelectionModel().getSelectedItem();
-            if(cg ==null)
-                throw new NullPointerException();
-            controller.addStudent(new Student(txtNaam.getText(), txtVoornaam.getText(), cg));
-            txtNaam.clear();
-            txtVoornaam.clear();
-            errorText.setText("");
+
+            List<Student> studentsWithFName = controller.giveStudentsWithFirstName(txtVoornaam.getText());
+
+            if (!studentsWithFName.isEmpty()) {
+                for (Student s : studentsWithFName) {
+                    if (s.getLastName().equals(txtNaam.getText())) {
+                        errorText.setText("Deze leerling werd al toegevoegd");
+                    } else {
+                        ClassGroup cg = dbLeerlingKlas.getSelectionModel().getSelectedItem();
+                        if (cg == null) {
+                            throw new NullPointerException();
+                        }
+                        controller.addStudent(new Student(txtNaam.getText(), txtVoornaam.getText(), cg));
+                        txtNaam.clear();
+                        txtVoornaam.clear();
+                        errorText.setText("");
+                    }
+                }
+            } else {
+                ClassGroup cg = dbLeerlingKlas.getSelectionModel().getSelectedItem();
+                if (cg == null) {
+                    throw new NullPointerException();
+                }
+                controller.addStudent(new Student(txtNaam.getText(), txtVoornaam.getText(), cg));
+                txtNaam.clear();
+                txtVoornaam.clear();
+                errorText.setText("");
+            }
+
         } catch (NoResultException invok) {
             errorText.setText("De klas is niet gevonden.");
 
