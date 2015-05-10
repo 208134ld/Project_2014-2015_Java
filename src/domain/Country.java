@@ -24,7 +24,7 @@ import javax.persistence.Table;
     @NamedQuery(name = "Country.findByName",
         query = "SELECT c FROM Countries c WHERE c.name = :countryName")
 })
-public class Country implements Serializable {
+public class Country implements Serializable, Comparable<Country> {
     private String name;
 
     @Id
@@ -76,5 +76,10 @@ public class Country implements Serializable {
 
     public void setId(int id) {
         this.countryId = id;
+    }
+    
+    @Override
+    public int compareTo(Country c) {
+        return this.name.compareTo(c.name);
     }
 }

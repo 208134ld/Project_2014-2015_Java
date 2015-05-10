@@ -27,7 +27,7 @@ import javax.persistence.Table;
             query = "SELECT c FROM ClimateCharts c WHERE c.climateChartId = :chartId"),
     @NamedQuery(name="ClimateChart.findAll",query="SELECT c from ClimateCharts c")
 })
-public class ClimateChart implements Serializable {
+public class ClimateChart implements Serializable, Comparable<ClimateChart> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ClimateChartID")
@@ -253,5 +253,10 @@ public class ClimateChart implements Serializable {
     public String toString()
     {
         return this.location;
+    }
+    
+    @Override
+    public int compareTo(ClimateChart c) {
+        return this.location.compareTo(c.location);
     }
 }

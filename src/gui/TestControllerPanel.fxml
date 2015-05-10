@@ -95,8 +95,6 @@
       <ComboBox fx:id="comboClassGroupExercises" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
       <Label text="Klimatogram:" GridPane.rowIndex="8" />
       <ComboBox fx:id="comboTestClimateChart" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-      <Label text="Determinatietabel:" GridPane.rowIndex="9" />
-      <ComboBox fx:id="comboTestDeterminateTable" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
       <ComboBox fx:id="comboTestClassGroup" prefWidth="150.0" GridPane.columnIndex="1" />
       <Label text="Klasgroep:">
          <font>
@@ -104,8 +102,8 @@
          </font>
       </Label>
       <Button fx:id="btnEditTest" mnemonicParsing="false" onAction="#editTest" prefHeight="25.0" prefWidth="122.0" text="Slaag toets op" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-      <Button fx:id="btnEditExercise" mnemonicParsing="false" onAction="#editExercise" prefHeight="25.0" prefWidth="115.0" text="Slaag vraag op" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-      <Label fx:id="txtInfo" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+      <Button fx:id="btnEditExercise" mnemonicParsing="false" onAction="#editExercise" prefHeight="25.0" prefWidth="115.0" text="Slaag vraag op" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+      <Label fx:id="txtInfo" GridPane.columnIndex="1" GridPane.rowIndex="10" />
       <Label text="Toets:" GridPane.rowIndex="5" />
       <GridPane GridPane.columnIndex="1" GridPane.rowIndex="5">
         <columnConstraints>
@@ -127,7 +125,7 @@
             <Insets left="130.0" />
          </GridPane.margin>
       </Button>
-      <Button fx:id="btnAddExercise" mnemonicParsing="false" onAction="#addExercise" prefHeight="25.0" prefWidth="179.0" text="Slaag als nieuwe vraag op" GridPane.columnIndex="1" GridPane.rowIndex="10">
+      <Button fx:id="btnAddExercise" mnemonicParsing="false" onAction="#addExercise" prefHeight="25.0" prefWidth="179.0" text="Slaag als nieuwe vraag op" GridPane.columnIndex="1" GridPane.rowIndex="9">
          <GridPane.margin>
             <Insets left="120.0" />
          </GridPane.margin>

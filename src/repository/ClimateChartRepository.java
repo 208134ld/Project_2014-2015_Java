@@ -1,6 +1,7 @@
 package repository;
 
 import domain.ClimateChart;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -16,8 +17,9 @@ public class ClimateChartRepository {
 
     public List<ClimateChart> getClimateChartsOfCountry(int countryId) {
         TypedQuery<ClimateChart> query = em.createNamedQuery("ClimateChart.findByCountry", ClimateChart.class);
-
-        return query.setParameter("countryID", countryId).getResultList();
+        List<ClimateChart> lijst = query.setParameter("countryID", countryId).getResultList();
+        Collections.sort(lijst);
+        return lijst;
     }
 
     public ClimateChart getClimateChartByClimateChartID(int chartId) {

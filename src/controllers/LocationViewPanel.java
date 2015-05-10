@@ -7,6 +7,9 @@ import domain.Months;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -17,6 +20,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -109,8 +113,6 @@ public class LocationViewPanel extends GridPane implements Observer {
         }
         disableEverything(true);
         initMonthTable();
-        updateSelectionTreeViewPanel();
-
     }
 
     private void disableEverything(boolean disable) {
@@ -197,6 +199,7 @@ public class LocationViewPanel extends GridPane implements Observer {
                 return null;
             }
         });
+        
         obsTreeItems = FXCollections.observableArrayList(continentItems);
         root.getChildren().addAll(obsTreeItems);
 

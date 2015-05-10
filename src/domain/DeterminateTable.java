@@ -14,6 +14,7 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name="DeterminateTable.findById",query= "select d from DeterminateTable d WHERE d.determinateTableId = :id"),
     @NamedQuery(name="DeterminateTable.findAllTables",query= "select d from DeterminateTable d"),
+    
 }) 
 public class DeterminateTable implements Serializable {
     

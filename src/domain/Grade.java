@@ -20,7 +20,7 @@ import javax.persistence.Table;
     @NamedQuery(name = "Grade.AllGrades",
             query = "SELECT g FROM Grades g"),
     @NamedQuery(name = "SelectedGrade",
-            query = "SELECT g FROM Grades g where g.grade = :graad"),
+            query = "SELECT g FROM Grades g where g.gradeId = :graad"),
     @NamedQuery(name = "Grade.findByDeterminateTableId",
             query = "SELECT g FROM Grades g where g.DeterminateTableId = :determinateTableId")
 })
@@ -29,7 +29,7 @@ public class Grade implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "GradeId")
-    private int grade;
+    private int gradeId;
 
     @OneToMany(mappedBy = "grade")
     private List<SchoolYear> schoolYears;
@@ -43,16 +43,16 @@ public class Grade implements Serializable {
     }
 
     public Grade(int grade) {
-        this.grade = grade;
+        this.gradeId = grade;
     }
 
     //GET SET
     public int getGrade() {
-        return grade;
+        return gradeId;
     }
 
     public void setGrade(int grade) {
-        this.grade = grade;
+        this.gradeId = grade;
     }
 
     public List<SchoolYear> getSchoolYears() {
@@ -72,7 +72,7 @@ public class Grade implements Serializable {
     }
 
     public String getGradeString() {
-        return Integer.toString(grade);
+        return Integer.toString(gradeId);
     }
 
     @Override
