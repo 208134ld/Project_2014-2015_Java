@@ -171,10 +171,21 @@ public class ClassListControllerPanel extends Accordion {
             if (txtKlasName.getText().length() == 0) {
                 throw new NullPointerException();
             }
-            SchoolYear sy = dbKlasLeerjaar.getSelectionModel().getSelectedItem();//new SchoolYear(Integer.parseInt(dbKlasLeerjaar.getSelectionModel().getSelectedItem()), g);
+            
+            if (controller.giveAllClassGroups().contains(controller.giveClassGroupWithName(txtKlasName.getText()))) {
+                errorText1.setText("Deze klasnaam bestaat al");
+            }
+            
+        } catch (NoResultException nre) {
+            SchoolYear sy = dbKlasLeerjaar.getSelectionModel().getSelectedItem();
             controller.addClassGroup(new ClassGroup(txtKlasName.getText(), sy));
+            SchoolYear sy = dbKlasLeerjaar.getSelectionModel().getSelectedItem();//new SchoolYear(Integer.parseInt(dbKlasLeerjaar.getSelectionModel().getSelectedItem()), g);
+            ClassGroup cg = new ClassGroup(txtKlasName.getText(),sy);
+            controller.addClassGroup(cg);
+            classGroupList.add(cg);
             txtKlasName.clear();
             errorText1.setText("");
+            classListEmpty();
         } catch (NullPointerException nule) {
             errorText1.setText("Vul alle gegevens in");
         } catch (Exception e) {
@@ -189,6 +200,7 @@ public class ClassListControllerPanel extends Accordion {
             if (txtNaam.getText().length() == 0 || txtVoornaam.getText().length() == 0) {
                 throw new NullPointerException();
             }
+            
             ClassGroup cg = dbLeerlingKlas.getSelectionModel().getSelectedItem();
             if(cg ==null)
                 throw new NullPointerException();
@@ -202,7 +214,7 @@ public class ClassListControllerPanel extends Accordion {
         } catch (NullPointerException nulex) {
             errorText.setText("Vul alle velden in");
         } catch (Exception e) {
-            errorText.setText("Er is geen klas voor dit jaar");
+            errorText.setText("Er is iets misgelopen. Probeer opnieuw");
         }
     }
 }
