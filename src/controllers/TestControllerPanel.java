@@ -28,6 +28,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import repository.RepositoryController;
 
 public class TestControllerPanel extends GridPane {
@@ -82,6 +83,7 @@ public class TestControllerPanel extends GridPane {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
+        
         initialize();
     }
 
@@ -107,8 +109,11 @@ public class TestControllerPanel extends GridPane {
                     txtAreaDescription.setText(null);
                     dpTestBegin.setValue(null);
                     dpTestEnd.setValue(null);
+                    txtInfo.setText("Selecteer een toets en druk daarna op 'Bekijk toets'.");
+                    txtInfo.setTextFill(Color.web("#000000"));
                 } else {
                     txtInfo.setText("Er zijn nog geen testen voor deze klasgroep.");
+                    txtInfo.setTextFill(Color.web("#000000"));
                     comboChooseTest.setDisable(true);
                     btnViewTest.setDisable(true);
                     btnDeleteTest.setDisable(true);
@@ -200,14 +205,15 @@ public class TestControllerPanel extends GridPane {
                     t.getClassGroup().getSchoolYear().getGrade().getDeterminateTableId(),
                     t);
             rc.insertExercise(e);
-            txtInfo.setText("De vraag is succesvol opgeslagen");
             txtExerciseName.setText("");
             txtExerciseQuotation.setText("");
             comboTestClimateChart.setValue("");
             viewTest();
             txtInfo.setText("De vraag is succesvol opgeslagen.");
+            txtInfo.setTextFill(Color.web("#000000"));
         } catch (Exception ex) {
             txtInfo.setText("U moet alles correct invullen.");
+            txtInfo.setTextFill(Color.web("#ee0f0f"));
         }
     }
 
@@ -248,12 +254,15 @@ public class TestControllerPanel extends GridPane {
             initialize();
 
             txtInfo.setText(String.format("De test '%s' is succesvol opgeslagen, u kan hiervoor nu vragen toevoegen.", testName));
+            txtInfo.setTextFill(Color.web("#000000"));
             txtTestTitle.clear();
             txtAreaDescription.clear();
         } catch (IllegalArgumentException ex) {
             txtInfo.setText(ex.getMessage());
+            txtInfo.setTextFill(Color.web("#ee0f0f"));
         } catch (Exception ex) {
             txtInfo.setText("U moet alles correct invullen.");
+            txtInfo.setTextFill(Color.web("#ee0f0f"));
         }
     }
 
@@ -285,6 +294,7 @@ public class TestControllerPanel extends GridPane {
             comboTestClimateChart.setValue("");
             btnEditExercise.setDisable(true);
             txtInfo.setText("Er zijn nog geen vragen voor deze toets.");
+            txtInfo.setTextFill(Color.web("#000000"));
         }
 
         txtExerciseName.setDisable(false);
@@ -309,6 +319,7 @@ public class TestControllerPanel extends GridPane {
             comboChooseTest.setValue(observableListTests.get(0));
         } else {
             txtInfo.setText("Er zijn nog geen testen voor deze klasgroep.");
+            txtInfo.setTextFill(Color.web("#000000"));
             comboChooseTest.setDisable(true);
             btnViewTest.setDisable(true);
             btnDeleteTest.setDisable(true);
@@ -322,6 +333,7 @@ public class TestControllerPanel extends GridPane {
         txtExerciseQuotation.setDisable(true);
         comboTestClimateChart.setDisable(true);
         txtInfo.setText("Test succesvol verwijderd.");
+        txtInfo.setTextFill(Color.web("#000000"));
         txtTestTitle.setText(null);
         txtAreaDescription.setText(null);
         dpTestBegin.setValue(null);
@@ -344,6 +356,7 @@ public class TestControllerPanel extends GridPane {
             comboClassGroupExercises.setItems(FXCollections.observableArrayList(rc.findExercisesByTest(e.getTest())));
         } catch (Exception ex) {
             txtInfo.setText("U moet alles correct invullen.");
+            txtInfo.setTextFill(Color.web("#ee0f0f"));
         }
     }
 
@@ -366,8 +379,10 @@ public class TestControllerPanel extends GridPane {
             comboChooseTest.setItems(FXCollections.observableArrayList(rc.findTestsByClassGroup(comboTestClassGroup.getSelectionModel().getSelectedItem())));
         } catch (IllegalArgumentException ex) {
             txtInfo.setText(ex.getMessage());
+            txtInfo.setTextFill(Color.web("#ee0f0f"));
         } catch (Exception ex) {
             txtInfo.setText("U moet alles correct invullen.");
+            txtInfo.setTextFill(Color.web("#ee0f0f"));
         }
     }
 

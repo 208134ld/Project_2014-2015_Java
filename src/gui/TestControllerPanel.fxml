@@ -101,8 +101,8 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Button fx:id="btnEditTest" mnemonicParsing="false" onAction="#editTest" prefHeight="25.0" prefWidth="122.0" text="Slaag toets op" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-      <Button fx:id="btnEditExercise" mnemonicParsing="false" onAction="#editExercise" prefHeight="25.0" prefWidth="115.0" text="Slaag vraag op" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+      <Button fx:id="btnEditTest" mnemonicParsing="false" onAction="#editTest" prefHeight="25.0" prefWidth="122.0" text="Wijzig toets" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <Button fx:id="btnEditExercise" mnemonicParsing="false" onAction="#editExercise" prefHeight="25.0" prefWidth="115.0" text="Wijzig vraag" GridPane.columnIndex="1" GridPane.rowIndex="9" />
       <Label fx:id="txtInfo" GridPane.columnIndex="1" GridPane.rowIndex="10" />
       <Label text="Toets:" GridPane.rowIndex="5" />
       <GridPane GridPane.columnIndex="1" GridPane.rowIndex="5">
