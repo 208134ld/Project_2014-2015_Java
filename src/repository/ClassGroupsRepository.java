@@ -66,6 +66,11 @@ public class ClassGroupsRepository {
         TypedQuery<Student> query = em.createNamedQuery("StudentsOfClassGroup", Student.class).setParameter("cg", cg);
         return query.getResultList();
     }
+    
+    public List<Student> getStudentsWithFirstName(String fname){
+        TypedQuery<Student> query = em.createNamedQuery("StudentsWithFirstName", Student.class).setParameter("fname", fname);
+        return query.getResultList();
+    }
 
     //Update, insert methodes
     public void insertStudent(Student s) { //name + ClassGroup

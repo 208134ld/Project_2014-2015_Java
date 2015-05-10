@@ -70,6 +70,8 @@ public class EditingCell extends TableCell<Months, Number> {
                 if (t.getCode() == KeyCode.ENTER || t.getCode() == KeyCode.TAB) {
                     try {
                         if (isInteger) {
+                            if(Double.parseDouble(textField.getText())<0)
+                                throw new IllegalArgumentException();
                             Double d = Double.parseDouble(textField.getText());
                             commitEdit(Math.floor(d));
                         } else {
@@ -79,7 +81,11 @@ public class EditingCell extends TableCell<Months, Number> {
                     } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(null, "Heeft u tekst ingegeven? een komma wordt door een . weergegeven.", "Er is een fout opgetreden", JOptionPane.ERROR_MESSAGE);
                         textField.setText("0");
-                    } catch (Exception e) {
+                    }catch(IllegalArgumentException ilex)
+                    {
+                        JOptionPane.showMessageDialog(null,"Neerslag mag niet negatief zijn");
+                    }
+                    catch (Exception e) {
                         JOptionPane.showMessageDialog(null, "er is iets onverwacht gebeurt" + e.getCause().getMessage());
                     }
 

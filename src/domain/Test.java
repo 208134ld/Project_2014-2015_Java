@@ -22,7 +22,8 @@ import javax.persistence.Temporal;
 @NamedQueries({
     @NamedQuery(name = "Test.findAllTests", query = "select t from Tests t"),
     @NamedQuery(name = "Test.findById",query = "SELECT t FROM Tests t WHERE t.testId = :testId"),
-    @NamedQuery(name = "Test.findByClassGroup",query = "SELECT t FROM Tests t WHERE t.classGroup = :classGroup")
+    @NamedQuery(name = "Test.findByClassGroup",query = "SELECT t FROM Tests t WHERE t.classGroup = :classGroup"),
+    
 })
 public class Test implements Serializable {
 
@@ -98,6 +99,9 @@ public class Test implements Serializable {
     }
 
     public void setEndDate(Date endDate) {
+        if(endDate.before(startDate)){
+            throw new IllegalArgumentException("De einddatum moet voorbij de begindatum liggen.");
+        }
         this.endDate = endDate;
     }
 

@@ -18,9 +18,10 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name = "Continent.findAllContinents", query = "select c from Continents c"),
     @NamedQuery(name = "Continent.findById",query = "SELECT c FROM Continents c WHERE c.continentId = :continentID"),
-    @NamedQuery(name="Continent.findByName",query="SELECT c FROM Continents c WHERE LOWER(c.name) =:name")
+    @NamedQuery(name="Continent.findByName",query="SELECT c FROM Continents c WHERE LOWER(c.name) =:name"),
+    @NamedQuery(name="Continent.findEurope",query="SELECT c FROM Continents c WHERE LOWER(c.name) ='europa'")
 })
-public class Continent implements Serializable {
+public class Continent implements Serializable, Comparable<Continent> {
     private String name;
 
     @Id
@@ -70,6 +71,11 @@ public class Continent implements Serializable {
     @Override
     public String toString() {
         return name;
+    }
+    
+    @Override
+    public int compareTo(Continent c) {
+        return this.name.compareTo(c.name);
     }
 
 }
