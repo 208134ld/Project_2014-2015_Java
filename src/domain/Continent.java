@@ -12,6 +12,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import util.MyNode;
 
 @Entity(name = "Continents")
 @Table(name = "Continents")
@@ -20,7 +21,7 @@ import javax.persistence.Table;
     @NamedQuery(name = "Continent.findById",query = "SELECT c FROM Continents c WHERE c.continentId = :continentID"),
     @NamedQuery(name="Continent.findByName",query="SELECT c FROM Continents c WHERE LOWER(c.name) =:name")
 })
-public class Continent implements Serializable {
+public class Continent implements Serializable, Comparable<Continent> {
     private String name;
 
     @Id
@@ -70,6 +71,11 @@ public class Continent implements Serializable {
     @Override
     public String toString() {
         return name;
+    }
+    
+    @Override
+    public int compareTo(Continent c) {
+        return this.name.compareTo(c.name);
     }
 
 }

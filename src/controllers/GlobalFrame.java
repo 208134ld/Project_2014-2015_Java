@@ -53,7 +53,6 @@ public class GlobalFrame extends VBox {
     private final ClassListViewPanel classListViewPanel;
     private final ManageDeterminateTable manageDeterminateTable;
     private final TestControllerPanel testControllerPanel;
-    private final TestViewPanel testViewPanel;
     private double minWidth;
     private double prefWidth;
     private double maxWidth;
@@ -69,7 +68,6 @@ public class GlobalFrame extends VBox {
         classListViewPanel = new ClassListViewPanel(classListController);
         manageDeterminateTable = new ManageDeterminateTable(repositoryController);
         testControllerPanel = new TestControllerPanel(repositoryController);
-        testViewPanel = new TestViewPanel(repositoryController);
         repositoryController.addObserver(locationViewPanel);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/GlobalFrame.fxml"));
@@ -136,9 +134,7 @@ public class GlobalFrame extends VBox {
                 workPanel.getColumnConstraints().get(0).setHgrow(Priority.NEVER);
                 //workPanel.add(testViewPanel, 0, 0);
                 workPanel.add(testControllerPanel, 1, 0);
-                testViewPanel.initialize();
                 testControllerPanel.initialize();
-                //testControllerPanel.addObserver(testViewPanel);
             }
         });
     }

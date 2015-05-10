@@ -1,6 +1,7 @@
 package repository;
 
 import domain.Country;
+import java.util.Collections;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -16,13 +17,16 @@ public class CountryRepository {
 
     public List<Country> getAllCountries() {
         TypedQuery<Country> query = em.createNamedQuery("Country.findAll", Country.class);
-        return query.getResultList();
+        List<Country> lijst = query.getResultList();
+        Collections.sort(lijst);
+        return lijst;
     }
 
     public List<Country> getCountriesOfContinent(int continentId) {
         TypedQuery<Country> query = em.createNamedQuery("Country.findCountriesByContinent", Country.class);
-        return query.setParameter("continentID", continentId).getResultList();
-
+        List<Country> lijst = query.setParameter("continentID", continentId).getResultList();
+        Collections.sort(lijst);
+        return lijst;
     }
 
     public void insertCountry(Country c) {

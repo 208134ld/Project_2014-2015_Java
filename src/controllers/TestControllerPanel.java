@@ -88,8 +88,6 @@ public class TestControllerPanel extends GridPane {
     @FXML
     private ComboBox comboTestClimateChart;
     @FXML
-    private ComboBox comboTestDeterminateTable;
-    @FXML
     private Button btnSaveTest;
     @FXML
     private Label txtInfo;
@@ -156,7 +154,6 @@ public class TestControllerPanel extends GridPane {
                 txtExerciseName.setDisable(true);
                 txtExerciseQuotation.setDisable(true);
                 comboTestClimateChart.setDisable(true);
-                comboTestDeterminateTable.setDisable(true);
             }
         }
         );
@@ -170,7 +167,6 @@ public class TestControllerPanel extends GridPane {
                     txtExerciseName.setText(e.getNaam());
                     txtExerciseQuotation.setText(e.getPunten().toString());
                     comboTestClimateChart.setValue(e.getClimateChart());
-                    comboTestDeterminateTable.setValue(e.getDetTable());
                 } catch (NullPointerException e) {
 
                 }
@@ -191,15 +187,10 @@ public class TestControllerPanel extends GridPane {
         );
 
         ObservableList<ClimateChart> observableListClimateCharts = FXCollections.observableArrayList(rc.findAllClimateCharts());
-        ObservableList<DeterminateTable> observableListDeterminateTables = FXCollections.observableArrayList(rc.getAllDeterminateTables());
 
         comboTestClimateChart.setItems(observableListClimateCharts);
-        comboTestDeterminateTable.setItems(observableListDeterminateTables);
         if (!observableListClimateCharts.isEmpty()) {
             comboTestClimateChart.setValue(observableListClimateCharts.get(0));
-        }
-        if (!observableListDeterminateTables.isEmpty()) {
-            comboTestDeterminateTable.setValue(observableListDeterminateTables.get(0));
         }
     }
 
@@ -213,7 +204,7 @@ public class TestControllerPanel extends GridPane {
             txtExerciseName.setText("");
             txtExerciseQuotation.setText("");
             comboTestClimateChart.setValue("");
-            comboTestDeterminateTable.setValue("");
+            //comboTestDeterminateTable.setValue("");
             btnEditExercise.setDisable(true);
             comboClassGroupExercises.setDisable(true);
             btnDeleteSelectedExercise.setDisable(true);
@@ -223,16 +214,16 @@ public class TestControllerPanel extends GridPane {
     @FXML
     private void addExercise() {
         try {
+            Test t = (Test) comboChooseTest.getSelectionModel().getSelectedItem();
             Exercise e = new Exercise(txtExerciseName.getText(), Double.parseDouble(txtExerciseQuotation.getText()),
                     (ClimateChart) comboTestClimateChart.getSelectionModel().getSelectedItem(),
-                    (DeterminateTable) comboTestDeterminateTable.getSelectionModel().getSelectedItem(),
-                    (Test) comboChooseTest.getSelectionModel().getSelectedItem());
+                    t.getClassGroup().getSchoolYear().getGrade().getDeterminateTableId(),
+                    t);
             rc.insertExercise(e);
             txtInfo.setText("De vraag is succesvol opgeslagen");
             txtExerciseName.setText("");
             txtExerciseQuotation.setText("");
             comboTestClimateChart.setValue("");
-            comboTestDeterminateTable.setValue("");
             viewTest();
             txtInfo.setText("De vraag is succesvol opgeslagen.");
         } catch (Exception ex) {
@@ -260,6 +251,7 @@ public class TestControllerPanel extends GridPane {
     @FXML
     private void saveTest() {
         try {
+            String testName = txtTestTitle.getText();
             LocalDate localDate = dpTestBegin.getValue();
             Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
             Date dateBegin = Date.from(instant);
@@ -267,13 +259,20 @@ public class TestControllerPanel extends GridPane {
             Instant instant2 = Instant.from(localDate2.atStartOfDay(ZoneId.systemDefault()));
             Date dateEnd = Date.from(instant2);
             ClassGroup c =(ClassGroup) comboTestClassGroup.getSelectionModel().getSelectedItem();
+            if(dateEnd.before(dateBegin))
+                throw new IllegalArgumentException("De einddatum moet voorbij de begindatum liggen.");
             Test t = new Test(txtTestTitle.getText(), txtAreaDescription.getText(), dateBegin, dateEnd, (ClassGroup) comboTestClassGroup.getSelectionModel().getSelectedItem());
             rc.insertTest(t);
             initialize();
-            txtInfo.setText(String.format("De test '%s' is succesvol opgeslagen, u kan hiervoor nu vragen toevoegen.", txtTestTitle.getText()));
+            
+            txtInfo.setText(String.format("De test '%s' is succesvol opgeslagen, u kan hiervoor nu vragen toevoegen.", testName));
             txtTestTitle.clear();
             txtAreaDescription.clear();
-        } catch (Exception ex) {
+        } 
+        catch(IllegalArgumentException ex){
+            txtInfo.setText(ex.getMessage());
+        } 
+        catch (Exception ex) {
             txtInfo.setText("U moet alles correct invullen.");
         }
     }
@@ -304,7 +303,7 @@ public class TestControllerPanel extends GridPane {
             txtExerciseName.setText("");
             txtExerciseQuotation.setText("");
             comboTestClimateChart.setValue("");
-            comboTestDeterminateTable.setValue("");
+            //comboTestDeterminateTable.setValue("");
             btnEditExercise.setDisable(true);
             txtInfo.setText("Er zijn nog geen vragen voor deze toets.");
         }
@@ -312,7 +311,7 @@ public class TestControllerPanel extends GridPane {
         txtExerciseName.setDisable(false);
         txtExerciseQuotation.setDisable(false);
         comboTestClimateChart.setDisable(false);
-        comboTestDeterminateTable.setDisable(false);
+        //comboTestDeterminateTable.setDisable(false);
         btnAddExercise.setDisable(false);
         btnEditTest.setDisable(false);
     }
@@ -344,7 +343,7 @@ public class TestControllerPanel extends GridPane {
         txtExerciseName.setDisable(true);
         txtExerciseQuotation.setDisable(true);
         comboTestClimateChart.setDisable(true);
-        comboTestDeterminateTable.setDisable(true);
+        //comboTestDeterminateTable.setDisable(true);
         txtInfo.setText("Test succesvol verwijderd.");
         txtTestTitle.setText(null);
         txtAreaDescription.setText(null);
@@ -353,7 +352,7 @@ public class TestControllerPanel extends GridPane {
         txtExerciseName.setText(null);
         txtExerciseQuotation.setText(null);
         comboTestClimateChart.setValue(null);
-        comboTestDeterminateTable.setValue(null);
+        //comboTestDeterminateTable.setValue(null);
     }
 
     @FXML
@@ -363,11 +362,11 @@ public class TestControllerPanel extends GridPane {
             e.setNaam(txtExerciseName.getText());
             e.setPunten(Double.parseDouble(txtExerciseQuotation.getText()));
             e.setClimateChart((ClimateChart) comboTestClimateChart.getSelectionModel().getSelectedItem());
-            e.setDetTable((DeterminateTable) comboTestDeterminateTable.getSelectionModel().getSelectedItem());
             e.setTest((Test) comboChooseTest.getSelectionModel().getSelectedItem());
+            comboClassGroupExercises.setValue(e);
             rc.updateRepo();
-            //comboClassGroupExercises.setValue(e);
-        } catch (Exception ex) {
+            comboClassGroupExercises.setItems(FXCollections.observableArrayList(rc.findExercisesByTest(e.getTest())));
+        } catch (Exception ex){
             txtInfo.setText("U moet alles correct invullen.");
         }
     }
@@ -389,9 +388,10 @@ public class TestControllerPanel extends GridPane {
             comboChooseTest.setValue(t);
             rc.updateRepo();
             comboChooseTest.setItems(FXCollections.observableArrayList(rc.findTestsByClassGroup(comboTestClassGroup.getSelectionModel().getSelectedItem())));
-            
-            
-        } catch (Exception ex) {
+        }catch(IllegalArgumentException ex){
+            txtInfo.setText(ex.getMessage());
+        } 
+        catch (Exception ex) {
             txtInfo.setText("U moet alles correct invullen.");
         }
     }
@@ -407,7 +407,7 @@ public class TestControllerPanel extends GridPane {
         txtExerciseQuotation.setDisable(bool);
         btnAddExercise.setDisable(bool);
         comboTestClimateChart.setDisable(bool);
-        comboTestDeterminateTable.setDisable(bool);
+        //comboTestDeterminateTable.setDisable(bool);
         btnSaveTest.setDisable(bool);
         btnEditTest.setDisable(bool);
         comboChooseTest.setDisable(bool);
