@@ -83,7 +83,7 @@
                         <Insets top="10.0" />
                      </padding>
                   </Label>
-                  <TextField fx:id="txtNaam" VBox.vgrow="ALWAYS" />
+                  <TextField fx:id="txtNaam" onKeyReleased="#fillTextFieldLastName" VBox.vgrow="ALWAYS" />
                   <Label text="Voornaam">
                      <font>
                         <Font size="14.0" />
@@ -92,7 +92,7 @@
                         <Insets top="10.0" />
                      </padding>
                   </Label>
-                  <TextField fx:id="txtVoornaam" />
+                  <TextField fx:id="txtVoornaam" onKeyReleased="#fillTextFieldFirstName" />
                   <GridPane>
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

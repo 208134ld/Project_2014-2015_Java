@@ -57,16 +57,22 @@ public class EditingClassCell extends TableCell<Student, String> {
     private void createTextField() {
         textField = new TextField(getItem());
         textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
+        String st = textField.getText();
         textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
             @Override
             public void handle(KeyEvent t) {
                 if (t.getCode() == KeyCode.ENTER || t.getCode() == KeyCode.TAB) {
                     try {
-                        commitEdit(textField.getText());
+                        String regex = "^[a-zA-Z]+$";
+                        if (textField.getText().trim().matches(regex) == false) {
+                            throw new NumberFormatException();
+                        } else {
+                            commitEdit(textField.getText());
+                        }
                     } catch (NumberFormatException e) {
-                        JOptionPane.showMessageDialog(null, "Heeft u tekst ingegeven? een komma wordt door een . weergegeven.", "Er is een fout opgetreden", JOptionPane.ERROR_MESSAGE);
-                        textField.setText("");
+                        JOptionPane.showMessageDialog(null, "Gelieve het veld niet leeg te laten, en geen cijfers in te geven", "Er is een fout opgetreden", JOptionPane.ERROR_MESSAGE);
+                        textField.setText(st);
                     } catch (Exception e) {
                         JOptionPane.showMessageDialog(null, "er is iets onverwacht gebeurt" + e.getCause().getMessage());
                     }
