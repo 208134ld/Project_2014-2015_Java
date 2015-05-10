@@ -210,8 +210,8 @@ public class LocationViewPanel extends GridPane implements Observer {
             @Override
             public void changed(ObservableValue<? extends TreeItem<MyNode>> observable, TreeItem<MyNode> oldValue, TreeItem<MyNode> newValue) {
                 TreeItem<MyNode> selectedItem = newValue;
-                if (selectedItem.getValue().getType().equalsIgnoreCase("ClimateChart")) {
-                    try {
+                
+                    try {if (selectedItem.getValue().getType().equalsIgnoreCase("ClimateChart")) {
                         if (!(newValue.getValue().getId() == i)) {
                             if (isClimateChartNotUpToDate()) {
                                 Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -223,7 +223,7 @@ public class LocationViewPanel extends GridPane implements Observer {
                                     saveDetaillWindow();
                                 } else {
     // ... user chose CANCEL or closed the dialog
-                                }
+                                }}
                             }
                             selectedClimatechart = rc.getClimateChartByClimateChartID(selectedItem.getValue().getId());
                             selectedClimatechart.setMonths(rc.getMonthsOfClimateChart(selectedItem.getValue().getId()));
@@ -234,7 +234,7 @@ public class LocationViewPanel extends GridPane implements Observer {
                     } catch (Exception e) {
                         errorText.setText("Kon de gewenste klimatogram niet vinden in de databank");
                     }
-                }
+                
             }
         });
     }

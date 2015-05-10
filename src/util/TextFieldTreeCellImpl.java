@@ -13,6 +13,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.swing.JOptionPane;
 import repository.RepositoryController;
 
 public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
@@ -129,6 +131,7 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
     }
 
     private void createTextField() {
+        System.out.println(getString());
         textField = new TextField(getString());
         textField.setOnKeyReleased(new EventHandler<KeyEvent>() {
 
@@ -137,14 +140,29 @@ public final class TextFieldTreeCellImpl extends TreeCell<MyNode> {
                 if (t.getCode() == KeyCode.ENTER) {
 
                     if (getItem().isCountry()) {
+                        
+                        try{
+                            rc.findCountryByName(textField.getText()); 
+                            JOptionPane.showMessageDialog(null, "Land met deze naam bestaat al");
+                            textField.setText(getString());
+                        }catch(NoResultException ex)
+                        {
                         rc.findCountryById(getItemId()).setName(textField.getText());
                         rc.updateRepo();
+                        }
+                       
                     } else if (getItem().isClimateChart()) {
                         rc.getClimateChartByClimateChartID(getItemId()).setLocation(textField.getText());
                         rc.updateRepo();
                     } else if (getItem().isContinent()) {
-                        rc.findContinentById(getItemId()).setName(textField.getText());
-                        rc.updateRepo();
+                        try{
+                            rc.findContinentByName(textField.getText());
+                            JOptionPane.showMessageDialog(null, "Continent met deze naam bestaat al");
+                            textField.setText(getString());
+                        }catch(NoResultException ex)
+                        { rc.findContinentById(getItemId()).setName(textField.getText());
+                        rc.updateRepo();}
+                       
                     }
 
                     if (getItem().isClause()) {

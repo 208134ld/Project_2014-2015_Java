@@ -98,7 +98,7 @@
                   <Label fx:id="lbTemperatureYear" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <Label fx:id="lbSedimentYear" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                   <Button fx:id="saveBut" mnemonicParsing="false" onAction="#saveDetaillWindow" text="Opslaan" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
-                  <Text fx:id="errorText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="438.13671875" GridPane.rowIndex="6" />
+                  <Text fx:id="errorText" fill="#b21515" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="438.13671875" GridPane.rowIndex="6" />
                </children>
                <GridPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
