@@ -171,15 +171,13 @@ public class ClassListControllerPanel extends Accordion {
             if (txtKlasName.getText().length() == 0) {
                 throw new NullPointerException();
             }
-            
+            System.out.println(controller.giveAllClassGroups().contains(controller.giveClassGroupWithName(txtKlasName.getText())));
             if (controller.giveAllClassGroups().contains(controller.giveClassGroupWithName(txtKlasName.getText()))) {
                 errorText1.setText("Deze klasnaam bestaat al");
             }
             
         } catch (NoResultException nre) {
-            SchoolYear sy = dbKlasLeerjaar.getSelectionModel().getSelectedItem();
-            controller.addClassGroup(new ClassGroup(txtKlasName.getText(), sy));
-            SchoolYear sy = dbKlasLeerjaar.getSelectionModel().getSelectedItem();//new SchoolYear(Integer.parseInt(dbKlasLeerjaar.getSelectionModel().getSelectedItem()), g);
+                    SchoolYear sy = dbKlasLeerjaar.getSelectionModel().getSelectedItem();
             ClassGroup cg = new ClassGroup(txtKlasName.getText(),sy);
             controller.addClassGroup(cg);
             classGroupList.add(cg);
