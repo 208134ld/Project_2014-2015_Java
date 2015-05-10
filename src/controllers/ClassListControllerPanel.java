@@ -19,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javax.persistence.NoResultException;
 
@@ -163,6 +164,38 @@ public class ClassListControllerPanel extends Accordion {
             txtVoornaam.setDisable(false);
             dbLeerlingKlas.setItems(classGroupList);
             dbLeerlingKlas.setValue(classGroupList.get(0));
+        }
+    }
+    
+    @FXML
+    private void fillTextFieldFirstName(KeyEvent event) {
+        String regex = "^[a-zA-Z]*$";
+        if(txtVoornaam.getText().trim().matches(regex) == true){
+            btnLeerlingToevoegen.setDisable(false);
+            txtNaam.setDisable(false);
+            errorText.setText("");
+        }
+        else
+        {
+            txtNaam.setDisable(true);
+            btnLeerlingToevoegen.setDisable(true);
+            errorText.setText("Gelieve enkel letters te gebruiken in de voornaam");
+        }
+    }
+    
+    @FXML
+    private void fillTextFieldLastName(KeyEvent event) {
+        String regex = "^[a-zA-Z]*$";
+        if(txtNaam.getText().trim().matches(regex) == true){
+            btnLeerlingToevoegen.setDisable(false);
+            txtVoornaam.setDisable(false);
+            errorText.setText("");
+        }
+        else
+        {
+            txtVoornaam.setDisable(true);
+            btnLeerlingToevoegen.setDisable(true);
+            errorText.setText("Gelieve enkel letters te gebruiken in de achternaam");
         }
     }
 
