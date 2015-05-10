@@ -19,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javax.persistence.NoResultException;
 
@@ -165,6 +166,38 @@ public class ClassListControllerPanel extends Accordion {
             dbLeerlingKlas.setValue(classGroupList.get(0));
         }
     }
+    
+    @FXML
+    private void fillTextFieldFirstName(KeyEvent event) {
+        String regex = "^[a-zA-Z]*$";
+        if(txtVoornaam.getText().trim().matches(regex) == true){
+            btnLeerlingToevoegen.setDisable(false);
+            txtNaam.setDisable(false);
+            errorText.setText("");
+        }
+        else
+        {
+            txtNaam.setDisable(true);
+            btnLeerlingToevoegen.setDisable(true);
+            errorText.setText("Gelieve enkel letters te gebruiken in de voornaam");
+        }
+    }
+    
+    @FXML
+    private void fillTextFieldLastName(KeyEvent event) {
+        String regex = "^[a-zA-Z]*$";
+        if(txtNaam.getText().trim().matches(regex) == true){
+            btnLeerlingToevoegen.setDisable(false);
+            txtVoornaam.setDisable(false);
+            errorText.setText("");
+        }
+        else
+        {
+            txtVoornaam.setDisable(true);
+            btnLeerlingToevoegen.setDisable(true);
+            errorText.setText("Gelieve enkel letters te gebruiken in de achternaam");
+        }
+    }
 
     @FXML
     private void addKlas(ActionEvent event) {
@@ -172,13 +205,12 @@ public class ClassListControllerPanel extends Accordion {
             if (txtKlasName.getText().length() == 0) {
                 throw new NullPointerException();
             }
-
             if (controller.giveAllClassGroups().contains(controller.giveClassGroupWithName(txtKlasName.getText()))) {
                 errorText1.setText("Deze klasnaam bestaat al");
             }
 
         } catch (NoResultException nre) {
-            SchoolYear sy = dbKlasLeerjaar.getSelectionModel().getSelectedItem();
+             SchoolYear sy = dbKlasLeerjaar.getSelectionModel().getSelectedItem();
             //controller.addClassGroup(new ClassGroup(txtKlasName.getText(), sy));
             ClassGroup cg = new ClassGroup(txtKlasName.getText(),sy);
             controller.addClassGroup(cg);
