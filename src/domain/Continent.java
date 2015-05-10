@@ -12,14 +12,14 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import util.MyNode;
 
 @Entity(name = "Continents")
 @Table(name = "Continents")
 @NamedQueries({
     @NamedQuery(name = "Continent.findAllContinents", query = "select c from Continents c"),
     @NamedQuery(name = "Continent.findById",query = "SELECT c FROM Continents c WHERE c.continentId = :continentID"),
-    @NamedQuery(name="Continent.findByName",query="SELECT c FROM Continents c WHERE LOWER(c.name) =:name")
+    @NamedQuery(name="Continent.findByName",query="SELECT c FROM Continents c WHERE LOWER(c.name) =:name"),
+    @NamedQuery(name="Continent.findEurope",query="SELECT c FROM Continents c WHERE LOWER(c.name) ='europa'")
 })
 public class Continent implements Serializable, Comparable<Continent> {
     private String name;

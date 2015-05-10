@@ -21,6 +21,11 @@ public class ContinentRepository {
         Collections.sort(lijst);
         return lijst;
     }
+    
+    public Continent getEurope(){
+        TypedQuery<Continent> query = em.createNamedQuery("Continent.findEurope", Continent.class);
+        return query.getSingleResult();
+    }
 
     public void insertContinent(Continent c) {
         em.getTransaction().begin();

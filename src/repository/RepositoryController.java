@@ -264,5 +264,9 @@ public class RepositoryController extends Observable {
     public void removeTest(Test t){
         testRepo.removeTest(t);
     }
+    
+    public Continent getEurope(){
+        return continentRepo.getEurope();
+    }
 
 }
