@@ -57,6 +57,10 @@ public class ClassListController extends Observable{
         return classRepo.getAllStudentsOfClassGroup(cg);
     }
     
+    public List<Student> giveStudentsWithFirstName(String fname){
+        return classRepo.getStudentsWithFirstName(fname);
+    }
+    
     public ClassGroup giveClassGroupWithName(String name){
         return classRepo.getClassGroupWithName(name);
     }

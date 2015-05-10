@@ -21,7 +21,9 @@ import javax.persistence.Transient;
     @NamedQuery(name = "AllStudents",
             query = "SELECT s FROM Students s"),
     @NamedQuery(name = "StudentsOfClassGroup",
-            query = "SELECT s FROM Students s WHERE s.classGroup = :cg ")
+            query = "SELECT s FROM Students s WHERE s.classGroup = :cg "),
+    @NamedQuery(name = "StudentsWithFirstName",
+            query = "SELECT s FROM Students s WHERE s.firtsName = :fname ")
 })
 public class Student implements Serializable {
 
