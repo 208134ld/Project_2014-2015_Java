@@ -40,7 +40,7 @@ public class Student implements Serializable {
     @ManyToOne
     @JoinColumn(name = "groupId")
     private ClassGroup classGroup;
-    
+
     @Transient
     private SimpleStringProperty lastNameProp;
     @Transient
