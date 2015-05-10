@@ -25,7 +25,9 @@ import javax.persistence.Table;
             query = "SELECT c FROM ClimateCharts c WHERE c.country.countryId = :countryID"),
     @NamedQuery(name = "ClimateChart.findById",
             query = "SELECT c FROM ClimateCharts c WHERE c.climateChartId = :chartId"),
-    @NamedQuery(name="ClimateChart.findAll",query="SELECT c from ClimateCharts c")
+    @NamedQuery(name="ClimateChart.findAll",query="SELECT c from ClimateCharts c"),
+    @NamedQuery(name = "ClimateChart.findByName",
+        query = "SELECT c FROM ClimateCharts c WHERE c.location = :climateChartName")
 })
 public class ClimateChart implements Serializable {
     @Id
@@ -126,7 +128,7 @@ public class ClimateChart implements Serializable {
 
     public void setEndperiod(int endperiod) {
         if (endperiod < this.beginperiod) {
-            throw new IllegalArgumentException("Eind periode kan niet kleiner zijn dan begin");
+            throw new IllegalArgumentException("De eind periode mag niet kleiner zijn dan begin periode");
         }
         this.endperiod = endperiod;
     }
@@ -195,11 +197,11 @@ public class ClimateChart implements Serializable {
             throw new IllegalArgumentException("Coordinaatwaarden moeten positief zijn");
         }
         if (minutes > 60 || seconds > 60) {
-            throw new IllegalArgumentException("minuten en seconden moeten kleiner zijn dan 60");
+            throw new IllegalArgumentException("Minuten en seconden moeten kleiner zijn dan 60");
         }
         if(degree>180)
         {
-            throw new IllegalArgumentException("graden moeten kleiner dan 180 zijn");
+            throw new IllegalArgumentException("Graden moeten kleiner dan 180 zijn");
         }
         return degree + "° " + minutes + "' " + seconds + "\" ";
     }

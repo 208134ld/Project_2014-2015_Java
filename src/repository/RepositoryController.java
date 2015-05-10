@@ -186,6 +186,11 @@ public class RepositoryController extends Observable {
     public void deleteClimatechart(int climatechartId) {
         chartRepo.deleteClimatechart(climatechartId);
     }
+    
+    public ClimateChart findClimateChartByName(String name) {
+        return chartRepo.findByName(name);
+    }
+    
 
     public void deleteContinent(int id) {
         continentRepo.deleteContinent(id);

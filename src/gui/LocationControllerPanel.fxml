@@ -98,7 +98,7 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="txtLocation" maxWidth="-Infinity" />
+                  <TextField fx:id="txtLocation" maxWidth="-Infinity" onKeyReleased="#fillTextFieldLocation" />
                   <Label layoutX="20.0" layoutY="110.0" text="Gegevens :">
                      <font>
                         <Font size="14.0" />
@@ -108,18 +108,18 @@
                      <children>
                         <Label layoutX="14.0" layoutY="24.0" text="Breedte graden:" />
                         <Label layoutX="14.0" layoutY="104.0" text="Periode:" />
-                        <TextField fx:id="startPeriod" layoutX="139.0" layoutY="104.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="70.0" />
-                        <TextField fx:id="endPeriod" layoutX="238.0" layoutY="104.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="70.0" />
+                        <TextField fx:id="startPeriod" layoutX="139.0" layoutY="104.0" minHeight="0.0" minWidth="0.0" onKeyReleased="#fillNumberField" prefHeight="24.0" prefWidth="70.0" />
+                        <TextField fx:id="endPeriod" layoutX="238.0" layoutY="104.0" minHeight="0.0" minWidth="0.0" onKeyReleased="#fillNumberField" prefHeight="24.0" prefWidth="70.0" />
                         <Label layoutX="223.0" layoutY="104.0" prefHeight="21.0" prefWidth="0.0" text=":" />
-                        <TextField fx:id="BGrades" layoutX="138.0" layoutY="24.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
+                        <TextField fx:id="BGrades" layoutX="138.0" layoutY="24.0" minHeight="0.0" minWidth="0.0" onKeyReleased="#fillNumberField" prefHeight="24.0" prefWidth="50.0" />
                         <Label layoutX="188.0" layoutY="14.0" text="°" />
-                        <TextField fx:id="BMinutes" layoutX="198.0" layoutY="24.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
+                        <TextField fx:id="BMinutes" layoutX="198.0" layoutY="24.0" minHeight="0.0" minWidth="0.0" onKeyReleased="#fillNumberField" prefHeight="24.0" prefWidth="50.0" />
                         <Label layoutX="249.0" layoutY="14.0" text="'" />
-                        <TextField fx:id="BSeconds" layoutX="258.0" layoutY="24.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
+                        <TextField fx:id="BSeconds" layoutX="258.0" layoutY="24.0" minHeight="0.0" minWidth="0.0" onKeyReleased="#fillNumberField" prefHeight="24.0" prefWidth="50.0" />
                         <Label layoutX="310.0" layoutY="14.0" text="&quot;" />
-                        <TextField fx:id="LSeconds" layoutX="258.0" layoutY="64.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
-                        <TextField fx:id="LMinutes" layoutX="198.0" layoutY="64.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
-                        <TextField fx:id="LGrades" layoutX="139.0" layoutY="64.0" minHeight="0.0" minWidth="0.0" prefHeight="24.0" prefWidth="50.0" />
+                        <TextField fx:id="LSeconds" layoutX="258.0" layoutY="64.0" minHeight="0.0" minWidth="0.0" onKeyReleased="#fillNumberField" prefHeight="24.0" prefWidth="50.0" />
+                        <TextField fx:id="LMinutes" layoutX="198.0" layoutY="64.0" minHeight="0.0" minWidth="0.0" onKeyReleased="#fillNumberField" prefHeight="24.0" prefWidth="50.0" />
+                        <TextField fx:id="LGrades" layoutX="139.0" layoutY="64.0" minHeight="0.0" minWidth="0.0" onKeyReleased="#fillNumberField" prefHeight="24.0" prefWidth="50.0" />
                         <Label layoutX="14.0" layoutY="64.0" text="Lengte graden:" />
                         <Label layoutX="311.0" layoutY="54.0" text="&quot;" />
                         <Label layoutX="250.0" layoutY="54.0" text="'" />

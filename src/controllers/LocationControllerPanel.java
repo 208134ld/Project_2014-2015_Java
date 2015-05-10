@@ -119,6 +119,7 @@ public class LocationControllerPanel extends Accordion {
     private ObservableList<Months> tableMonthList;
     private MonthOfTheYear[] months;
     private int counter = 0;
+    private ClimateChart c;
 
     public LocationControllerPanel(RepositoryController repositoryController) {
         this.repositoryController = repositoryController;
@@ -292,74 +293,117 @@ public class LocationControllerPanel extends Accordion {
     }
 
     @FXML
-    private void addClimateChart(MouseEvent event) {
-        try{
-            if(txtLocation.getText().length()==0)
-                throw new NullPointerException("Locatie mag niet leeg zijn");
-            String loc = txtLocation.getText().trim();
-        int begin = Integer.parseInt(startPeriod.getText().trim());
-        int end = Integer.parseInt(endPeriod.getText().trim());
-        int g1 = Integer.parseInt(BGrades.getText().trim());
-        int g2 = Integer.parseInt(LGrades.getText().trim());
-        int m1 = Integer.parseInt(BMinutes.getText().trim());
-        int m2 = Integer.parseInt(LMinutes.getText().trim());
-        int s1 = Integer.parseInt(BSeconds.getText().trim());
-        int s2 = Integer.parseInt(LSeconds.getText().trim());
-
-        Country country = repositoryController.findCountryByName(
-                cbCountryClimateChart.getSelectionModel().getSelectedItem());
-        if (monthList.size() != 12) {
-            throw new IllegalArgumentException("Er moeten 12 maanden zijn.");
+    private void fillTextFieldLocation(KeyEvent event) {
+        String regex = "^[a-zA-Z]*$";
+        if(txtLocation.getText().trim().matches(regex) == true){
+            btnAddClimateChart.setDisable(false);
+            errorBar.setText("");
         }
+        else
+        {
+            btnAddClimateChart.setDisable(true);
+            errorBar.setText("Gelieve enkel letters te gebruiken");
+        }
+    }
+    
+    @FXML
+    private void fillNumberField(KeyEvent event) {
+        String regex = "^[0-9]*$";
+        if(BGrades.getText().trim().matches(regex) == true
+                &&BMinutes.getText().trim().matches(regex) == true
+                &&BSeconds.getText().trim().matches(regex) == true
+                &&LGrades.getText().trim().matches(regex) == true
+                &&LMinutes.getText().trim().matches(regex) == true
+                &&LSeconds.getText().trim().matches(regex) == true
+                &&startPeriod.getText().trim().matches(regex) == true
+                &&endPeriod.getText().trim().matches(regex) == true){
+            btnAddClimateChart.setDisable(false);
+            errorBar.setText("");
+        }
+        else
+        {
+            btnAddClimateChart.setDisable(true);
+            errorBar.setText("Gelieve enkel cijfers te gebruiken");
+        }
+    }
+    
+    @FXML
+    private void addClimateChart(MouseEvent event) {
+        
+        try{
+            if(txtLocation.getText().trim().isEmpty() == false
+                &&BGrades.getText().trim().isEmpty() == false
+                &&BMinutes.getText().trim().isEmpty() == false
+                &&BSeconds.getText().trim().isEmpty() == false
+                &&LGrades.getText().trim().isEmpty() == false
+                &&LMinutes.getText().trim().isEmpty() == false
+                &&LSeconds.getText().trim().isEmpty() == false
+                &&startPeriod.getText().trim().isEmpty() == false
+                &&endPeriod.getText().trim().isEmpty() == false){
+                Country country = repositoryController.findCountryByName(
+                        cbCountryClimateChart.getSelectionModel().getSelectedItem());
+                String loc = txtLocation.getText().trim();
+                int begin = Integer.parseInt(startPeriod.getText().trim());
+                int end = Integer.parseInt(endPeriod.getText().trim());
+                int g1 = Integer.parseInt(BGrades.getText().trim());
+                int g2 = Integer.parseInt(LGrades.getText().trim());
+                int m1 = Integer.parseInt(BMinutes.getText().trim());
+                int m2 = Integer.parseInt(LMinutes.getText().trim());
+                int s1 = Integer.parseInt(BSeconds.getText().trim());
+                int s2 = Integer.parseInt(LSeconds.getText().trim());
 
-        ClimateChart c = new ClimateChart();
-        String Bcord = c.giveCords(g1, m1, s1) + " " + breedteChoice.getValue();
-        String Lcord = c.giveCords(g2, m2, s2) + " " + lengteChoice.getValue();
-        double lat = c.calcDecimals(g1, m1, s1, breedteChoice.getValue());
-        double longi = c.calcDecimals(g2, m2, s2, lengteChoice.getValue());
-        c.setLocation(loc);
-        c.setBeginperiod(begin);
-        c.setEndperiod(end);
-        c.setBCord(Bcord);
-        c.setLCord(Lcord);
-        c.setLatitude(lat);
-        c.setLongitude(longi);
-        c.setCountry(country);
-        List<Months> maanden = new ArrayList<>();
-        monthList.stream().forEach(p -> maanden.add(p));
-        maanden.stream().forEach(mont -> mont.setClimateChart(c));
-        c.setMonths(maanden);        
-        repositoryController.InsertClimatechart(c);
-        txtLocation.clear();
-        startPeriod.clear();
-        endPeriod.clear();
-        BGrades.clear();
-        BMinutes.clear();
-        BSeconds.clear();
-        LGrades.clear();
-        LMinutes.clear();
-        LSeconds.clear();
-        errorBar.setText("");
-        monthList = new ArrayList<>();
-        Arrays.asList(MonthOfTheYear.values()).stream().forEach(month -> monthList.add(new Months(0, 0, month)));
-        tableMonthList = FXCollections.observableList(monthList);
-        monthTable.setItems(tableMonthList);
-        errorBar.setText("");
-        }catch(NumberFormatException nullExc)
-        {
-            this.errorBar.setText("Er mag geen text in de velden zijn");
-        }catch(IllegalArgumentException ilex)
-        {
-            this.errorBar.setText(ilex.getMessage());
-        }catch(NullPointerException nulExc)
-        {
-            this.errorBar.setText("Er mogen geen lege velden zijn");
+                c = new ClimateChart();
+                String Bcord = c.giveCords(g1, m1, s1) + " " + breedteChoice.getValue();
+                String Lcord = c.giveCords(g2, m2, s2) + " " + lengteChoice.getValue();
+                double lat = c.calcDecimals(g1, m1, s1, breedteChoice.getValue());
+                double longi = c.calcDecimals(g2, m2, s2, lengteChoice.getValue());
+                c.setLocation(loc);
+                c.setBeginperiod(begin);
+                c.setEndperiod(end);
+                c.setBCord(Bcord);
+                c.setLCord(Lcord);
+                c.setLatitude(lat);
+                c.setLongitude(longi);
+                c.setCountry(country);
+                List<Months> maanden = new ArrayList<>();
+                monthList.stream().forEach(p -> maanden.add(p));
+                maanden.stream().forEach(mont -> mont.setClimateChart(c));
+                c.setMonths(maanden);
+                
+                if(repositoryController.getClimateChartsOfCountry(country.getId()).contains(
+                        repositoryController.findClimateChartByName(txtLocation.getText().toLowerCase()))
+                        == true){
+                txtLocation.clear();
+                errorBar.setText("Deze benaming bestaad reeds, gelieve iets anders te kiezen");
+                }
+
+                
+            }
+            else{
+                errorBar.setText("Gelieve de invoervakken in te vullen");
+            }
+        }
+        catch(NoResultException ex){
+            errorBar.setText("");
+            repositoryController.InsertClimatechart(c);
+            txtLocation.clear();
+            startPeriod.clear();
+            endPeriod.clear();
+            BGrades.clear();
+            BMinutes.clear();
+            BSeconds.clear();
+            LGrades.clear();
+            LMinutes.clear();
+            LSeconds.clear();
+            monthList = new ArrayList<>();
+            Arrays.asList(MonthOfTheYear.values()).stream().forEach(month -> monthList.add(new Months(0, 0, month)));
+            tableMonthList = FXCollections.observableList(monthList);
+            monthTable.setItems(tableMonthList);   
         }
         catch(Exception e)
         {
             this.errorBar.setText(e.getMessage());
-        }
-        
+        }  
     }
 
     public void initMonthTable() {
@@ -416,7 +460,7 @@ public class LocationControllerPanel extends Accordion {
 
     @FXML
     private void updateTempCol(TableColumn.CellEditEvent<Months, Double> event) {
-        errorBar.setText(" ");
+        errorBar.setText("");
         int id = monthTable.getSelectionModel().getSelectedCells().get(0).getRow();
 
         if (monthTable.getSelectionModel().getSelectedCells().get(0).getColumn() == 1) {

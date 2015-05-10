@@ -59,5 +59,10 @@ public class ClimateChartRepository {
         em.remove(this.getClimateChartByClimateChartID(climatechartId));
         em.getTransaction().commit();
     }
+    
+    public ClimateChart findByName(String name) {
+        TypedQuery<ClimateChart> query = em.createNamedQuery("ClimateChart.findByName", ClimateChart.class);
+        return query.setParameter("climateChartName", name).getSingleResult();
+    }
 
 }
