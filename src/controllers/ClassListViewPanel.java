@@ -95,11 +95,12 @@ public class ClassListViewPanel extends GridPane implements Observer {
         TreeItem<MyNode> rootItem = new TreeItem<>(new MyNode("ClassGroups", "Root", 1));
         treeItems.clear();
         gradeItems.clear();
-
-        controller.giveAllGrades().stream().map((g) -> {
+        try{
+                    controller.giveAllGrades().stream().map((g) -> {
             TreeItem<MyNode> grade = new TreeItem<>(new MyNode("Graad " + g.getGradeString(), "Graad", g.getGrade()));
             controller.giveSchoolYearsOfGrade(g).stream().map((sy) -> {
                 TreeItem<MyNode> schoolYear = new TreeItem<>(new MyNode("Leerjaar " + sy.getSchoolYearString(), "Leerjaar", sy.getSchoolYear()));
+                
                 controller.giveClassGroupOfSchoolYear(sy).stream().map((cg) -> new TreeItem<>(new MyNode(cg.getGroupName(), "classgroup", cg.getGroupId()))).forEach((classGroup) -> {
                     schoolYear.getChildren().add(classGroup);
                 });
@@ -117,13 +118,15 @@ public class ClassListViewPanel extends GridPane implements Observer {
         }).forEach((grade) -> {
             treeItems.add(grade);
         });
-
+                }catch(Exception e)
+                {
+                    
+                }
+        
         obsTreeItems = FXCollections.observableArrayList(gradeItems);
         rootItem.getChildren().addAll(obsTreeItems);
         rootItem.setExpanded(true);
-
         rootItem.getChildren().forEach(p -> p.setExpanded(true));
-
         classTreeView.setEditable(true);
 
         classTreeView.setCellFactory(new Callback<TreeView<MyNode>, TreeCell<MyNode>>() {
