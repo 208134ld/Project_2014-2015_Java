@@ -110,7 +110,7 @@ public class LocationControllerPanel extends Accordion {
     private WebView siteView;
     @FXML
     private ProgressBar webProgress;
-    private final String WEBSITE = "http://climatechart.azurewebsites.net/";
+    private final String WEBSITE = "http://climatecharttest.azurewebsites.net/";
     private RepositoryController repositoryController;
     private ObservableList<MonthOfTheYear> monthOfTheYearList;
     private ObservableList<String> continentList;
