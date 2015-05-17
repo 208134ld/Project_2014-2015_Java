@@ -298,53 +298,57 @@ public class ManageDeterminateTable extends GridPane {
         discLijst.add(" ");
         parDropd2.setItems(FXCollections.observableArrayList(discLijst));
         parDropd.setItems(FXCollections.observableArrayList(discLijst));
-        int graad = Integer.parseInt(gradeCombo.getSelectionModel().getSelectedItem().split(" ")[1]);
-        List<ClauseComponent> clauses = rc.findClausesByDeterminateTableId(rc.findGradeById(graad).getDeterminateTableId());
-        currentDetTableId = rc.findGradeById(graad).getDeterminateTableId().getDeterminateTableId();
-
-        List<Integer> ids = new ArrayList<>();
-        parDropd2.setDisable(true);
-        parDropd.setDisable(true);
-        operatorDropd.setDisable(true);
-        waardeParameter.setDisable(true);
-        txtVegetationFeature.setDisable(true);
-        txtClimateFeature.setDisable(true);
-        btnDeleteDeterminateTable.setDisable(false);
-
-        lblActiveDeterminateTable.setText(String.format("U bekijkt momenteel determinatietabel %d, deze hoort bij graad %d.",
-                rc.findGradeById(graad).getDeterminateTableId().getDeterminateTableId(), graad));
-
-        clauses.stream().map((c) -> {
-            if (c.getYesClause() != null) {
-                ids.add(c.getYesClause().getClauseComponentId());
-            }
-            return c;
-        }).filter((c) -> (c.getNoClause() != null)).forEach((c) -> {
-            ids.add(c.getNoClause().getClauseComponentId());
-        });
-
-        ClauseComponent rootClause = null;
-
-        for (ClauseComponent c : clauses) {
-            if (!ids.contains(c.getClauseComponentId())) {
-                root = new TreeItem<>(new MyNode(c.getName(), "Clause", c.getClauseComponentId()));
-                rootClause = c;
-            }
-        }
-
-        recursiveClause(root, rootClause, true);
-        recursiveClause(root, rootClause, false);
-
         try {
-            root.setExpanded(true);
-            treeViewDeterminateTable.setRoot(root);
+            int graad = Integer.parseInt(gradeCombo.getSelectionModel().getSelectedItem().split(" ")[1]);
+            List<ClauseComponent> clauses = rc.findClausesByDeterminateTableId(rc.findGradeById(graad).getDeterminateTableId());
+            currentDetTableId = rc.findGradeById(graad).getDeterminateTableId().getDeterminateTableId();
+            List<Integer> ids = new ArrayList<>();
+            parDropd2.setDisable(true);
+            parDropd.setDisable(true);
+            operatorDropd.setDisable(true);
+            waardeParameter.setDisable(true);
+            txtVegetationFeature.setDisable(true);
+            txtClimateFeature.setDisable(true);
+            btnDeleteDeterminateTable.setDisable(false);
+
+            lblActiveDeterminateTable.setText(String.format("U bekijkt momenteel determinatietabel %d, deze hoort bij graad %d.",
+                    rc.findGradeById(graad).getDeterminateTableId().getDeterminateTableId(), graad));
+
+            clauses.stream().map((c) -> {
+                if (c.getYesClause() != null) {
+                    ids.add(c.getYesClause().getClauseComponentId());
+                }
+                return c;
+            }).filter((c) -> (c.getNoClause() != null)).forEach((c) -> {
+                ids.add(c.getNoClause().getClauseComponentId());
+            });
+
+            ClauseComponent rootClause = null;
+
+            for (ClauseComponent c : clauses) {
+                if (!ids.contains(c.getClauseComponentId())) {
+                    root = new TreeItem<>(new MyNode(c.getName(), "Clause", c.getClauseComponentId()));
+                    rootClause = c;
+                }
+            }
+
+            recursiveClause(root, rootClause, true);
+            recursiveClause(root, rootClause, false);
+
+            try {
+                root.setExpanded(true);
+                treeViewDeterminateTable.setRoot(root);
+            } catch (NullPointerException ex) {
+            }
+
+            if (clauses.isEmpty()) {
+                initialize();
+                treeViewDeterminateTable.setRoot(null);
+            }
         } catch (NullPointerException ex) {
+
         }
 
-        if (clauses.isEmpty()) {
-            initialize();
-            treeViewDeterminateTable.setRoot(null);
-        }
     }
 
     public void recursiveClause(TreeItem<MyNode> node, ClauseComponent parentClause, Boolean typeClause) {
